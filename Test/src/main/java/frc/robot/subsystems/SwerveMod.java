@@ -22,8 +22,8 @@ public class SwerveMod {
  * Might need to Change the Gains, IDs, and offset
  * change track and wheel and Gearatios
  */
-private static final double trackWidth = 16.315;
-private static final double wheelbase = 22.655;
+private static final double trackWidth = 16;
+private static final double wheelbase = 22.727;
 
     private static final double DriveMotorGR = 6.75;
     private static final double SteerMotorGR = 150/7;
