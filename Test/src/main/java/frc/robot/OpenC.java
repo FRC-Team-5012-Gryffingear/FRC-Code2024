@@ -1,3 +1,6 @@
+// **** TODO **** We have the calibration parameters
+// without using this code. Delete this code later.
+
 package frc.robot;
 
 import org.opencv.core.Core;
@@ -22,7 +25,7 @@ import java.util.List;
 public class OpenC {
     static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME);}    
     public void main(String[] args){ }
-    public void camera_calibrate(Mat image) {
+    public void camera_calibrate() {
         Mat mat = Mat.eye(3,3, CvType.CV_8UC1);
         System.out.println("Mat = " + mat.dump());
         
@@ -54,37 +57,38 @@ public class OpenC {
 
         //import image???
         Mat grayImageSize = new Mat();
-        // String[] checkerboards = new String[]{"C:\\Users\\Owner\\Downloads\\checkboard_patterns\\checkblack.jpg",
-        //                                       "C:\\Users\\Owner\\Downloads\\checkboard_patterns\\checkpink.jpg",
-        //                                       "C:\\Users\\Owner\\Downloads\\checkboard_patterns\\checkteal.jpg"};  
-        // for(String imagePath : checkerboards) {
-        //     Mat image = Imgcodecs.imread(imagePath);
-        //     Mat grayImage = new Mat();
-        //     Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
+        String[] checkerboards = new String[]{"C:\\Users\\Owner\\Downloads\\checkboard_patterns\\checkblack.jpg",
+                                              "C:\\Users\\Owner\\Downloads\\checkboard_patterns\\checkpink.jpg",
+                                              "C:\\Users\\Owner\\Downloads\\checkboard_patterns\\checkteal.jpg"};  
+        for(String imagePath : checkerboards) {
+            Mat image = Imgcodecs.imread(imagePath);
+            Mat grayImage = new Mat();
+            Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
 
-        //     MatOfPoint2f corners = new MatOfPoint2f();
-        //     boolean found = Calib3d.findChessboardCorners(grayImage, boardSize, corners);
+            MatOfPoint2f corners = new MatOfPoint2f();
+            boolean found = Calib3d.findChessboardCorners(grayImage, boardSize, corners);
 
-        //     if (found) {
-        //         objPts.add(obj);
-        //         imgPts.add(corners);
+            if (found) {
+                objPts.add(obj);
+                imgPts.add(corners);
 
-        //     }
-        //     grayImageSize = grayImage;
-        // }
-
-        Mat grayImage = new Mat();
-        Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
-
-        MatOfPoint2f corners = new MatOfPoint2f();
-        boolean found = Calib3d.findChessboardCorners(grayImage, boardSize, corners);
-
-        if (found) {
-            objPts.add(obj);
-            imgPts.add(corners);
-
+            }
+            grayImageSize = grayImage;
         }
-        grayImageSize = grayImage;
+
+        // Mat grayImage = new Mat();
+        // Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
+
+        // MatOfPoint2f corners = new MatOfPoint2f();
+        // boolean found = Calib3d.findChessboardCorners(grayImage, boardSize, corners);
+
+        // if (found) {
+        //     objPts.add(obj);
+
+        //     imgPts.add(corners);
+
+        // }
+        // grayImageSize = grayImage;
 
         Mat cameraMatrix = new Mat(3, 3, CvType.CV_64FC1);
         Mat distCoeffs = new Mat();

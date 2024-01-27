@@ -9,10 +9,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer; 
 import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.math.geometry.Transform3d;
+
 import org.opencv.core.Mat;
 import java.lang.Math;
 import java.util.*;
+
+import javax.xml.crypto.dsig.Transform;
+
 import edu.wpi.first.apriltag.AprilTagDetector;
+import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 import edu.wpi.first.apriltag.AprilTagDetection;
 import frc.robot.OpenC;
 /**
@@ -36,19 +42,30 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     CameraServer.startAutomaticCapture();
     CvSink cvsink = CameraServer.getVideo();
-    double fx = 4; // mm
-    double tagsize = 0;//6 inches we need to convert
-
 
     Mat image = new Mat();
     cvsink.grabFrame(image);
+    AprilTagDetector april_tag_detector = new AprilTagDetector();
 
+   april_tag_detector.addFamily("36h11");
 
-   // AprilTagDetection[] april_tag_detection_array = AprilTagDetector.detect(image);
+    AprilTagDetection[] april_tag_detection_array = april_tag_detector.detect(image);
+    AprilTagPoseEstimator.Config april_tag_pose_estimator_config = new AprilTagPoseEstimator.Config(0.1524, 1377.154, 1387.105, 694.783, 406.604);
+    AprilTagPoseEstimator april_tag_estimator = new AprilTagPoseEstimator(april_tag_pose_estimator_config);
+    List<Transform3d> april_tag_poses = new ArrayList<Transform3d>();
+
+    for (AprilTagDetection april_tag_detection: april_tag_detection_array) {
+      Transform3d april_tag_pose = april_tag_estimator.estimate(april_tag_detection);
+      april_tag_poses.add(april_tag_pose);
+    }
+    
+    for (Transform3d april_tag_pose: april_tag_poses) {
+      System.out.println("This is the X: " + april_tag_pose.getX());
+      System.out.println("This is the Y: " + april_tag_pose.getY());
+      System.out.println("This is the Z: " + april_tag_pose.getZ());
+    }
+    
     m_robotContainer = new RobotContainer();
-
-    OpenC open_c_object = new OpenC();
-    open_c_object.camera_calibrate(image);
   }
 
   /**
