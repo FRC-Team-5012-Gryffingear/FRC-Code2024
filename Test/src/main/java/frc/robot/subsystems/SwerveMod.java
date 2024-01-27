@@ -93,7 +93,7 @@ public class SwerveMod {
     public void setModState(SwerveModuleState desiredState){
         lastDesiredState = desiredState;
 
-        if(Math.abs(desiredState.speedMetersPerSecond) < 0.01){
+        if(Math.abs(desiredState.speedMetersPerSecond) < 0.05){
             stop();
             return;
         }
