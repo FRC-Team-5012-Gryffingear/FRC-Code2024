@@ -17,9 +17,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.Timer;
 /**
@@ -35,16 +37,20 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
+  private double Maxspeed = 6;
+  private double MaxAngularRate = 1.5 * Math.PI;
 
+  private final CommandXboxController driveController = new CommandXboxController(0);
+  public final static CommandSwerveDrivetrain drivetrain = SwerveMod.train;
 
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+  .withDeadband(Maxspeed * 0.15).withRotationalDeadband(MaxAngularRate*0.1)
+  .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
   public RobotContainer() {
     // Configure the trigger bindings
-
-
-
-
-
 
     configureBindings();
   }
@@ -52,6 +58,16 @@ public class RobotContainer {
 
   private void configureBindings() {
 
+    drivetrain.setDefaultCommand(
+      drivetrain.applyRequest(() -> drive.withVelocityX(-driveController.getLeftY() * Maxspeed)
+      .withVelocityY(-driveController.getLeftX() * Maxspeed)
+      .withRotationalRate(-driveController.getRightX()* MaxAngularRate)
+      ).ignoringDisable(true));
+
+      driveController.b().whileTrue(drivetrain
+      .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driveController.getLeftY(), -driveController.getLeftX()))));
+
+      driveController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
   }
 
   /**

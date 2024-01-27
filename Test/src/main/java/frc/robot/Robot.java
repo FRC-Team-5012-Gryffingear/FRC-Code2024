@@ -23,15 +23,8 @@ import frc.robot.subsystems.SwerveMod;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private final SwerveDrivetrain drivetrain = SwerveMod.train;
-private final SwerveRequest.FieldCentric request = new SwerveRequest.FieldCentric()
-.withDeadband(SwerveMod.MaxSpeed * 0.1)
-.withRotationalDeadband(SwerveMod.MaxAngularSpeed * 0.1)
-.withDriveRequestType(DriveRequestType.Velocity)
-.withSteerRequestType(SteerRequestType.MotionMagicExpo);
+ 
 
-
-private XboxController controller = new XboxController(0);
 
 
   private RobotContainer m_robotContainer;
@@ -99,10 +92,7 @@ private XboxController controller = new XboxController(0);
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    System.out.println("This is running");
-    drivetrain.setControl(request.withVelocityX(controller.getLeftX())
-    .withVelocityY(controller.getLeftY())
-    .withRotationalRate(controller.getRightX()));
+ 
   }
 
   @Override

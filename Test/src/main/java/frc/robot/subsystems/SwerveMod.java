@@ -6,8 +6,10 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
+import frc.robot.CommandSwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 
 import edu.wpi.first.math.trajectory.constraint.MaxVelocityConstraint;
 import edu.wpi.first.math.util.Units;
@@ -20,36 +22,38 @@ public class SwerveMod {
  * Might need to Change the Gains, IDs, and offset
  * change track and wheel and Gearatios
  */
-private static final double trackWidth = 20.5;
-private static final double wheelbase = 25.752;
+private static final double trackWidth = 16.315;
+private static final double wheelbase = 22.655;
 
-    private static final double DriveMotorGR = 8.14;
-    private static final double SteerMotorGR = 12.8;
+    private static final double DriveMotorGR = 6.75;
+    private static final double SteerMotorGR = 150/7;
 
     private static final Slot0Configs SteerGain = new Slot0Configs()
-    .withKP(2)
-    .withKI(0)
-    .withKD(0)
-    .withKA(1)
-    .withKV(1)
-    .withKS(0.5);
+    .withKP(100).withKI(0).withKD(0.2)
+    .withKA(0).withKV(1.5).withKS(0);
 
     private static final Slot0Configs DriveGain = new Slot0Configs()
-    .withKP(2)
+    .withKP(3)
     .withKI(0)
     .withKD(0)
-    .withKA(1)
-    .withKS(0.5)
-    .withKV(1);
+    .withKA(0)
+    .withKS(0)
+    .withKV(0);
 
     private static final double WheelRad = 2;
 
-    public static final double MaxSpeed = (6380/6.75* Math.PI * 4/12 / 60);
-    public static final double MaxAngularSpeed = MaxSpeed/Math.hypot(trackWidth/2, wheelbase/2);
+    // public static final double MaxSpeed = (6380/6.75* Math.PI * 4/12 / 60);
+    // public static final double MaxAngularSpeed = MaxSpeed/Math.hypot(trackWidth/2, wheelbase/2);
+    public static final double SpeedAt12Volts = 4.4;
+
+    public static final double DriveMaxSpeed = 6; // 6 meters per second desired top speed
+    public static final double SteerMaxRate = 1.5; // 3/4 of a rotation per second max velocity
+    public static final double MaxAcceleration = 3;
+    public static final double MaxAngularAccel = 4;
 
     private static final ClosedLoopOutputType SteerLoopOutput = ClosedLoopOutputType.Voltage;
 
-    private static final ClosedLoopOutputType DriveLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
+    private static final ClosedLoopOutputType DriveLoopOutput = ClosedLoopOutputType.Voltage;
 
    
 
@@ -67,11 +71,12 @@ public static final SwerveModuleConstantsFactory factorySettings = new SwerveMod
 .withSteerMotorGains(SteerGain)
 .withDriveMotorClosedLoopOutput(DriveLoopOutput)
 .withSteerMotorClosedLoopOutput(SteerLoopOutput)
-.withSpeedAt12VoltsMps(MaxSpeed)
-.withSteerMotorInverted(false);     
+.withSpeedAt12VoltsMps(SpeedAt12Volts)
+.withFeedbackSource(SteerFeedbackType.RemoteCANcoder)
+.withSteerMotorInverted(true);     
 
 
-
+// Change the IDs of the motors and offset
 private static final int FRightDriveID = 4;
 private static final int FRightSteerID = 5;
 private static final int FRightSteerEncoderID = 6;
@@ -133,7 +138,7 @@ private static final SwerveModuleConstants BackRight = factorySettings.createMod
     ,Units.inchesToMeters(-wheelbase/2)
     ,true);
 
-public static final SwerveDrivetrain train = new SwerveDrivetrain(DriveConstant
+public static final CommandSwerveDrivetrain train = new CommandSwerveDrivetrain(DriveConstant
 , FrontLeft,
 FrontRight,
 BackLeft,
