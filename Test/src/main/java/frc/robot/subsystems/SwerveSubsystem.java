@@ -71,6 +71,7 @@ private Field2d fieldMaker = new Field2d();
         backRightMod.getModPos()
     });
 
+    //gets info on drive and steer Motor
     frontLeftMod.Info();
     frontRightMod.Info();
     backLeftMod.Info();
@@ -90,6 +91,7 @@ private Field2d fieldMaker = new Field2d();
 
   public void resetHeading(){
     //resets Gyro heading on field
+    //Change to .setYaw(0)???
     pigeon.reset();
   }
 
@@ -121,6 +123,7 @@ private Field2d fieldMaker = new Field2d();
 
   }
 
+  //Gets Mods states 
   private ChassisSpeeds getRobotRelativeSpeeds(){
     return Constants.kinematics.toChassisSpeeds(frontLeftMod.getModState(),frontRightMod.getModState(),backLeftMod.getModState(),backRightMod.getModState());
   }
