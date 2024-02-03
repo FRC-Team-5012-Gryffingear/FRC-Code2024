@@ -47,15 +47,15 @@ public final class Constants {
 //FR:  0.252685536875
 //BL: -0.153564453125
 //BR: 0.273681640625
-  public static final double FrontLeftOffset = -0.0263671875;
-  public static final double FrontRightOffset = -0.760498046875;
-  public static final double BackLeftOffset = -0.658203125;
-  public static final double BackRightOffset = -0.7802734375;
+  public static final double FrontLeftOffset = -0.002685546875;
+  public static final double FrontRightOffset = -0.131103515625;
+  public static final double BackLeftOffset = -0.029052734375;
+  public static final double BackRightOffset = -0.398681640625;
 
   public static final boolean FrontLeftInv = true;
-  public static final boolean FrontRightInv = false;
+  public static final boolean FrontRightInv = true;
   public static final boolean BackLeftInv = true;
-  public static final boolean BackRightInv = false;
+  public static final boolean BackRightInv = true;
 
   public static final int PigeonID = 0;
 

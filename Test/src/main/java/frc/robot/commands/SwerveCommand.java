@@ -36,9 +36,9 @@ public class SwerveCommand extends Command {
   public void execute() {
     double xSpeed = -MathUtil.applyDeadband(controller2.getLeftY() * 2, OperatorConstants.DriverDeadband) * 0.4;
     double ySpeed = MathUtil.applyDeadband(controller2.getLeftX() * 2, OperatorConstants.DriverDeadband) * 0.4;
-    double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX() * 2, OperatorConstants.DriverDeadband) * 0.4;
+    double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.DriverDeadband) * 0.4;
 
-    swervesubsys.drive(xSpeed, ySpeed, rotateSpeed,true);
+    swervesubsys.drive(xSpeed, ySpeed, rotateSpeed *2,true);
     
     // if(controller2.rightBumper().getAsBoolean()){
     //     swervesubsys.drive(xSpeed, ySpeed, rotateSpeed,true);

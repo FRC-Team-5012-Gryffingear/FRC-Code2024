@@ -53,7 +53,7 @@ public class SwerveMod {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
         //Config to full 360 if problems set back to signed half
-        config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+        config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
         config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
         SteerEncoder.getConfigurator().apply(config);
