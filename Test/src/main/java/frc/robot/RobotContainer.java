@@ -42,7 +42,7 @@ public class RobotContainer {
 
 
   private void configureBindings() { 
-    driverController.rightBumper().onTrue(new InstantCommand(swerveSubsys::resetHeading, swerveSubsys));
+    driverController.leftBumper().onTrue(new InstantCommand(swerveSubsys::resetHeading, swerveSubsys));
 
     driverController.y().onTrue(new InstantCommand(swerveSubsys::resetPose, swerveSubsys));
   }

@@ -153,7 +153,7 @@ private Field2d fieldMaker = new Field2d();
   public void setModStates(SwerveModuleState[] states){
     //Reduce Speeds to attainable values
     //Add MaxVelocity by doing math if needed and place into attainable Max speed
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, 1);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Max_velo);
     
     //sets module states, MAKE SURE THEY ARE IN ORDER CALLED
     frontLeftMod.setModState(states[0]);

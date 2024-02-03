@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -33,16 +34,17 @@ public class SwerveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xSpeed = -MathUtil.applyDeadband(controller2.getLeftY(), OperatorConstants.DriverDeadband) * 0.4;
-    double ySpeed = MathUtil.applyDeadband(controller2.getLeftX(), OperatorConstants.DriverDeadband) * 0.4;
-    double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.DriverDeadband) * 0.4;
+    double xSpeed = -MathUtil.applyDeadband(controller2.getLeftY() * 2, OperatorConstants.DriverDeadband) * 0.4;
+    double ySpeed = MathUtil.applyDeadband(controller2.getLeftX() * 2, OperatorConstants.DriverDeadband) * 0.4;
+    double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX() * 2, OperatorConstants.DriverDeadband) * 0.4;
 
+    swervesubsys.drive(xSpeed, ySpeed, rotateSpeed,true);
     
-    if(controller2.rightBumper().getAsBoolean()){
-        swervesubsys.drive(xSpeed, ySpeed, rotateSpeed,true);
-    } else{
-        swervesubsys.drive(xSpeed, ySpeed, rotateSpeed);
-    }
+    // if(controller2.rightBumper().getAsBoolean()){
+    //     swervesubsys.drive(xSpeed, ySpeed, rotateSpeed,true);
+    // } else{
+    //     swervesubsys.drive(xSpeed, ySpeed, rotateSpeed);
+    // }
 
   }
 
