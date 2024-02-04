@@ -31,20 +31,21 @@ public class RobotContainer {
   CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.DriverControllerPort);
 
-  SwerveCommand swerveCom = new SwerveCommand(swerveSubsys, driverController);
+  //SwerveCommand swerveCom = new SwerveCommand(swerveSubsys, driverController);
 
 
   public RobotContainer() {
-    swerveSubsys.setDefaultCommand(swerveCom);
+    swerveSubsys.setDefaultCommand(new SwerveCommand(swerveSubsys,
+     driverController,
+    () -> driverController.b().getAsBoolean(),
+     () -> driverController.a().getAsBoolean()));
 
     configureBindings();
   }
 
 
   private void configureBindings() { 
-    driverController.leftBumper().onTrue(new InstantCommand(swerveSubsys::resetHeading, swerveSubsys));
 
-    driverController.y().onTrue(new InstantCommand(swerveSubsys::resetPose, swerveSubsys));
   }
 
   /**

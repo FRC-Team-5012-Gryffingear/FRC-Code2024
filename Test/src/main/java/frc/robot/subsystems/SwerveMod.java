@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -29,7 +30,7 @@ public class SwerveMod {
 
     private final PIDController pidcontrl = new PIDController(ModConstants.KP, ModConstants.KI, ModConstants.KD);
 
-    private final SlewRateLimiter DriveLim = new SlewRateLimiter(0.8);
+    private final SlewRateLimiter DriveLim = new SlewRateLimiter(1);
     private final String Modname;
 
     private SwerveModuleState lastDesiredState = new SwerveModuleState();
@@ -47,9 +48,8 @@ public class SwerveMod {
 
         SteerMotor.getConfigurator().apply(new TalonFXConfiguration());
 
-        DriveMotor.setNeutralMode(NeutralModeValue.Brake);
-        SteerMotor.setNeutralMode(NeutralModeValue.Brake);
-
+        DriveMotor.setNeutralMode(NeutralModeValue.Brake);               
+ 
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
         //Config to full 360 if problems set back to signed half
@@ -107,7 +107,7 @@ public class SwerveMod {
         }
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, getRotation());
 
-        DriveMotor.set(DriveLim.calculate(optimizedState.speedMetersPerSecond));
+        DriveMotor.set(DriveLim.calculate(optimizedState.speedMetersPerSecond * 8));
 
         SteerMotor.set(pidcontrl.calculate(getRotation().getRadians(), optimizedState.angle.getRadians()));
 

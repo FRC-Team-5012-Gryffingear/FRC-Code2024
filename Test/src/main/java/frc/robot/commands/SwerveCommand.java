@@ -8,6 +8,9 @@ import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,12 +20,14 @@ public class SwerveCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
  private final SwerveSubsystem swervesubsys;
  private final CommandXboxController controller2;
-
+  private final BooleanSupplier yaw, pose;
  
   
-  public SwerveCommand(SwerveSubsystem subsystem, CommandXboxController controller) {
+  public SwerveCommand(SwerveSubsystem subsystem, CommandXboxController controller,BooleanSupplier yaw, BooleanSupplier pose ) {
     swervesubsys = subsystem;
     controller2 = controller;
+    this.yaw = yaw;
+    this.pose = pose;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -34,12 +39,18 @@ public class SwerveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xSpeed = -MathUtil.applyDeadband(controller2.getLeftY() * 2, OperatorConstants.DriverDeadband) * 0.4;
-    double ySpeed = MathUtil.applyDeadband(controller2.getLeftX() * 2, OperatorConstants.DriverDeadband) * 0.4;
-    double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.DriverDeadband) * 0.4;
-
-    swervesubsys.drive(xSpeed, ySpeed, rotateSpeed *2,true);
+    double xSpeed = MathUtil.applyDeadband(controller2.getLeftY(), OperatorConstants.DriverDeadband) * 0.4;
+    double ySpeed = MathUtil.applyDeadband(controller2.getLeftX(), OperatorConstants.DriverDeadband) * 0.4;
+    double rotateSpeed = -MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.DriverDeadband) * 0.4;
+// Delete 3 if slow
+    swervesubsys.drive3(xSpeed/3, -ySpeed/3, rotateSpeed, true);
     
+    if(yaw.getAsBoolean()){
+      swervesubsys.resetHeading();
+    }
+    else if(pose.getAsBoolean()){
+      swervesubsys.resetPose();
+    }
     // if(controller2.rightBumper().getAsBoolean()){
     //     swervesubsys.drive(xSpeed, ySpeed, rotateSpeed,true);
     // } else{

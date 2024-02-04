@@ -40,7 +40,7 @@ private final SwerveMod backRightMod = new SwerveMod(
 private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
 
 
-
+//  FL, FR, BL,
 private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.kinematics, getHeading(), new SwerveModulePosition[] {
     frontLeftMod.getModPos(),
     frontRightMod.getModPos(),
@@ -92,13 +92,16 @@ private Field2d fieldMaker = new Field2d();
   public void resetHeading(){
     //resets Gyro heading on field
     //Change to .setYaw(0)???
+    //reset();
+    System.out.println("HEADING IS RESETING");
     pigeon.reset();
+    pigeon.setYaw(270);
   }
 
   public Pose2d getPose(){
     //returns the odometry pose
     return new Pose2d(
-        new Translation2d(odometry.getPoseMeters().getX(), -odometry.getPoseMeters().getY()),
+        new Translation2d(-odometry.getPoseMeters().getX(), -odometry.getPoseMeters().getY()),
         odometry.getPoseMeters().getRotation()
     );
   }
@@ -108,6 +111,7 @@ private Field2d fieldMaker = new Field2d();
   public void resetPose(){
     //resets the odometry pose
     resetPose(new Pose2d());
+    System.out.println("POSE IS RESETING");
   }
 
   public void resetPose(Pose2d pose){
@@ -128,15 +132,15 @@ private Field2d fieldMaker = new Field2d();
     return Constants.kinematics.toChassisSpeeds(frontLeftMod.getModState(),frontRightMod.getModState(),backLeftMod.getModState(),backRightMod.getModState());
   }
 
-  private void drive(ChassisSpeeds chassisSpeeds){
-    drive(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false);
+  private void drive1(ChassisSpeeds chassisSpeeds){
+    drive3(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false);
   }
 
-  public void drive(double xSpeed, double ySpeed, double rotSpeed){
-    drive(xSpeed,ySpeed,rotSpeed,false);
+  public void drive2(double xSpeed, double ySpeed, double rotSpeed){
+    drive3(xSpeed,ySpeed,rotSpeed,false);
   }
 
-  public void drive(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative){
+  public void drive3(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative){
     ChassisSpeeds speeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
 
     if(fieldRelative){
@@ -156,10 +160,10 @@ private Field2d fieldMaker = new Field2d();
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Max_velo);
     
     //sets module states, MAKE SURE THEY ARE IN ORDER CALLED
-    frontLeftMod.setModState(states[0]);
-    frontRightMod.setModState(states[1]);
-    backLeftMod.setModState(states[2]);
-    backRightMod.setModState(states[3]);
+    frontLeftMod.setModState(states[1]);
+    frontRightMod.setModState(states[3]);
+    backLeftMod.setModState(states[0]);
+    backRightMod.setModState(states[2]);
   }
   public void stopMods(){
     //stops the modules 
