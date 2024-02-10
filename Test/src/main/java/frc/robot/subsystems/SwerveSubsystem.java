@@ -53,13 +53,7 @@ private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.k
 
 private Field2d fieldMaker = new Field2d();
 
-  public SwerveSubsystem() {
-
-  }
-
-
-
-
+  public SwerveSubsystem() {}
 
   @Override
   public void periodic() {
@@ -141,16 +135,16 @@ private Field2d fieldMaker = new Field2d();
   }
 
   public void drive3(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative){
-    ChassisSpeeds speeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
-
+    ChassisSpeeds speeds;
     if(fieldRelative){
         //add negative on getHeading if need to invert
-        speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, Rotation2d.fromRadians(getHeading().getRadians()));
-    }
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, Rotation2d.fromRadians(getHeading().getRadians()));
+    
 
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
 
     setModStates(states);
+    }
   }
 
   
@@ -160,6 +154,7 @@ private Field2d fieldMaker = new Field2d();
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Max_velo);
     
     //sets module states, MAKE SURE THEY ARE IN ORDER CALLED
+    // In this case it was needed to invert them
     frontLeftMod.setModState(states[1]);
     frontRightMod.setModState(states[3]);
     backLeftMod.setModState(states[0]);

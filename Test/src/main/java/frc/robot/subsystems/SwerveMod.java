@@ -31,6 +31,8 @@ public class SwerveMod {
     private final PIDController pidcontrl = new PIDController(ModConstants.KP, ModConstants.KI, ModConstants.KD);
 
     private final SlewRateLimiter DriveLim = new SlewRateLimiter(1);
+
+    private final PIDController drivecont = new PIDController(ModConstants.KP, 0, 0);
     private final String Modname;
 
     private SwerveModuleState lastDesiredState = new SwerveModuleState();
@@ -48,12 +50,13 @@ public class SwerveMod {
 
         SteerMotor.getConfigurator().apply(new TalonFXConfiguration());
 
-        DriveMotor.setNeutralMode(NeutralModeValue.Brake);               
+        DriveMotor.setNeutralMode(NeutralModeValue.Brake);             
+        SteerMotor.setNeutralMode(NeutralModeValue.Brake);  
  
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
         //Config to full 360 if problems set back to signed half
-        config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+        config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
         SteerEncoder.getConfigurator().apply(config);
@@ -61,6 +64,7 @@ public class SwerveMod {
         pidcontrl.enableContinuousInput(-Math.PI, Math.PI);
         
         pidcontrl.reset();
+        drivecont.reset();
 
         Modname = moduleName;
 
@@ -77,14 +81,6 @@ public class SwerveMod {
         }
     }
 
-    public SwerveModuleState getModState(){
-        return new SwerveModuleState(getDriveVelo(),getRotation());
-    }
-
-    public SwerveModulePosition getModPos(){
-        return new SwerveModulePosition(getDrivePos(),getRotation());
-    }
-
     public Rotation2d getRotation(){
         return Rotation2d.fromRotations(SteerEncoder.getAbsolutePosition().getValueAsDouble());
     }
@@ -97,17 +93,25 @@ public class SwerveMod {
         return DriveMotor.getVelocity().getValueAsDouble();
     }
 
+    public SwerveModuleState getModState(){
+        return new SwerveModuleState(getDriveVelo(),getRotation());
+    }
+
+    public SwerveModulePosition getModPos(){
+        return new SwerveModulePosition(getDrivePos(),getRotation());
+    }
+
 
     public void setModState(SwerveModuleState desiredState){
-        lastDesiredState = desiredState;
+         lastDesiredState = desiredState;
 
-        if(Math.abs(desiredState.speedMetersPerSecond) < 0.05){
+        if(Math.abs(lastDesiredState.speedMetersPerSecond) < 0.05){
             stop();
             return;
         }
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, getRotation());
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(lastDesiredState, getRotation());
 
-        DriveMotor.set(DriveLim.calculate(optimizedState.speedMetersPerSecond * 8));
+        DriveMotor.set(drivecont.calculate(optimizedState.speedMetersPerSecond * 8, lastDesiredState.speedMetersPerSecond));
 
         SteerMotor.set(pidcontrl.calculate(getRotation().getRadians(), optimizedState.angle.getRadians()));
 

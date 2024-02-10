@@ -34,7 +34,9 @@ public class SwerveCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    swervesubsys.resetHeading();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -42,8 +44,8 @@ public class SwerveCommand extends Command {
     double xSpeed = MathUtil.applyDeadband(controller2.getLeftY(), OperatorConstants.DriverDeadband) * 0.4;
     double ySpeed = MathUtil.applyDeadband(controller2.getLeftX(), OperatorConstants.DriverDeadband) * 0.4;
     double rotateSpeed = -MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.DriverDeadband) * 0.4;
-// Delete 3 if slow
-    swervesubsys.drive3(xSpeed/3, -ySpeed/3, rotateSpeed, true);
+// Delete 2 if slow
+    swervesubsys.drive3(xSpeed/2, -ySpeed/2, rotateSpeed, true);
     
     if(yaw.getAsBoolean()){
       swervesubsys.resetHeading();
