@@ -23,7 +23,7 @@ public final class Constants {
   public static final double trackWidth = Units.inchesToMeters(16.366);
   public static final double wheelBase = Units.inchesToMeters(22.580);
 
-
+// Max velo using RPM/Gear Ratio * pi * 4(diameter)/12(feet) * 60(min/seconds?)
   public static final double Max_velo = 6380 / 6.75 * Math.PI * 4 / 12 / 60;
   public static final int Max_Voltage = 12;
   public static final double Max_Angular = Max_velo/ Math.hypot(trackWidth/2, wheelBase/2);
@@ -52,6 +52,7 @@ public final class Constants {
   public static final double BackLeftOffset = -0.408203125;
   public static final double BackRightOffset = -0.017822265625;
 
+  // if true then inverse drive motors
   public static final boolean FrontLeftInv = false;
   public static final boolean FrontRightInv = false;
   public static final boolean BackLeftInv = false;
@@ -59,12 +60,21 @@ public final class Constants {
 
   public static final int PigeonID = 0;
 
+  // gives position of modules on a 2d plane
   public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     new Translation2d(wheelBase/2, -trackWidth/2), // Front Right
     new Translation2d(wheelBase/2, trackWidth/2),  // FrontLeft
     new Translation2d(-wheelBase/2, -trackWidth/2), // Back Right
     new Translation2d(-wheelBase/2, trackWidth/2) // Rear Left
   );
+
+  /*
+   * public static final int Intake1 = 0;
+   * public static final int Intake2 = 0;
+   * public static final int Elev1 = 0;
+   * public static final int Elev2 = 0;
+   * 
+   */
 
   public static class ModConstants{
     // same Kp values for all modules, Might need to adjust

@@ -27,7 +27,8 @@ import frc.robot.Constants;
 public class SwerveSubsystem extends SubsystemBase {
  
 
-
+//Using the SwerveMod file constructer we define and set the SwerveMods 
+//according to their ports and name
 private final SwerveMod frontLeftMod = new SwerveMod(
     Constants.FrontLeftDriveID, Constants.FrontLeftSteerID, Constants.FrontLeftEncoderID, Constants.FrontLeftOffset, Constants.FrontLeftInv, "FL");
 private final SwerveMod frontRightMod = new SwerveMod(
@@ -37,10 +38,12 @@ private final SwerveMod backLeftMod = new SwerveMod(
 private final SwerveMod backRightMod = new SwerveMod(
     Constants.BackRightDriveID, Constants.BackRightSteerID, Constants.BackRightEncoderID, Constants.BackRightOffset, Constants.BackRightInv, "BR");
 
+// Pigeon object that determines the yaw,roll,pitch
 private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
 
 
 //  FL, FR, BL,
+// Determines robots position and heading on field
 private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.kinematics, getHeading(), new SwerveModulePosition[] {
     frontLeftMod.getModPos(),
     frontRightMod.getModPos(),
@@ -50,7 +53,7 @@ private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.k
 
 //makes a 2d field
 
-
+//2d field for user view
 private Field2d fieldMaker = new Field2d();
 
   public SwerveSubsystem() {}
@@ -71,7 +74,7 @@ private Field2d fieldMaker = new Field2d();
     backLeftMod.Info();
     backRightMod.Info();
 
-
+// puts data into board to view
     fieldMaker.setRobotPose(getPose());
     SmartDashboard.putData(fieldMaker);
   }
@@ -104,11 +107,14 @@ private Field2d fieldMaker = new Field2d();
 
   public void resetPose(){
     //resets the odometry pose
+    // for field references?
+    //Utilizes the other Reset pose 
     resetPose(new Pose2d());
     System.out.println("POSE IS RESETING");
   }
 
   public void resetPose(Pose2d pose){
+    //
     odometry.resetPosition(
         getHeading(),
         new SwerveModulePosition[] {
