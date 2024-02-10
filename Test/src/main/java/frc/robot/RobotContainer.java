@@ -6,13 +6,15 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.elevCom;
 import frc.robot.otherInfo.controllerConstant;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.elevSS;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -25,22 +27,28 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final Elevator elev = new Elevator();
-
-  private final Joystick joystick = new Joystick(0);
+  private final elevSS subsys = new elevSS();
+  private final XboxController xbox = new XboxController(0);
 
 
   public RobotContainer() {
-    // Configure the trigger bindings
-    elev.setDefaultCommand(new ElevatorCom(
-      elev,
-      () -> joystick.getRawButton(controllerConstant.A),
-      () -> joystick.getRawButton(controllerConstant.B)));
+    //subsys.setDefaultCommand(new elevCom(subsys, null, null));
+
+
+
     configureBindings();
   }
 
 
   private void configureBindings() {
+    subsys.setDefaultCommand(new elevCom(subsys, 
+    () -> xbox.getRawAxis(controllerConstant.RIGHT_TRIGGER),
+    () -> xbox.getRawAxis(controllerConstant.LEFT_TRIGGER), 
+    () -> xbox.getra));
+    
+    
+    
+    
 
   }
 
