@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -48,9 +50,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
-    Thread visionThread = new Thread(() -> apriltagVisionThreadProc());
-    visionThread.setDaemon(true);
-    visionThread.start();
+   Thread visionThread = new Thread(()-> apriltagVisionThreadProc());
+   visionThread.setDaemon(true);
+   visionThread.start();
 
   //   Code seems to not be necessary
   //   CameraServer.startAutomaticCapture();
@@ -161,31 +163,16 @@ public class Robot extends TimedRobot {
     AprilTagDetector detector = new AprilTagDetector();
     detector.addFamily("tag16h5",0);
 
-    // Get the UsbCamera from CameraServer
+    //get the UsbCamera from CameraServer
     UsbCamera camera = CameraServer.startAutomaticCapture();
-    //Set the resolution
-    camera.setResolution(640, 480); //double check if this works with our camera
+    //set resolution
+    camera.setResolution(640, 480);
 
-    //Get a CvSink. This will caputre Mats from the camera
-    CvSink cvSink = CameraServer.getVideo();
-    //Setup a CvSource. this will send images back to the Dashboard
+    //Get a CvSink This will capture Mats from the camera
+    CvSink cvsink = CameraServer.getVideo();
+    //setup a cvsource this will send immages back to the dashboard
     CvSource outputStream = CameraServer.putVideo("detect", 640, 480);
-    var tagSize = 36;
-    //Camera Logitech C920 Camera
-    // var fx = 939.646;
-    // var fy = 945.506; 
 
-    //Camera Logitech C270 HD Webcam
-    var fx = 1377.154;
-    var fy = 1387.105;
-    // var _cx = 694.783;
-    // var _cy = 406.604;
-
-    // AprilTagPoseEstimator.Config poseEstConfig = new AprilTagPoseEstimator.Config(tagSize, fx, fy, _cx, _cy);
-    // AprilTagPoseEstimator estimator = new AprilTagPoseEstimator(poseEstConfig);
-
-
-    //resuing this Mat
     Mat image = new Mat();
     Mat grayimage = new Mat();
     ArrayList<Integer> tags = new ArrayList<>();
@@ -196,18 +183,20 @@ public class Robot extends TimedRobot {
     ArrayList<Double> Rollvalues = new ArrayList<>();
     ArrayList<Double> Yawvalues = new ArrayList<>();
 
-    Scalar outlineColor = new Scalar(0,255,0); //
-    Scalar xColor = new Scalar(0,0,255); 
+    var TagSize = 36;
+    //Camera Logitech C270 HD Webcam
+    var fx = 1377.154;
+    var fy = 1387.105;
+  
 
-    while (!Thread.interrupted()){
-      //Tell the CvSink to grab a frame and put it in source mat, if error notify the output
-      if (cvSink.grabFrame(image)==0){
-        //send the output the error
-        outputStream.notifyError(cvSink.getError());
-        //skip the rest of the current iteration
+    Scalar outlineColor = new Scalar(0,255,0);
+    Scalar xColor = new Scalar(0,0,255);
+
+    while(!Thread.interrupted()){
+      if (cvsink.grabFrame(image)==0){
+        outputStream.notifyError(cvsink.getError());
         continue;
       }
-
       Imgproc.cvtColor(image, grayimage, Imgproc.COLOR_RGB2GRAY);
 
       AprilTagDetection[] detections = detector.detect(grayimage);
@@ -218,13 +207,14 @@ public class Robot extends TimedRobot {
       Pitchvalues.clear();
       Rollvalues.clear();
       Yawvalues.clear();
-
       ArrayList<Transform3d> poses = new ArrayList<Transform3d>();
 
-      for(AprilTagDetection detection : detections){
+
+
+      for (AprilTagDetection detection : detections){
         tags.add(detection.getId());
 
-        for(var i = 0; i <=3; i++){
+        for (var i = 0; i <= 3; i++){
           var j = (i + 1) % 4;
           var pt1 = new Point(detection.getCornerX(i), detection.getCornerY(i));
           var pt2 = new Point(detection.getCornerX(j), detection.getCornerY(j));
@@ -235,64 +225,42 @@ public class Robot extends TimedRobot {
         var cy = detection.getCenterY();
         var num = 10;
         Imgproc.line(image, new Point(cx - num, cy), new Point(cx + num, cy), xColor, 2);
-        Imgproc.line(image, new Point(cx, cy - num), new Point(cx, cy - num), xColor, 2);
+        Imgproc.line(image, new Point(cx, cy - num), new Point(cx, cy + num), xColor, 2);
         Imgproc.putText(image, Integer.toString(detection.getId()), new Point(cx + num, cy), Imgproc.FONT_HERSHEY_SIMPLEX, 1, xColor, 3);
+        AprilTagPoseEstimator.Config poseEstConfig = new AprilTagPoseEstimator.Config(TagSize, fx, fy, cx, cy);
+        AprilTagPoseEstimator poseEst = new AprilTagPoseEstimator(poseEstConfig);
+        Transform3d pose = poseEst.estimate(detection);
+        poses.add(pose);
 
+      }
 
-        // AprilTagPoseEstimator.Config poseEstConfig = new AprilTagPoseEstimator.Config(tagSize, fx, fy, cx, cy);
-        // AprilTagPoseEstimator estimator = new AprilTagPoseEstimator(poseEstConfig);
-        // Transform3d pose = estimator.estimate(detection);
-        // poses.add(pose);
-
-
-      
-      for(Transform3d _pose : poses){
+      for (Transform3d _pose : poses){
         Xvalues.add(_pose.getX());
         Yvalues.add(_pose.getY());
         Zvalues.add(_pose.getZ());
         Pitchvalues.add(_pose.getRotation().getX());
         Rollvalues.add(_pose.getRotation().getY());
         Yawvalues.add(_pose.getRotation().getZ());
-        //Check if we can use getDistance to our advantage.
-              SmartDashboard.putString("X Values", Xvalues.toString());
-      SmartDashboard.putString("Y Values", Yvalues.toString());
-      SmartDashboard.putString("Z Values", Zvalues.toString());
-      SmartDashboard.putString("Pitch Values", Pitchvalues.toString());
-      SmartDashboard.putString("Roll Values", Rollvalues.toString());
-      SmartDashboard.putString("Yaw Values", Yawvalues.toString());
-      //Put Tag ID on Array
-     //SmartDashboard.putString("tag", tags.toString());
 
-      //detect Specific April Tag
-      // Give the output stream a new image to display
-      outputStream.putFrame(image);
-
-        
-        // SmartDashboard.putNumber("X: ", _pose.getX());
-        // SmartDashboard.putNumber("Y: ", _pose.getY());
-        // SmartDashboard.putNumber("Z: ", _pose.getZ());
-        // SmartDashboard.putNumber("Pitch: ", _pose.getRotation().getX());
-        // SmartDashboard.putNumber("Roll: ", _pose.getRotation().getY());
-        // SmartDashboard.putNumber("Yaw: ", _pose.getRotation().getZ());
-
-
-        // System.out.println("X: " + _pose.getX());
-        // System.out.println("Y: " + _pose.getY());
-        // System.out.println("Z: " + _pose.getZ());
-        // System.out.println("Pitch: " + _pose.getRotation().getX());
-        // System.out.println("Roll: " + _pose.getRotation().getY());
-        // System.out.println("Yaw: " + _pose.getRotation().getZ());
 
       }
+
+
+
+      SmartDashboard.putString("X values", Xvalues.toString());
+      SmartDashboard.putString("Y values", Yvalues.toString());
+      SmartDashboard.putString("Z values", Zvalues.toString());
+      SmartDashboard.putString("Pitch values", Pitchvalues.toString());
+      SmartDashboard.putString("Roll values", Rollvalues.toString());
+      SmartDashboard.putString("Yaw values", Yawvalues.toString());
+
+
+
       SmartDashboard.putString("tag", tags.toString());
-
-      //Put X, Y, Z, Pitch, Roll, Yaw values on SmartDashboard
-
+      
+      outputStream.putFrame(image);
     }
-
     detector.close();
-  }
-
   }
 
 
