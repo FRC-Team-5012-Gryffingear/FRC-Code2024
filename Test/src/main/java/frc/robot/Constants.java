@@ -13,6 +13,13 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+//for the elev
+  public static final int talon1 = 0;  //inverted(?)
+  public static final int talon2 = 0;
+//for the intake
+  public static final int talon3 = 0; //inverted
+  public static final int talon4 = 0;
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }

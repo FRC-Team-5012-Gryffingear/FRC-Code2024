@@ -8,9 +8,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.elevCom;
+import frc.robot.commands.intakeCom;
 import frc.robot.otherInfo.controllerConstant;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.elevSS;
+import frc.robot.subsystems.intakeSS;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +30,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final elevSS subsys = new elevSS();
+  private final intakeSS inss = new intakeSS();
   private final XboxController xbox = new XboxController(0);
 
 
@@ -43,12 +46,11 @@ public class RobotContainer {
   private void configureBindings() {
     subsys.setDefaultCommand(new elevCom(subsys, 
     () -> xbox.getRawAxis(controllerConstant.RIGHT_TRIGGER),
-    () -> xbox.getRawAxis(controllerConstant.LEFT_TRIGGER), 
-    () -> xbox.getra));
-    
-    
-    
-    
+    () -> xbox.getRawAxis(controllerConstant.LEFT_TRIGGER)));
+
+    inss.setDefaultCommand(new intakeCom(inss,
+    () -> xbox.getRawButton(controllerConstant.X),
+    () -> xbox.getRawButton(controllerConstant.Y)));
 
   }
 
