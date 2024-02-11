@@ -2,13 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.cameraserver.CameraServer; 
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -30,145 +31,16 @@ import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 import edu.wpi.first.apriltag.AprilTagDetection;
 import frc.robot.OpenC;
-/**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
- */
-public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+
+public class VisionSub extends SubsystemBase {
+  /** Creates a new VisionSub. */
+
+
   
-  private RobotContainer m_robotContainer;
+ // private Alert enableVisionUpdatesAlert =
+  //  new Alert("Vision updates are temporarily disabled.", AlertType.WARNING);
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-
-
-
-    
-
-  //  Thread visionThread = new Thread(()-> apriltagVisionThreadProc());
-  //  visionThread.setDaemon(true);
-  //  visionThread.start();
-
-
-
-
-
-
-  //   Code seems to not be necessary
-  //   CameraServer.startAutomaticCapture();
-  //  CvSink cvsink = CameraServer.getVideo();
-
-  //   Mat image = new Mat();
-  //   cvsink.grabFrame(image);
-  //   AprilTagDetector april_tag_detector = new AprilTagDetector();
-
-  //  april_tag_detector.addFamily("tag36h11");
-
-  //   AprilTagDetection[] april_tag_detection_array = april_tag_detector.detect(image);
-  //   AprilTagPoseEstimator.Config april_tag_pose_estimator_config = new AprilTagPoseEstimator.Config(0.1524, 1377.154, 1387.105, 694.783, 406.604);
-  //   AprilTagPoseEstimator april_tag_estimator = new AprilTagPoseEstimator(april_tag_pose_estimator_config);
-  //   List<Transform3d> april_tag_poses = new ArrayList<Transform3d>();
-
-
-  //   if(april_tag_detection_array.length != 0){
-  //     for (AprilTagDetection april_tag_detection: april_tag_detection_array) {
-  //     Transform3d april_tag_pose = april_tag_estimator.estimate(april_tag_detection);
-  //     april_tag_poses.add(april_tag_pose);
-  //     }
-  //   }
-
-
-  //   for (Transform3d april_tag_pose: april_tag_poses) {
-  //     System.out.println("This is the X: " + april_tag_pose.getX());
-  //     System.out.println("This is the Y: " + april_tag_pose.getY());
-  //     System.out.println("This is the Z: " + april_tag_pose.getZ());
-  //   }
-    
-    m_robotContainer = new RobotContainer();
-  }
-
-
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
-  }
-
-  /** This function is called once each time the robot enters Disabled mode. */
-  @Override
-  public void disabledInit() {}
-
-  @Override
-  public void disabledPeriodic() {}
-
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
-  }
-
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
-
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
-  }
-
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {}
-
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-  }
-
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
-
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
-
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
-
-   void apriltagVisionThreadProc(){
+  public void apriltagVisionThreadProc(){
     AprilTagDetector detector = new AprilTagDetector();
     detector.addFamily("tag16h5",0);
 
@@ -287,6 +159,43 @@ public class Robot extends TimedRobot {
   }
  }
   
+  /**
+   * Example command factory method.
+   *
+   * @return a command
+   */
+  public Command exampleMethodCommand() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          /* one-time action goes here */
+        });
+  }
 
+  public void func(){
+     Thread visionThread = new Thread(()-> apriltagVisionThreadProc());
+    visionThread.setDaemon(true);
+    visionThread.start();
+  }
+  /**
+   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
+   *
+   * @return value of some boolean subsystem state, such as a digital sensor.
+   */
+  public boolean exampleCondition() {
+    // Query some boolean state, such as a digital sensor.
+    return false;
+  }
 
+  @Override
+  public void periodic() {
+
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // This method will be called once per scheduler run during simulation
+  }
 }
+
