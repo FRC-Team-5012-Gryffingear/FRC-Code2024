@@ -22,6 +22,9 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import java.lang.Math;
 import java.util.*;
 
@@ -36,13 +39,15 @@ public class VisionSub extends SubsystemBase {
   /** Creates a new VisionSub. */
 
 
-  
+  // ArrayList<Double> xPose = new ArrayList<>();
+  // //double xPose;
+  // ArrayList<Integer> ID = new ArrayList<>();
  // private Alert enableVisionUpdatesAlert =
   //  new Alert("Vision updates are temporarily disabled.", AlertType.WARNING);
 
   public void apriltagVisionThreadProc(){
     AprilTagDetector detector = new AprilTagDetector();
-    detector.addFamily("tag16h5",0);
+    detector.addFamily("tag36h11",0);
 
     //get the UsbCamera from CameraServer
     UsbCamera camera = CameraServer.startAutomaticCapture();
@@ -56,7 +61,7 @@ public class VisionSub extends SubsystemBase {
 
     Mat image = new Mat();
     Mat grayimage = new Mat();
-    ArrayList<Integer> tags = new ArrayList<>();
+    ArrayList<Integer> tagsIDs = new ArrayList<>();
     ArrayList<Double> Xvalues = new ArrayList<>();
     ArrayList<Double> Yvalues = new ArrayList<>();
     ArrayList<Double> Zvalues = new ArrayList<>();
@@ -81,20 +86,21 @@ public class VisionSub extends SubsystemBase {
       Imgproc.cvtColor(image, grayimage, Imgproc.COLOR_RGB2GRAY);
 
       AprilTagDetection[] detections = detector.detect(grayimage);
-      tags.clear();
+      tagsIDs.clear();
       Xvalues.clear();
       Yvalues.clear();
       Zvalues.clear();
       Pitchvalues.clear();
       Rollvalues.clear();
       Yawvalues.clear();
+     // xPose.clear();
       ArrayList<Transform3d> poses = new ArrayList<Transform3d>();
 
 
 
       for (AprilTagDetection detection : detections){
-        tags.add(detection.getId());
-
+        tagsIDs.add(detection.getId());
+       // ID.add(detection.getId());
         for (var i = 0; i <= 3; i++){
           var j = (i + 1) % 4;
           var pt1 = new Point(detection.getCornerX(i), detection.getCornerY(i));
@@ -112,11 +118,11 @@ public class VisionSub extends SubsystemBase {
         AprilTagPoseEstimator poseEst = new AprilTagPoseEstimator(poseEstConfig);
         Transform3d pose = poseEst.estimate(detection);
         poses.add(pose);
-        adapt(tags,pose);
+      //  adapt(tags,pose);
 
 
       }
-
+      System.out.println(poses);
       for (Transform3d _pose : poses){
         Xvalues.add(_pose.getX());
         Yvalues.add(_pose.getY());
@@ -125,72 +131,66 @@ public class VisionSub extends SubsystemBase {
         Rollvalues.add(_pose.getRotation().getY());
         Yawvalues.add(_pose.getRotation().getZ());
 
+        // for(int i : tagsIDs){
+        //     if(i == 1){
+        //         // xPose.add(_pose.getX());
+        //         // xPose.get(0);
+        //         // SmartDashboard.putNumber("Number X: ", xPose.get(0));
+        //         double x = Double.parseDouble(SmartDashboard.getString("X values","0"));
+        //        //System.out.println("This is the X value within: " + x );
+
+        //     }
+        // }
 
       }
-
+// Get the IDs array, check if num matches, then populate the double with the X value of the array 
+// 
       SmartDashboard.putString("X values", Xvalues.toString());
       SmartDashboard.putString("Y values", Yvalues.toString());
       SmartDashboard.putString("Z values", Zvalues.toString());
       SmartDashboard.putString("Pitch values", Pitchvalues.toString());
       SmartDashboard.putString("Roll values", Rollvalues.toString());
       SmartDashboard.putString("Yaw values", Yawvalues.toString());
+
+      //double x = SmartDashboard.getString("X values","0");
+       System.out.println("This is the X value within: " + Double.parseDouble(SmartDashboard.getString("X values","0")));
+      
+     //System.out.println("This is the true X: " + SmartDashboard.getData("X values"));
       
 
 
-      SmartDashboard.putString("tag", tags.toString());
+      SmartDashboard.putString("tag", tagsIDs.toString());
       
       outputStream.putFrame(image);
     }
     detector.close();
-    
   }
 
  public void adapt(ArrayList<Integer> tagIDs,Transform3d poses){
+  ArrayList<Double> Storage = new ArrayList<>();
   for(int i : tagIDs){
     if(i == 1){
       System.out.println("Detected 1");
       if(Math.abs(poses.getX()) < 0.05){
+        Storage.add(poses.getX());
         System.out.println("Xvalue reading: " + poses.getX());
         SmartDashboard.putNumber("Xvaluesssss", poses.getX());
-
-
       }
     }
   }
  }
-  
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
-  }
 
-  public void func(){
-     Thread visionThread = new Thread(()-> apriltagVisionThreadProc());
-    visionThread.setDaemon(true);
-    visionThread.start();
-  }
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
+ public double getXs(){
+    //System.out.println("This is the X val: " + xPose.get(0));
+    // SmartDashboard.putNumber("This is the X value", xPose.get(0));
+    return 0;
+ }
+
+  
 
   @Override
   public void periodic() {
-
+    getXs();
   }
 
   @Override

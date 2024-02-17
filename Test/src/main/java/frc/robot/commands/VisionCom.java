@@ -5,6 +5,7 @@ import frc.robot.subsystems.VisionSub;
 
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
@@ -34,6 +35,7 @@ public class VisionCom extends Command {
   @Override
   public void execute() {
     subsys.apriltagVisionThreadProc();
+   // SmartDashboard.putNumber("Getting the X value: ", subsys.getXs());
   }
 
   // Called once the command ends or is interrupted.
