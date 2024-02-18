@@ -215,7 +215,7 @@ public class VisionSub extends SubsystemBase {
       double value_id_7_value = SmartDashboard.getNumber("ID 7 X Value", 0);
       SmartDashboard.putNumber("ID 7 X Values", value_id_7_value);
 
-      double value_id_8_value = SmartDashboard.getNumber("ID 8 Value", 0);
+      double value_id_8_value = SmartDashboard.getNumber("ID 8 X  Value", 0);
       SmartDashboard.putNumber("ID 8 X Values", value_id_8_value);
 
       SmartDashboard.putString("X values", Xvalues.toString());
