@@ -68,6 +68,7 @@ public class VisionSub extends SubsystemBase {
     ArrayList<Double> Pitchvalues = new ArrayList<>();
     ArrayList<Double> Rollvalues = new ArrayList<>();
     ArrayList<Double> Yawvalues = new ArrayList<>();
+    ArrayList<Integer> IDValues = new ArrayList<>();
 
     var TagSize = 36;
     //Camera Logitech C270 HD Webcam
@@ -93,6 +94,8 @@ public class VisionSub extends SubsystemBase {
       Pitchvalues.clear();
       Rollvalues.clear();
       Yawvalues.clear();
+      IDValues.clear();
+
      // xPose.clear();
       ArrayList<Transform3d> poses = new ArrayList<Transform3d>();
 
@@ -123,13 +126,65 @@ public class VisionSub extends SubsystemBase {
 
       }
       System.out.println(poses);
+      var i = 0;
       for (Transform3d _pose : poses){
-        Xvalues.add(_pose.getX());
-        Yvalues.add(_pose.getY());
-        Zvalues.add(_pose.getZ());
-        Pitchvalues.add(_pose.getRotation().getX());
-        Rollvalues.add(_pose.getRotation().getY());
-        Yawvalues.add(_pose.getRotation().getZ());
+        if(detections[i].getId() == 4){
+          SmartDashboard.putNumber("ID 4 X Value", _pose.getX());
+          SmartDashboard.putNumber("ID 4 Y Value", _pose.getY());
+          SmartDashboard.putNumber( "ID 4 Z Value", _pose.getZ());
+          SmartDashboard.putNumber( "ID 4 Pitch Value", _pose.getRotation().getX());
+          SmartDashboard.putNumber("ID 4 Roll Value", _pose.getRotation().getY());
+          SmartDashboard.putNumber("ID 4 Yaw Value", _pose.getRotation().getZ());
+        }
+        else if(detections[i].getId() == 3){
+          SmartDashboard.putNumber("ID 3 X Value", _pose.getX());
+          SmartDashboard.putNumber("ID 3 Y Value", _pose.getY());
+          SmartDashboard.putNumber( "ID 3 Z Value", _pose.getZ());
+          SmartDashboard.putNumber( "ID 3 Pitch Value", _pose.getRotation().getX());
+          SmartDashboard.putNumber("ID 3 Roll Value", _pose.getRotation().getY());
+          SmartDashboard.putNumber("ID 3 Yaw Value", _pose.getRotation().getZ());
+        }
+        else if(detections[i].getId() == 5){
+          SmartDashboard.putNumber("ID 5 X Value", _pose.getX());
+          SmartDashboard.putNumber("ID 5 Y Value", _pose.getY());
+          SmartDashboard.putNumber( "ID 5 Z Value", _pose.getZ());
+          SmartDashboard.putNumber( "ID 5 Pitch Value", _pose.getRotation().getX());
+          SmartDashboard.putNumber("ID 5 Roll Value", _pose.getRotation().getY());
+          SmartDashboard.putNumber("ID 5 Yaw Value", _pose.getRotation().getZ());
+        }
+        else if (detections[i].getId() == 6){
+          SmartDashboard.putNumber("ID 6 X Value", _pose.getX());
+          SmartDashboard.putNumber("ID 6 Y Value", _pose.getY());
+          SmartDashboard.putNumber( "ID 6 Z Value", _pose.getZ());
+          SmartDashboard.putNumber( "ID 6 Pitch Value", _pose.getRotation().getX());
+          SmartDashboard.putNumber("ID 6 Roll Value", _pose.getRotation().getY());
+          SmartDashboard.putNumber("ID 6 Yaw Value", _pose.getRotation().getZ());
+        }
+        else if (detections[i].getId() == 7){
+          SmartDashboard.putNumber("ID 7 X Value", _pose.getX());
+          SmartDashboard.putNumber("ID 7 Y Value", _pose.getY());
+          SmartDashboard.putNumber( "ID 7 Z Value", _pose.getZ());
+          SmartDashboard.putNumber( "ID 7 Pitch Value", _pose.getRotation().getX());
+          SmartDashboard.putNumber("ID 7 Roll Value", _pose.getRotation().getY());
+          SmartDashboard.putNumber("ID 7 Yaw Value", _pose.getRotation().getZ());}
+        else if (detections[i].getId() == 8){
+          SmartDashboard.putNumber("ID 8 X Value", _pose.getX());
+          SmartDashboard.putNumber("ID 8 Y Value", _pose.getY());
+          SmartDashboard.putNumber( "ID 8 Z Value", _pose.getZ());
+          SmartDashboard.putNumber( "ID 8 Pitch Value", _pose.getRotation().getX());
+          SmartDashboard.putNumber("ID 8 Roll Value", _pose.getRotation().getY());
+          SmartDashboard.putNumber("ID 8 Yaw Value", _pose.getRotation().getZ());
+        }
+        
+        i = i + 1 ;
+        // Xvalues.add(_pose.getX());
+        // Yvalues.add(_pose.getY());
+        // Zvalues.add(_pose.getZ());
+        // Pitchvalues.add(_pose.getRotation().getX());
+        // Rollvalues.add(_pose.getRotation().getY());
+        // Yawvalues.add(_pose.getRotation().getZ());
+        // IDValues.add(detections[i].getId());
+        // i = i + 1;
 
         // for(int i : tagsIDs){
         //     if(i == 1){
@@ -144,16 +199,35 @@ public class VisionSub extends SubsystemBase {
 
       }
 // Get the IDs array, check if num matches, then populate the double with the X value of the array 
-// 
+
+      double value_id_4_value = SmartDashboard.getNumber("ID 4 X Value", 0);
+      SmartDashboard.putNumber("ID 4 X Values", value_id_4_value);
+
+      double value_id_3_value = SmartDashboard.getNumber("ID 3 X Value", 0);
+      SmartDashboard.putNumber("ID 3 X Values", value_id_3_value);
+
+      double value_id_5_value = SmartDashboard.getNumber("ID 5 X Value", 0);
+      SmartDashboard.putNumber("ID 5 X Values", value_id_5_value);
+
+      double value_id_6_value = SmartDashboard.getNumber("ID 6 X Value", 0);
+      SmartDashboard.putNumber("ID 6 X Values", value_id_6_value);
+
+      double value_id_7_value = SmartDashboard.getNumber("ID 7 X Value", 0);
+      SmartDashboard.putNumber("ID 7 X Values", value_id_7_value);
+
+      double value_id_8_value = SmartDashboard.getNumber("ID 8 Value", 0);
+      SmartDashboard.putNumber("ID 8 X Values", value_id_8_value);
+
       SmartDashboard.putString("X values", Xvalues.toString());
       SmartDashboard.putString("Y values", Yvalues.toString());
       SmartDashboard.putString("Z values", Zvalues.toString());
       SmartDashboard.putString("Pitch values", Pitchvalues.toString());
       SmartDashboard.putString("Roll values", Rollvalues.toString());
       SmartDashboard.putString("Yaw values", Yawvalues.toString());
+      SmartDashboard.putString("TagIDs", IDValues.toString());
 
       //double x = SmartDashboard.getString("X values","0");
-       System.out.println("This is the X value within: " + Double.parseDouble(SmartDashboard.getString("X values","0")));
+      //  System.out.println("This is the X value within: " + Double.parseDouble(SmartDashboard.getString("X values","0")));
       
      //System.out.println("This is the true X: " + SmartDashboard.getData("X values"));
       
@@ -166,31 +240,37 @@ public class VisionSub extends SubsystemBase {
     detector.close();
   }
 
- public void adapt(ArrayList<Integer> tagIDs,Transform3d poses){
-  ArrayList<Double> Storage = new ArrayList<>();
-  for(int i : tagIDs){
-    if(i == 1){
-      System.out.println("Detected 1");
-      if(Math.abs(poses.getX()) < 0.05){
-        Storage.add(poses.getX());
-        System.out.println("Xvalue reading: " + poses.getX());
-        SmartDashboard.putNumber("Xvaluesssss", poses.getX());
-      }
-    }
-  }
+ public double getX_ID_3(){
+    double x = SmartDashboard.getNumber("ID 3 X Value", 0);
+    return x;
  }
 
- public double getXs(){
-    //System.out.println("This is the X val: " + xPose.get(0));
-    // SmartDashboard.putNumber("This is the X value", xPose.get(0));
-    return 0;
+ public double getX_ID_4(){
+  double x = SmartDashboard.getNumber("ID 4 X Value", 0);
+  return x;
  }
 
+ public double getX_ID_5(){
+  double x = SmartDashboard.getNumber("ID 5 X Value", 0);
+  return x;
+ }
+
+ public double getX_ID_6(){
+  double x = SmartDashboard.getNumber("ID 6 X Value", 0);
+  return x;
+ }
+  public double getX_ID_7(){
+  double x = SmartDashboard.getNumber("ID 7 X Value", 0);
+  return x;
+ }
+ public double getX_ID_8(){
+  double x = SmartDashboard.getNumber("ID 8 X Value", 0);
+  return x;
+ }
   
 
   @Override
   public void periodic() {
-    getXs();
   }
 
   @Override
