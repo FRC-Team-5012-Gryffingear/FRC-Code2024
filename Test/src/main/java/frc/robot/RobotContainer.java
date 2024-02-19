@@ -6,10 +6,15 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ElevatorComm;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeComm;
 import frc.robot.commands.SwerveCommand;
+import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsys;
 import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -26,21 +31,38 @@ public class RobotContainer {
   
 
   SwerveSubsystem swerveSubsys = new SwerveSubsystem();
+  IntakeSubsys intakeSub = new IntakeSubsys();
+  ElevatorSubsys elevSub = new ElevatorSubsys();
 
 
   CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.DriverControllerPort);
+  CommandXboxController operatorController =
+      new CommandXboxController(OperatorConstants.OperatorControllerPort);
+  
+  
 
   //SwerveCommand swerveCom = new SwerveCommand(swerveSubsys, driverController);
 
 
   public RobotContainer() {
+    //Check if A and B register since we switched to Xboxcontroller from CommandXboxcontroller
     swerveSubsys.setDefaultCommand(new SwerveCommand(swerveSubsys,
      driverController,
-    () -> driverController.b().getAsBoolean(),
-     () -> driverController.a().getAsBoolean()));
+    () -> driverController.a().getAsBoolean(),
+     () -> driverController.b().getAsBoolean()));
 
     configureBindings();
+
+    intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
+     () -> operatorController.a().getAsBoolean(),
+     () -> operatorController.b().getAsBoolean()));
+
+    elevSub.setDefaultCommand(new ElevatorComm(elevSub,
+    () -> driverController.getRightTriggerAxis(), 
+    () -> driverController.getLeftTriggerAxis()));
+
+
   }
 
 
@@ -55,6 +77,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(null);
+    //return Autos.exampleAuto(null);
+    return null;
   }
 }

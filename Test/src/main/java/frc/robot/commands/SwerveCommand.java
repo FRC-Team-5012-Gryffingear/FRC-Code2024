@@ -43,7 +43,7 @@ public class SwerveCommand extends Command {
   public void execute() {
     double xSpeed = MathUtil.applyDeadband(controller2.getLeftY(), OperatorConstants.DriverDeadband) * 0.4;
     double ySpeed = MathUtil.applyDeadband(controller2.getLeftX(), OperatorConstants.DriverDeadband) * 0.4;
-    double rotateSpeed = -MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.DriverDeadband) * 0.4;
+    double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.DriverDeadband) * 0.4;
 // Delete 2 if slow
 //X should move pos direction, -Y  move pos direction, rotateSpeed move in pos direction
     swervesubsys.drive3(xSpeed, -ySpeed, rotateSpeed, true);

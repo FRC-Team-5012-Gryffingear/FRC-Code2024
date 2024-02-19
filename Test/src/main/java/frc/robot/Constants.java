@@ -68,13 +68,11 @@ public final class Constants {
     new Translation2d(-wheelBase/2, trackWidth/2) // Rear Left
   );
 
-  /*
-   * public static final int Intake1 = 0;
-   * public static final int Intake2 = 0;
-   * public static final int Elev1 = 0;
-   * public static final int Elev2 = 0;
-   * 
-   */
+  
+  public static final int Intake1 = 13;
+  public static final int Elev1 = 14;
+    
+   
 
   public static class ModConstants{
     // same Kp values for all modules, Might need to adjust
