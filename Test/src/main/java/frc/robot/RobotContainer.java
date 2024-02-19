@@ -57,7 +57,7 @@ public class RobotContainer {
      () -> driverController.a().getAsBoolean(),
      () -> driverController.b().getAsBoolean()));
      
-     visionSub.setDefaultCommand(new Autos(swerveSubsys, visionSub));
+     //visionSub.setDefaultCommand(new Autos(swerveSubsys, visionSub));
 
     // intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
     //  () -> operatorController.a().getAsBoolean(),
