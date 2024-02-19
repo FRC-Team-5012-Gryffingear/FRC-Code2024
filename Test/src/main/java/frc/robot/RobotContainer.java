@@ -14,6 +14,7 @@ import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsys;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -33,6 +34,7 @@ public class RobotContainer {
   SwerveSubsystem swerveSubsys = new SwerveSubsystem();
   IntakeSubsys intakeSub = new IntakeSubsys();
   ElevatorSubsys elevSub = new ElevatorSubsys();
+  VisionSub visionSub = new VisionSub();
 
 
   CommandXboxController driverController =
@@ -46,24 +48,28 @@ public class RobotContainer {
 
 
   public RobotContainer() {
+    configureBindings();
+    
     //Check if A and B register since we switched to Xboxcontroller from CommandXboxcontroller
+    
     swerveSubsys.setDefaultCommand(new SwerveCommand(swerveSubsys,
      driverController,
-    () -> driverController.a().getAsBoolean(),
+     () -> driverController.a().getAsBoolean(),
      () -> driverController.b().getAsBoolean()));
+     
+     visionSub.setDefaultCommand(new Autos(swerveSubsys, visionSub));
 
-    configureBindings();
+    // intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
+    //  () -> operatorController.a().getAsBoolean(),
+    //  () -> operatorController.b().getAsBoolean()));
 
-    intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
-     () -> operatorController.a().getAsBoolean(),
-     () -> operatorController.b().getAsBoolean()));
+    // elevSub.setDefaultCommand(new ElevatorComm(elevSub,
+    //  () -> driverController.getRightTriggerAxis(), 
+    //  () -> driverController.getLeftTriggerAxis()));
 
-    elevSub.setDefaultCommand(new ElevatorComm(elevSub,
-    () -> driverController.getRightTriggerAxis(), 
-    () -> driverController.getLeftTriggerAxis()));
-
-
+  
   }
+
 
 
   private void configureBindings() { 
