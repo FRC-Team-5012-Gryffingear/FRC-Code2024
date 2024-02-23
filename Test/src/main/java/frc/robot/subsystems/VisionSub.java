@@ -268,37 +268,40 @@ public class VisionSub extends SubsystemBase {
 
 public double get_ID_Xpose(int ID){
     String ID_name;
-    if(ID == 3){
-        ID_name =  "ID 3 X Value";
-        double x = SmartDashboard.getNumber("ID 3 X Value", 0);
-        return x;
-    }
-    else if (ID == 4){
-        ID_name =  "ID " + 4 + " X Value";
-        double x = SmartDashboard.getNumber(ID_name, 0);
-        return x;
-    }
-    else if (ID == 5){
-        ID_name =  "ID " + 5 + " X Value";
-        double x = SmartDashboard.getNumber(ID_name, 0);
-        return x;
-    }
-    else if (ID == 6){
-        ID_name =  "ID " + 6 + " X Value";
-        double x = SmartDashboard.getNumber(ID_name, 0);
-        return x;
-    }
-    else if (ID == 7){
-        ID_name =  "ID " + 7 + " X Value";
-        double x = SmartDashboard.getNumber(ID_name, 0);
-        return x;
-    }
-    else if(ID == 8){
-        ID_name =  "ID " + 8 + " X Value";
-        double x = SmartDashboard.getNumber(ID_name, 0);
-        return x;
-    }
-    return 0;
+
+    ID_name = "ID " + ID + " X Value";
+    double x = SmartDashboard.getNumber(ID_name, 0);
+    return x;
+    // if(ID == 3){
+    //     ID_name =  "ID 3 X Value";
+    //     double x = SmartDashboard.getNumber("ID 3 X Value", 0);
+    //     return x;
+    // }
+    // else if (ID == 4){
+    //     ID_name =  "ID " + 4 + " X Value";
+    //     double x = SmartDashboard.getNumber(ID_name, 0);
+    //     return x;
+    // }
+    // else if (ID == 5){
+    //     ID_name =  "ID " + 5 + " X Value";
+    //     double x = SmartDashboard.getNumber(ID_name, 0);
+    //     return x;
+    // }
+    // else if (ID == 6){
+    //     ID_name =  "ID " + 6 + " X Value";
+    //     double x = SmartDashboard.getNumber(ID_name, 0);
+    //     return x;
+    // }
+    // else if (ID == 7){
+    //     ID_name =  "ID " + 7 + " X Value";
+    //     double x = SmartDashboard.getNumber(ID_name, 0);
+    //     return x;
+    // }
+    // else if(ID == 8){
+    //     ID_name =  "ID " + 8 + " X Value";
+    //     double x = SmartDashboard.getNumber(ID_name, 0);
+    //     return x;
+    // }
 }
 
 //  public double getX_ID_3(){

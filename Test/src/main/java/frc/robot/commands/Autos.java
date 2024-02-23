@@ -32,6 +32,9 @@ public class Autos extends Command {
   @Override
   public void execute() {
     System.out.println("FEVERD REAAMM");
+    vision.startVision();
+    System.out.println(vision.get_ID_Xpose(5));
+    System.out.println("PASSSING");
     //Changes: Created a VisionComm where we would initiate the thread plus
     //initiate the function. Not completely sure if this works, but hopefully it does.
     
@@ -40,6 +43,7 @@ public class Autos extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    vision.stopVision();
   }
 
   // Returns true when the command should end.
