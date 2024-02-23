@@ -32,8 +32,9 @@ public class Autos extends Command {
   @Override
   public void execute() {
     System.out.println("FEVERD REAAMM");
+    //Changes: Created a VisionComm where we would initiate the thread plus
+    //initiate the function. Not completely sure if this works, but hopefully it does.
     
-
   }
 
   // Called once the command ends or is interrupted.

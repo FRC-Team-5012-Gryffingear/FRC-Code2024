@@ -35,6 +35,7 @@ public class RobotContainer {
   IntakeSubsys intakeSub = new IntakeSubsys();
   ElevatorSubsys elevSub = new ElevatorSubsys();
   VisionSub visionSub = new VisionSub();
+  Autos auto = new Autos(swerveSubsys, visionSub);
 
 
   CommandXboxController driverController =
@@ -84,6 +85,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(null);
-    return null;
+    return auto;
   }
 }

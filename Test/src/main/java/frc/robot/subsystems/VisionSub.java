@@ -43,6 +43,32 @@ public class VisionSub extends SubsystemBase {
   // ArrayList<Integer> ID = new ArrayList<>();
  // private Alert enableVisionUpdatesAlert =
   //  new Alert("Vision updates are temporarily disabled.", AlertType.WARNING);
+  private Thread visionThread;
+  public VisionSub(){
+    visionThread = new Thread(this::apriltagVisionThreadProc);
+  }
+
+  //Checks if the vision is not running and if so to make the thread connection to the main function
+  //and then starts it using the start() command that the thread has
+  public void startVision(){
+    if(visionThread == null || !visionThread.isAlive()){
+      visionThread = new Thread(this::apriltagVisionThreadProc);
+      visionThread.start();
+    }
+  }
+//Stops the vision by checking it is running and if so use the 
+//Try - catch method to see if there is an exception to use that exception to run the interrupt command
+  public void stopVision(){
+    if(visionThread.isAlive() || visionThread != null){
+      visionThread.interrupt();
+      try{
+        visionThread.join();
+      } catch(InterruptedException e){
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
 
   public void apriltagVisionThreadProc(){
     AprilTagDetector detector = new AprilTagDetector();
@@ -240,7 +266,7 @@ public class VisionSub extends SubsystemBase {
   }
 
 
-public double get_ID_Xpose(double ID){
+public double get_ID_Xpose(int ID){
     String ID_name;
     if(ID == 3){
         ID_name =  "ID 3 X Value";
