@@ -37,13 +37,30 @@ import frc.robot.OpenC;
 
 public class VisionSub extends SubsystemBase {
   /** Creates a new VisionSub. */
-
-
+private Thread visionThread;
+  public VisionSub(){
+    visionThread = new Thread(this::apriltagVisionThreadProc);
+  }
   // ArrayList<Double> xPose = new ArrayList<>();
   // //double xPose;
   // ArrayList<Integer> ID = new ArrayList<>();
- // private Alert enableVisionUpdatesAlert =
-  //  new Alert("Vision updates are temporarily disabled.", AlertType.WARNING);
+  public void startThread(){
+    if(!visionThread.isAlive() || visionThread == null){
+      visionThread = new Thread(this::apriltagVisionThreadProc);
+      visionThread.start();
+    }
+  }
+
+  public void stopThread(){
+    if(visionThread!= null || visionThread.isAlive()){
+      visionThread.interrupt();
+      try {
+        visionThread.join();
+      } catch (InterruptedException e){
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
 
   public void apriltagVisionThreadProc(){
     AprilTagDetector detector = new AprilTagDetector();
@@ -122,8 +139,6 @@ public class VisionSub extends SubsystemBase {
         Transform3d pose = poseEst.estimate(detection);
         poses.add(pose);
       //  adapt(tags,pose);
-
-
       }
       System.out.println(poses);
       var i = 0;
@@ -236,6 +251,7 @@ public class VisionSub extends SubsystemBase {
       SmartDashboard.putString("tag", tagsIDs.toString());
       
       outputStream.putFrame(image);
+      System.out.println("ENDDDNNDNDND");
     }
     detector.close();
   }

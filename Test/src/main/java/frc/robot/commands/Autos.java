@@ -4,17 +4,51 @@
 
 package frc.robot.commands;
 
+import frc.robot.Robot;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.VisionSub;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 
-public final class Autos {
-  /** Example static factory for an autonomous command. */
-  public static Command exampleAuto(ExampleSubsystem subsystem) {
-    return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
+/** An example command that uses an example subsystem. */
+public class Autos extends Command {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private final VisionSub m_subsystem;
+  
+  public Autos(VisionSub subsystem) {
+    m_subsystem = subsystem;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(subsystem);
   }
 
-  private Autos() {
-    throw new UnsupportedOperationException("This is a utility class!");
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    System.out.println("INITIALIZING  AAAAA");
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    System.out.println("CHECK 111111111111111");
+    System.out.println(m_subsystem.getX_ID_5());
+
+    m_subsystem.startThread();
+    
+    System.out.println("IS WORKKKKKKKKKKKKINNNNNNNNNNNNG");
+    
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    m_subsystem.stopThread();
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+        System.out.println("INTERRRUPPPTED BY END");
+
+    return false;
   }
 }
