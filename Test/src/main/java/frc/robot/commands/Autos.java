@@ -31,6 +31,36 @@ public class Autos extends Command {
 
   @Override
   public void execute() {
+    /* Error = GOAL - Current
+     * kp = something constant
+     * 
+     * power = kp * error
+     * 
+     * --Actual stuff Distance z:
+     * 
+     * error = 85 - current firatees
+     * 
+     * kp = 0.2 needs to be changed
+     * 
+     * power1 = kp * error
+     * 
+     * --Actual for Distance x;
+     * 
+     * error = 15 - current firatees
+     * 
+     * kp = 0.2 needs to be changed
+     * 
+     * power2 = kp * error
+     * 
+     * --Actual roll:
+     * 
+     * error = 0.1 - abs current firatmeters
+     * 
+     * kp = 0.2 needs to be changed
+     * 
+     * power3 = kp * error
+     * 
+     */
     System.out.println("FEVERD REAAMM");
     vision.startVision();
     System.out.println(vision.get_ID_Xpose(5));

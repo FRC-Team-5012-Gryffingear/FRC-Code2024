@@ -44,6 +44,7 @@ public class VisionSub extends SubsystemBase {
  // private Alert enableVisionUpdatesAlert =
   //  new Alert("Vision updates are temporarily disabled.", AlertType.WARNING);
   private Thread visionThread;
+  
   public VisionSub(){
     visionThread = new Thread(this::apriltagVisionThreadProc);
   }
@@ -268,42 +269,30 @@ public class VisionSub extends SubsystemBase {
 
 public double get_ID_Xpose(int ID){
     String ID_name;
+    double x = 0;
 
     ID_name = "ID " + ID + " X Value";
-    double x = SmartDashboard.getNumber(ID_name, 0);
+    x = SmartDashboard.getNumber(ID_name, 0);
     return x;
-    // if(ID == 3){
-    //     ID_name =  "ID 3 X Value";
-    //     double x = SmartDashboard.getNumber("ID 3 X Value", 0);
-    //     return x;
-    // }
-    // else if (ID == 4){
-    //     ID_name =  "ID " + 4 + " X Value";
-    //     double x = SmartDashboard.getNumber(ID_name, 0);
-    //     return x;
-    // }
-    // else if (ID == 5){
-    //     ID_name =  "ID " + 5 + " X Value";
-    //     double x = SmartDashboard.getNumber(ID_name, 0);
-    //     return x;
-    // }
-    // else if (ID == 6){
-    //     ID_name =  "ID " + 6 + " X Value";
-    //     double x = SmartDashboard.getNumber(ID_name, 0);
-    //     return x;
-    // }
-    // else if (ID == 7){
-    //     ID_name =  "ID " + 7 + " X Value";
-    //     double x = SmartDashboard.getNumber(ID_name, 0);
-    //     return x;
-    // }
-    // else if(ID == 8){
-    //     ID_name =  "ID " + 8 + " X Value";
-    //     double x = SmartDashboard.getNumber(ID_name, 0);
-    //     return x;
-    // }
 }
 
+public double get_ID_Ypose(int ID){
+    String ID_name;
+    double y = 0;
+
+    ID_name = "ID " + ID + " Y Value";
+    y = SmartDashboard.getNumber(ID_name, 0);
+    return y;
+}
+
+public double get_ID_Zpose(int ID){
+    String ID_name;
+    double z = 0;
+
+    ID_name = "ID " + ID + " Z Value";
+    z = SmartDashboard.getNumber(ID_name, 0);
+    return z;
+}
 //  public double getX_ID_3(){
 //     double x = SmartDashboard.getNumber("ID 3 X Value", 0);
 //     return x;
@@ -332,6 +321,36 @@ public double get_ID_Xpose(int ID){
 //   return x;
 //  }
   
+public double getXID(int ID){
+  String ID_name;
+  double x;
+
+  ID_name = "ID " + ID + " X Value";
+  x = SmartDashboard.getNumber(ID_name, 0);
+
+  System.out.println("THE VALUE OF X: " + x);
+    return x;
+}
+
+public double getIDroll(int ID){
+  String ID_name;
+  double roll;
+
+  ID_name = "ID " + ID + " Roll Value";
+  roll = SmartDashboard.getNumber(ID_name, 0);
+  System.out.println("THE VALUE OF ROLL: " + roll);
+    return roll;
+}
+
+public double getZID(int ID){
+  String ID_name;
+  double z;
+
+  ID_name = "ID " + ID + " Z Value";
+  z = SmartDashboard.getNumber(ID_name, 0);
+  System.out.println("THE VALUE OF ROLL: " + z);
+    return z;
+}
 
   @Override
   public void periodic() {

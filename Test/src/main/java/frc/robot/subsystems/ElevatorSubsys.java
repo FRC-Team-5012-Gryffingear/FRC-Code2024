@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -18,13 +19,18 @@ public class ElevatorSubsys extends SubsystemBase {
   /** Creates a new ElevatorSubsys. */
 
   TalonSRX elevMotor1 = new TalonSRX(Constants.Elev1);
+  TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
 
   public ElevatorSubsys() {
     elevMotor1.configFactoryDefault();
+    elevMotor2.configFactoryDefault();
 
     elevMotor1.setNeutralMode(NeutralMode.Brake);
+    elevMotor2.setNeutralMode(NeutralMode.Brake);
     
     elevMotor1.setInverted(InvertType.InvertMotorOutput);
+
+    elevMotor2.follow(elevMotor1);
   }
 
 

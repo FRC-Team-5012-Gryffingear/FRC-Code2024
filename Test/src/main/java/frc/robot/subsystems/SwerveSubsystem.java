@@ -92,6 +92,7 @@ private Field2d fieldMaker = new Field2d();
     //reset();
     System.out.println("HEADING IS RESETING");
     pigeon.reset();
+    //This is the 0 of the robot
     pigeon.setYaw(270);
   }
 
