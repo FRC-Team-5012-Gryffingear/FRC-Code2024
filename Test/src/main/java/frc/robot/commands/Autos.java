@@ -29,9 +29,7 @@ public class Autos extends Command {
     System.out.println("Runnnnnnninnnnng");
   }
 
-  @Override
-  public void execute() {
-    /* Error = GOAL - Current
+      /* Error = GOAL - Current
      * kp = something constant
      * 
      * power = kp * error
@@ -61,12 +59,44 @@ public class Autos extends Command {
      * power3 = kp * error
      * 
      */
-    System.out.println("FEVERD REAAMM");
+  @Override
+  public void execute() {
     vision.startVision();
-    System.out.println(vision.get_ID_Xpose(5));
-    System.out.println("PASSSING");
+  
+    //FOR AMPS DO TAGS 5 AND 3
+    //THIS SECTION IS FOR Z
+    //THESE ARE FOR PID (MIGHT NEED TO CHANGE LATER)
+    double Error5Z = 85 - vision.getZID(5);
+    double Error3Z = 85 - vision.getZID(3);
+
+    //this Kp value will be permanent for all values
+    double kp = 0.2;
+
+    double Zpower_ID_5 = kp * Error5Z; 
+    double Zpower_ID_3 = kp * Error3Z;
+
+    //this section is for X
+    //Change 15 to a number that takes in count the offset of the camera since it is on the side
+    double Error5X = 15 - vision.getXID(5);
+    double Error3X = 15 - vision.getXID(3);
+
+    double Xpower_ID_5 = kp * Error5X;
+    double Xpower_ID_3 = kp * Error3X;
+
+    //This section is for Roll (rotating)
+    //Might cause an error since the value read is 0 - 360 (Maybe)
+    //Check to see if changing the Mod encoder config to -pi to pi works
+    double Error5Roll = 0.1 - vision.getIDroll(5);
+    double Error3Roll = 0.1 - vision.getIDroll(3);
+
+    double Rollpower_ID_5 = kp * Error5Roll;
+    double Rollpower_ID_3 = kp * Error3Roll;
+    //Application of these variables will probably look like
+    
+
+
     //Changes: Created a VisionComm where we would initiate the thread plus
-    //initiate the function. Not completely sure if this works, but hopefully it does.
+    //initiate the function.
     
   }
 
