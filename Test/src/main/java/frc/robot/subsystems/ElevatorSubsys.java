@@ -19,18 +19,18 @@ public class ElevatorSubsys extends SubsystemBase {
   /** Creates a new ElevatorSubsys. */
 
   TalonSRX elevMotor1 = new TalonSRX(Constants.Elev1);
-  TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
+  //TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
 
   public ElevatorSubsys() {
     elevMotor1.configFactoryDefault();
-    elevMotor2.configFactoryDefault();
+    //elevMotor2.configFactoryDefault();
 
     elevMotor1.setNeutralMode(NeutralMode.Brake);
-    elevMotor2.setNeutralMode(NeutralMode.Brake);
+    //elevMotor2.setNeutralMode(NeutralMode.Brake);
     
     elevMotor1.setInverted(InvertType.InvertMotorOutput);
 
-    elevMotor2.follow(elevMotor1);
+   // elevMotor2.follow(elevMotor1);
   }
 
 

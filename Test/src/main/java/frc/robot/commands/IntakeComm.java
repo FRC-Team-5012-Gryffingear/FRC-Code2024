@@ -16,12 +16,12 @@ public class IntakeComm extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   private final IntakeSubsys subsys;
-  private final BooleanSupplier a,b;
+  private final BooleanSupplier as,bs;
 
   public IntakeComm(IntakeSubsys subsystem, BooleanSupplier a, BooleanSupplier b) {
     subsys = subsystem;
-    this.a = a;
-    this.b = b;
+    as = a;
+    bs = b;
    
     addRequirements(subsystem);
   }
@@ -33,7 +33,7 @@ public class IntakeComm extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsys.intaking(a.getAsBoolean(), b.getAsBoolean());
+    subsys.intaking(as.getAsBoolean(), bs.getAsBoolean());
   }
 
   // Called once the command ends or is interrupted.

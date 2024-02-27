@@ -10,11 +10,13 @@ import frc.robot.commands.ElevatorComm;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeComm;
 import frc.robot.commands.SwerveCommand;
+import frc.robot.otherInfo.controllerConstant;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsys;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -40,10 +42,10 @@ public class RobotContainer {
 
   CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.DriverControllerPort);
-  CommandXboxController operatorController =
-      new CommandXboxController(OperatorConstants.OperatorControllerPort);
+  // XboxController operatorController =
+  //     new XboxController(OperatorConstants.OperatorControllerPort);
   
-  
+  XboxController operatorController = new XboxController(OperatorConstants.OperatorControllerPort);
 
   //SwerveCommand swerveCom = new SwerveCommand(swerveSubsys, driverController);
 
@@ -55,14 +57,13 @@ public class RobotContainer {
     
     swerveSubsys.setDefaultCommand(new SwerveCommand(swerveSubsys,
      driverController,
-     () -> driverController.a().getAsBoolean(),
-     () -> driverController.b().getAsBoolean()));
+     () -> driverController.a().getAsBoolean()));
      
      //visionSub.setDefaultCommand(new Autos(swerveSubsys, visionSub));
 
-    // intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
-    //  () -> operatorController.a().getAsBoolean(),
-    //  () -> operatorController.b().getAsBoolean()));
+     intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
+      () -> operatorController.getBButton(),
+      () -> operatorController.getAButton()));
 
     // elevSub.setDefaultCommand(new ElevatorComm(elevSub,
     //  () -> driverController.getRightTriggerAxis(), 

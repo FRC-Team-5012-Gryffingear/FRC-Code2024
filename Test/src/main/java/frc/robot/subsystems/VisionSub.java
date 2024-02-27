@@ -345,17 +345,15 @@ public double getIDroll(int ID){
 public double getZID(int ID){
   String ID_name;
   double z;
-
   ID_name = "ID " + ID + " Z Value";
   z = SmartDashboard.getNumber(ID_name, 0);
-  System.out.println("THE VALUE OF ROLL: " + z);
+  System.out.println("THE VALUE OF Z: " + z);
     return z;
 }
 
-  @Override
-  public void periodic() {
 
-}
+  @Override
+  public void periodic() {}
 
   @Override
   public void simulationPeriodic() {

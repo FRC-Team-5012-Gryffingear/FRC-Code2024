@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
+import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
@@ -93,10 +94,16 @@ public class Autos extends Command {
     double Rollpower_ID_3 = kp * Error3Roll;
     //Application of these variables will probably look like
     
-
+    
+      swerve.drive3(Zpower_ID_3, -Xpower_ID_3, Rollpower_ID_3, true);
+    
+      swerve.drive3(Zpower_ID_5, Xpower_ID_5, Rollpower_ID_5, true);
 
     //Changes: Created a VisionComm where we would initiate the thread plus
     //initiate the function.
+
+    //X ,Y, ROT
+    
     
   }
 

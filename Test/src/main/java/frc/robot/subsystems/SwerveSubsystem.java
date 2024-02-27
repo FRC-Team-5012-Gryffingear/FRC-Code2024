@@ -85,6 +85,12 @@ private Field2d fieldMaker = new Field2d();
     //Returns the gyro heading might need invert if it is not clockwise positive
     return Rotation2d.fromDegrees(pigeon.getAngle()); // add negative on pigeon angle
   }
+//Might be used to see the current yaw and how far it is from its initial starting direction
+  public double getYaw(){
+    double currentYaw = pigeon.getYaw().getValueAsDouble();
+    double angle = currentYaw % 360;
+    return angle;
+  }
 
   public void resetHeading(){
     //resets Gyro heading on field

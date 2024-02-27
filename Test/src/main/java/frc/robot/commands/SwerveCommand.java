@@ -20,14 +20,13 @@ public class SwerveCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
  private final SwerveSubsystem swervesubsys;
  private final CommandXboxController controller2;
-  private final BooleanSupplier yaw, pose;
+  private final BooleanSupplier yaw;
  
   
-  public SwerveCommand(SwerveSubsystem subsystem, CommandXboxController controller,BooleanSupplier yaw, BooleanSupplier pose ) {
+  public SwerveCommand(SwerveSubsystem subsystem, CommandXboxController controller,BooleanSupplier yaw) {
     swervesubsys = subsystem;
     controller2 = controller;
     this.yaw = yaw;
-    this.pose = pose;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -51,9 +50,9 @@ public class SwerveCommand extends Command {
     if(yaw.getAsBoolean()){
       swervesubsys.resetHeading();
     }
-    else if(pose.getAsBoolean()){
-      swervesubsys.resetPose();
-    }
+    // else if(pose.getAsBoolean()){
+    //   swervesubsys.resetPose();
+    // }
     // if(controller2.rightBumper().getAsBoolean()){
     //     swervesubsys.drive(xSpeed, ySpeed, rotateSpeed,true);
     // } else{
