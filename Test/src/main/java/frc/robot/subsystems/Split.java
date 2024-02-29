@@ -4,17 +4,34 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Split extends SubsystemBase {
   /** Creates a new Split. */
-  
-  public Split() {}
+  DigitalInput topLimit = new DigitalInput(0);
+  DigitalInput bottomLimit = new DigitalInput(1);
 
+  TalonSRX talon = new TalonSRX(0);
+  public Split() {
+  }
+
+  public void movingWlimit(double power){
+    if(topLimit.get() && power > 0){
+      talon.set(ControlMode.PercentOutput, 0);
+    }
+    else if(bottomLimit.get() && power < 0){
+      talon.set(ControlMode.PercentOutput, 0);
+    }
+    else{
+     talon.set(ControlMode.PercentOutput, power);
+    }
+  }
  
 
   @Override

@@ -89,8 +89,8 @@ private Thread visionThread;
 
     var TagSize = 36;
     //Camera Logitech C270 HD Webcam
-    var fx = 1377.154;
-    var fy = 1387.105;
+    var fx = 954.6564522093413;
+    var fy = 950.3993532691603;
   
 
     Scalar outlineColor = new Scalar(0,255,0);
@@ -116,13 +116,18 @@ private Thread visionThread;
      // xPose.clear();
       ArrayList<Transform3d> poses = new ArrayList<Transform3d>();
 
+      // double cxs = 334.86944443989194;
+      // double cys = 221.42493856582405;
+
+      double cxs = 320;
+      double cys = 240;
 
 
       for (AprilTagDetection detection : detections){
         tagsIDs.add(detection.getId());
        // ID.add(detection.getId());
         for (var i = 0; i <= 3; i++){
-          var j = (i + 1) % 4;
+          var j = (i + 1) % 4; 
           var pt1 = new Point(detection.getCornerX(i), detection.getCornerY(i));
           var pt2 = new Point(detection.getCornerX(j), detection.getCornerY(j));
           Imgproc.line(image, pt1, pt2, outlineColor, 2);
@@ -134,13 +139,13 @@ private Thread visionThread;
         Imgproc.line(image, new Point(cx - num, cy), new Point(cx + num, cy), xColor, 2);
         Imgproc.line(image, new Point(cx, cy - num), new Point(cx, cy + num), xColor, 2);
         Imgproc.putText(image, Integer.toString(detection.getId()), new Point(cx + num, cy), Imgproc.FONT_HERSHEY_SIMPLEX, 1, xColor, 3);
-        AprilTagPoseEstimator.Config poseEstConfig = new AprilTagPoseEstimator.Config(TagSize, fx, fy, cx, cy);
+        AprilTagPoseEstimator.Config poseEstConfig = new AprilTagPoseEstimator.Config(TagSize, fx, fy, cxs, cys);
         AprilTagPoseEstimator poseEst = new AprilTagPoseEstimator(poseEstConfig);
         Transform3d pose = poseEst.estimate(detection);
         poses.add(pose);
       //  adapt(tags,pose);
       }
-      System.out.println(poses);
+      // System.out.println(poses);
       var i = 0;
       for (Transform3d _pose : poses){
         if(detections[i].getId() == 4){
@@ -250,6 +255,7 @@ private Thread visionThread;
 
       SmartDashboard.putString("tag", tagsIDs.toString());
       
+      
       outputStream.putFrame(image);
       System.out.println("ENDDDNNDNDND");
     }
@@ -283,8 +289,44 @@ private Thread visionThread;
   double x = SmartDashboard.getNumber("ID 8 X Value", 0);
   return x;
  }
+
+
+
+ public double getXID(int ID){
+  String ID_name;
+  double x;
+
+  ID_name = "ID " + ID + " X Value";
+  x = SmartDashboard.getNumber(ID_name, 0);
+
+ // SmartDashboard.putNumber("XValueMultiplier", x);
+//ljoj
+//System.out.println("THE VALUE OF X: " + x);
+  return x;
+ }
+
+ public double getIDroll(int ID){
+  String ID_name;
+  double roll;
+
+  ID_name = "ID " + ID + " Roll Value";
+  roll = SmartDashboard.getNumber(ID_name, 0);
+  //System.out.println("THE VALUE OF ROLL: " + roll);
+  return roll;
+
+ }
   
 
+ public double getZID(int ID){
+  String ID_name;
+  double z;
+
+  ID_name = "ID " + ID + " Z Value";
+  z = SmartDashboard.getNumber(ID_name, 0);
+
+  return z;
+ }
+ 
   @Override
   public void periodic() {
   }
