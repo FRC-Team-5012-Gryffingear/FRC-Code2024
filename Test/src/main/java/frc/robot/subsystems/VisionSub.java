@@ -98,9 +98,8 @@ public class VisionSub extends SubsystemBase {
 
     var TagSize = 36;
     //Camera Logitech C270 HD Webcam
-    var fx = 1377.154;
-    var fy = 1387.105;
-  
+    var fx = 954.6564;
+    var fy = 950.39935;
 
     Scalar outlineColor = new Scalar(0,255,0);
     Scalar xColor = new Scalar(0,0,255);
@@ -125,7 +124,8 @@ public class VisionSub extends SubsystemBase {
      // xPose.clear();
       ArrayList<Transform3d> poses = new ArrayList<Transform3d>();
 
-
+      double cxs = 320;
+      double cys = 240;
 
       for (AprilTagDetection detection : detections){
         tagsIDs.add(detection.getId());
@@ -143,7 +143,7 @@ public class VisionSub extends SubsystemBase {
         Imgproc.line(image, new Point(cx - num, cy), new Point(cx + num, cy), xColor, 2);
         Imgproc.line(image, new Point(cx, cy - num), new Point(cx, cy + num), xColor, 2);
         Imgproc.putText(image, Integer.toString(detection.getId()), new Point(cx + num, cy), Imgproc.FONT_HERSHEY_SIMPLEX, 1, xColor, 3);
-        AprilTagPoseEstimator.Config poseEstConfig = new AprilTagPoseEstimator.Config(TagSize, fx, fy, cx, cy);
+        AprilTagPoseEstimator.Config poseEstConfig = new AprilTagPoseEstimator.Config(TagSize, fx, fy, cxs, cys);
         AprilTagPoseEstimator poseEst = new AprilTagPoseEstimator(poseEstConfig);
         Transform3d pose = poseEst.estimate(detection);
         poses.add(pose);

@@ -31,8 +31,8 @@ public class IntakeSubsys extends SubsystemBase {
 
 //Check if timer actually works on intake
   public void intaking(boolean a, boolean b){
-    System.out.println("INTAKING RUNNNING");
     if(a){
+      // Intaking
       timer1.start();
       if(timer1.get() < .3) {
           intake1.set(ControlMode.PercentOutput, 1);
@@ -42,6 +42,7 @@ public class IntakeSubsys extends SubsystemBase {
        }
     }
     else if(b){
+      //Outtaking
         intake1.set(ControlMode.PercentOutput, -1);
     }
     else{
