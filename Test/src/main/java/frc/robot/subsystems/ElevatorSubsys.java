@@ -33,10 +33,13 @@ public class ElevatorSubsys extends SubsystemBase {
 
     elevMotor1.setNeutralMode(NeutralMode.Brake);
     elevMotor2.setNeutralMode(NeutralMode.Brake);
-    
-    elevMotor1.setInverted(InvertType.InvertMotorOutput);
 
     elevMotor2.follow(elevMotor1);
+    //If motor right side then do invert if on left then do not invert
+    //Ignore if Gears invert the way it works
+    elevMotor1.setInverted(InvertType.InvertMotorOutput);
+
+    
   }
 
 //Has "push" as a button and once pressed it moves up for 0.3 seconds

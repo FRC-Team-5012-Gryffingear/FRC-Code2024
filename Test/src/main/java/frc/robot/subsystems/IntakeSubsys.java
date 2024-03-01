@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class IntakeSubsys extends SubsystemBase {
     TalonSRX intake1 = new TalonSRX(Constants.Intake1);
     DigitalInput intakeLimit = new DigitalInput(2);
-    private Timer timer1 = new Timer();
+   // private Timer timer1 = new Timer();
     //have left side motor (Right side when in front) be the intake1
   public IntakeSubsys() {
     intake1.configFactoryDefault();

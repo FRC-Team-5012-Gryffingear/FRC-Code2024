@@ -105,6 +105,7 @@ public class Autos extends Command {
    */
   if(Math.abs(Xpower_ID_5) >= 0){
     if(vision.getZID(5) < 90 && vision.getZID(5) > 83) {
+      System.out.println("Z IS 00000000");
       Zpower_ID_5 = 0;
     }
     if(vision.getXID(5) > -9.25 && vision.getXID(5) < 15.25) {
