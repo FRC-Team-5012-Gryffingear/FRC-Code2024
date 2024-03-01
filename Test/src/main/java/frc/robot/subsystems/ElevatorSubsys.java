@@ -22,6 +22,9 @@ public class ElevatorSubsys extends SubsystemBase {
   /** Creates a new ElevatorSubsys. */
   TalonSRX elevMotor1 = new TalonSRX(Constants.Elev1);
   TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
+
+  DigitalInput Limit1Top = new DigitalInput(0);
+  DigitalInput Limit2Bottom = new DigitalInput(1);
   Timer time = new Timer();
 
   public ElevatorSubsys() {
@@ -36,16 +39,37 @@ public class ElevatorSubsys extends SubsystemBase {
     elevMotor2.follow(elevMotor1);
   }
 
-
+//Has "push" as a button and once pressed it moves up for 0.3 seconds
+//"Power" is the regular supplier for the elevator that moves when Bottom or Top is not currently being pressed
+//
   public void elevating(double power, boolean push){
     if(push){
       time.start();
       if(time.get() < 0.3){
-        elevMotor1.set(ControlMode.PercentOutput, .25);
+        if(Limit1Top.get()){
+          elevMotor1.set(ControlMode.PercentOutput, 0);
+        }
+        else{
+          elevMotor1.set(ControlMode.PercentOutput, .25);
+        }
+      }
+      
+      else if(time.get() > 0.3){
+        elevMotor1.set(ControlMode.PercentOutput, 0);
       }
     }
-    
-    elevMotor1.set(ControlMode.PercentOutput, power/2); 
+//Checks top limit and if power is being supplied 
+    else if(Limit1Top.get() && power > 0){
+      elevMotor1.set(ControlMode.PercentOutput, 0);
+    }
+
+    else if(Limit2Bottom.get() && power < 0){
+      elevMotor2.set(ControlMode.PercentOutput, 0);
+    }
+
+    else{
+      elevMotor1.set(ControlMode.PercentOutput, power/2); 
+    }
     time.stop();
     time.reset();
   }

@@ -15,11 +15,13 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 
 
 public class IntakeSubsys extends SubsystemBase {
     TalonSRX intake1 = new TalonSRX(Constants.Intake1);
+    DigitalInput intakeLimit = new DigitalInput(2);
     private Timer timer1 = new Timer();
     //have left side motor (Right side when in front) be the intake1
   public IntakeSubsys() {
@@ -32,23 +34,21 @@ public class IntakeSubsys extends SubsystemBase {
 //Check if timer actually works on intake
   public void intaking(boolean a, boolean b){
     if(a){
-      // Intaking
-      timer1.start();
-      if(timer1.get() < .3) {
-          intake1.set(ControlMode.PercentOutput, 1);
-       }
-       else{
+      // Intaking and checks if inner switch being pressed
+      if(intakeLimit.get()){
         intake1.set(ControlMode.PercentOutput, 0);
-       }
+      }
+      else{
+        intake1.set(ControlMode.PercentOutput, 1);
+      }
+      
     }
     else if(b){
       //Outtaking
-        intake1.set(ControlMode.PercentOutput, -1);
+      intake1.set(ControlMode.PercentOutput, -1);
     }
     else{
         intake1.set(ControlMode.PercentOutput, 0);
-        timer1.stop();
-        timer1.reset();
     }
   }
 
