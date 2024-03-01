@@ -4,12 +4,15 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Timer;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,9 +20,9 @@ import frc.robot.Constants;
 
 public class ElevatorSubsys extends SubsystemBase {
   /** Creates a new ElevatorSubsys. */
-
   TalonSRX elevMotor1 = new TalonSRX(Constants.Elev1);
   TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
+  Timer time = new Timer();
 
   public ElevatorSubsys() {
     elevMotor1.configFactoryDefault();
@@ -34,8 +37,17 @@ public class ElevatorSubsys extends SubsystemBase {
   }
 
 
-  public void elevating(double power){
-    elevMotor1.set(ControlMode.PercentOutput, power);
+  public void elevating(double power, boolean push){
+    if(push){
+      time.start();
+      if(time.get() < 0.3){
+        elevMotor1.set(ControlMode.PercentOutput, .25);
+      }
+    }
+    
+    elevMotor1.set(ControlMode.PercentOutput, power/2); 
+    time.stop();
+    time.reset();
   }
   
   @Override
