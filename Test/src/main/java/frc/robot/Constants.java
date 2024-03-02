@@ -28,7 +28,7 @@ public final class Constants {
   public static final int Max_Voltage = 12;
   public static final double Max_Angular = Max_velo/ Math.hypot(trackWidth/2, wheelBase/2);
 
-  //CHANGE IDS FOR ALL MOTORS AND ENCODERS
+  //IDS FOR MOTORS AND ENCODERS
   public static final int FrontLeftDriveID = 1;
   public static final int FrontRightDriveID = 4;
   public static final int BackLeftDriveID = 7;

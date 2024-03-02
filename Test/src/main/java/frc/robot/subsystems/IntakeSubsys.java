@@ -31,23 +31,28 @@ public class IntakeSubsys extends SubsystemBase {
     intake1.setInverted(InvertType.InvertMotorOutput);
   }
 
-//Check if timer actually works on intake
+
+
+
   public void intaking(boolean a, boolean b){
+    //Checks if the A button is being pressed 
     if(a){
-      // Intaking and checks if inner switch being pressed
+      //once the A button is pressed also check if the intake limit is pressed to see if we hit our goal
       if(intakeLimit.get()){
         intake1.set(ControlMode.PercentOutput, 0);
       }
+      //if not then just continue intaking until true
       else{
         intake1.set(ControlMode.PercentOutput, 1);
       }
       
     }
-    
+    //Check if B button is pressed
     else if(b){
-      //Outtaking
+      //if it is then outtake that note out
       intake1.set(ControlMode.PercentOutput, -1);
     }
+    //Nothing pressed? Don't move!
     else{
         intake1.set(ControlMode.PercentOutput, 0);
     }

@@ -86,6 +86,7 @@ private Field2d fieldMaker = new Field2d();
     return Rotation2d.fromDegrees(pigeon.getAngle()); // add negative on pigeon angle
   }
 //Might be used to see the current yaw and how far it is from its initial starting direction
+//to autocorrect itself in the right orientation
   public double getYaw(){
     double currentYaw = pigeon.getYaw().getValueAsDouble();
     double angle = currentYaw % 360;
@@ -103,7 +104,7 @@ private Field2d fieldMaker = new Field2d();
   }
 
   public Pose2d getPose(){
-    //returns the odometry pose
+    //returns the odometry pose or where we currently are after moving a ton
     return new Pose2d(
         new Translation2d(-odometry.getPoseMeters().getX(), -odometry.getPoseMeters().getY()),
         odometry.getPoseMeters().getRotation()
@@ -120,6 +121,7 @@ private Field2d fieldMaker = new Field2d();
     System.out.println("POSE IS RESETING");
   }
 
+  //resets the orientation the robot moves in (I do not recommend using)
   public void resetPose(Pose2d pose){
     //
     odometry.resetPosition(
@@ -139,14 +141,17 @@ private Field2d fieldMaker = new Field2d();
     return Constants.kinematics.toChassisSpeeds(frontLeftMod.getModState(),frontRightMod.getModState(),backLeftMod.getModState(),backRightMod.getModState());
   }
 
+  //Drive that converts the speeds into robot orientation
   private void drive1(ChassisSpeeds chassisSpeeds){
     drive3(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false);
   }
 
+  //if not using drive1 to convert it, then make the field relative false
   public void drive2(double xSpeed, double ySpeed, double rotSpeed){
     drive3(xSpeed,ySpeed,rotSpeed,false);
   }
 
+  //This drive uses field orientation and needs to be changed since it is false there is no movement
   public void drive3(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative){
     ChassisSpeeds speeds;
     if(fieldRelative){

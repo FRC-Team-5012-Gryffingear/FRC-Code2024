@@ -36,19 +36,20 @@ public class ElevatorSubsys extends SubsystemBase {
 
     elevMotor2.follow(elevMotor1);
     //If motor right side then do invert if on left then do not invert
-    //Ignore if Gears invert the way it works
+    //Ignore if gears make them inverted already and
     elevMotor1.setInverted(InvertType.InvertMotorOutput);
 
     
   }
 
-//Has "push" as a button and once pressed it moves up for 0.3 seconds
-//"Power" is the regular supplier for the elevator that moves when Bottom or Top is not currently being pressed
-//
+
   public void elevating(double power, boolean push){
     if(push){
       time.start();
+      //check if the timer is not above 0.3 seconds
       if(time.get() < 0.3){
+        //if timer is not above 0.3 seconds also check if the top limit switch is pressed
+        //and if it is stop the motor to prevent from going more up
         if(Limit1Top.get()){
           elevMotor1.set(ControlMode.PercentOutput, 0);
         }
@@ -56,25 +57,30 @@ public class ElevatorSubsys extends SubsystemBase {
           elevMotor1.set(ControlMode.PercentOutput, .25);
         }
       }
-      
+      //if the timer is above 0.3 seconds immediately end it
       else if(time.get() > 0.3){
         elevMotor1.set(ControlMode.PercentOutput, 0);
       }
     }
-//Checks top limit and if power is being supplied 
+//Checks top limit and if power is positive
+//if it is to turn it completely off 
     else if(Limit1Top.get() && power > 0){
       elevMotor1.set(ControlMode.PercentOutput, 0);
     }
-
+// checks if bottom limit and if power is negative
+// if it is to prevent it from going down
     else if(Limit2Bottom.get() && power < 0){
       elevMotor2.set(ControlMode.PercentOutput, 0);
     }
-
+// if the button is not pressed, top and lower limits not being pressed
+// to move normally since none of the requirements are being met
     else{
       elevMotor1.set(ControlMode.PercentOutput, power/2); 
-    }
+    //reset timer if nothing happening in the push
     time.stop();
     time.reset();
+    }
+
   }
   
   @Override
