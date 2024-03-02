@@ -63,6 +63,13 @@ public class Autos extends Command {
   @Override
   public void execute() {
     vision.startVision();
+
+    //ALL OF THE GOALS AND THRESHOLDS NEEED TO BE CHANGED OR WILL NOT FUNCTION DUE TO THE NEW METHOD
+    //BEING IMPLEMENTED
+    //Z quick measure was around 40 - 50 firameters
+    //Roll did not seem to change but needs to be tested
+    //X was not checked but seems to be centered at (0,0) Maybe
+
   
     //FOR AMPS DO TAGS 5 AND 3
     //THIS SECTION IS FOR Z
@@ -93,36 +100,30 @@ public class Autos extends Command {
     double Rollpower_ID_5 = kp * Error5Roll;
     double Rollpower_ID_6 = kp * Error6Roll;
 
-    
-    //Application of these variables will probably look like
-    //Need to add a way to get out of PID after dropped off note
-   /* if(Math.abs(Error6X) > 0){
-      swerve.drive3(Zpower_ID_6, -Xpower_ID_6, Rollpower_ID_6, true);
-   } 
-   if(Math.abs(Error5X) > 0){
-      swerve.drive3(Zpower_ID_5, -Xpower_ID_5, Rollpower_ID_5, true);
-   }
-   */
-  if(Math.abs(Xpower_ID_5) >= 0){
-    if(vision.getZID(5) < 90 && vision.getZID(5) > 83) {
-      System.out.println("Z IS 00000000");
-      Zpower_ID_5 = 0;
-    }
-    if(vision.getXID(5) > -9.25 && vision.getXID(5) < 15.25) {
-      Xpower_ID_5 = 0;
-      System.out.println("X IS 000000000");
-    }   
-    if(vision.getIDroll(5) > -.1 && vision.getIDroll(5) < .1) {
-      Rollpower_ID_5 = 0;
-      System.out.println("ROLL IS PERFECT YIPPEEEEEEE");
-    }
-    swerve.drive3(Zpower_ID_5, -Xpower_ID_5, Rollpower_ID_5, true);
 
-    if(Zpower_ID_5 == 0 && Xpower_ID_5 == 0 && Rollpower_ID_5 ==0) {
-      System.out.println("ALL VALUES ARE 0000000000000000000000000000000");
-      swerve.drive3(0, 0, 0, true);
-    }
-  }
+
+    
+  
+  // if(Math.abs(Xpower_ID_5) >= 0){
+  //   if(vision.getZID(5) < 90 && vision.getZID(5) > 83) {
+  //     System.out.println("Z IS 00000000");
+  //     Zpower_ID_5 = 0;
+  //   }
+  //   if(vision.getXID(5) > -9.25 && vision.getXID(5) < 15.25) {
+  //     Xpower_ID_5 = 0;
+  //     System.out.println("X IS 000000000");
+  //   }   
+  //   if(vision.getIDroll(5) > -.1 && vision.getIDroll(5) < .1) {
+  //     Rollpower_ID_5 = 0;
+  //     System.out.println("ROLL IS PERFECT YIPPEEEEEEE");
+  //   }
+  //   swerve.drive3(Zpower_ID_5, -Xpower_ID_5, Rollpower_ID_5, true);
+
+  //   if(Zpower_ID_5 == 0 && Xpower_ID_5 == 0 && Rollpower_ID_5 ==0) {
+  //     System.out.println("ALL VALUES ARE 0000000000000000000000000000000");
+  //     swerve.drive3(0, 0, 0, true);
+  //   }
+  // }
     //Changes: Created a VisionComm where we would initiate the thread plus
     //initiate the function.
   }

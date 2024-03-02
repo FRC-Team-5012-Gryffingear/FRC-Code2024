@@ -43,6 +43,7 @@ public class IntakeSubsys extends SubsystemBase {
       }
       
     }
+    
     else if(b){
       //Outtaking
       intake1.set(ControlMode.PercentOutput, -1);

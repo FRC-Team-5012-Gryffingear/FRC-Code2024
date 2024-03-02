@@ -98,8 +98,10 @@ public class VisionSub extends SubsystemBase {
 
     var TagSize = 36;
     //Camera Logitech C270 HD Webcam
-    var fx = 954.6564;
-    var fy = 950.39935;
+    //tan something needs to be added here
+    double FOV = 55;
+    var fx = (grayimage.height() / 2) / Math.tan((Math.PI * FOV/180) / 2);
+    var fy = fx;
 
     Scalar outlineColor = new Scalar(0,255,0);
     Scalar xColor = new Scalar(0,0,255);
@@ -124,8 +126,8 @@ public class VisionSub extends SubsystemBase {
      // xPose.clear();
       ArrayList<Transform3d> poses = new ArrayList<Transform3d>();
 
-      double cxs = 320;
-      double cys = 240;
+      double cxs = grayimage.width()/2;
+      double cys = grayimage.height()/2;
 
       for (AprilTagDetection detection : detections){
         tagsIDs.add(detection.getId());
