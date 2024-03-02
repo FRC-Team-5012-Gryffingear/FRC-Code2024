@@ -101,7 +101,6 @@ public class SwerveMod {
         return new SwerveModulePosition(getDrivePos(),getRotation());
     }
 
-
     public void setModState(SwerveModuleState desiredState){
          lastDesiredState = desiredState;
 

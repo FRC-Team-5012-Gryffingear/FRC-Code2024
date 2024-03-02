@@ -100,6 +100,8 @@ public class Autos extends Command {
     double Rollpower_ID_5 = kp * Error5Roll;
     double Rollpower_ID_6 = kp * Error6Roll;
 
+    //Add Threshold checkers  for ID 5 & 6 here:
+
 
 
     

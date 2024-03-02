@@ -43,10 +43,8 @@ public final class Constants {
   public static final int FrontRightEncoderID = 6;
   public static final int BackLeftEncoderID = 9;
   public static final int BackRightEncoderID = 12;
-//-0.4833984375 FL
-//FR:  0.252685536875
-//BL: -0.153564453125
-//BR: 0.273681640625
+
+//One of these encoders needs to be changed due to new encoder
   public static final double FrontLeftOffset = -0.771728515625;
   public static final double FrontRightOffset = -0.003173828125;
   public static final double BackLeftOffset = -0.408203125;
