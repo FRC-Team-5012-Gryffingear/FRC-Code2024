@@ -44,6 +44,7 @@ public class ElevatorSubsys extends SubsystemBase {
 
 
   public void elevating(double power, boolean push){
+    //Checks if push button pressed and if so then start timer
     if(push){
       time.start();
       //check if the timer is not above 0.3 seconds

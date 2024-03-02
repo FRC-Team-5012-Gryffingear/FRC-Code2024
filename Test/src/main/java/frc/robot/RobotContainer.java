@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoSimple;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ElevatorComm;
 import frc.robot.commands.ExampleCommand;
@@ -33,19 +34,23 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
 
-  SwerveSubsystem swerveSubsys = new SwerveSubsystem();
-  IntakeSubsys intakeSub = new IntakeSubsys();
-  ElevatorSubsys elevSub = new ElevatorSubsys();
-  VisionSub visionSub = new VisionSub();
-  Autos auto = new Autos(swerveSubsys, visionSub);
+  private final SwerveSubsystem swerveSubsys = new SwerveSubsystem();
+  private final IntakeSubsys intakeSub = new IntakeSubsys();
+  private final ElevatorSubsys elevSub = new ElevatorSubsys();
+  private final VisionSub visionSub = new VisionSub();
+
+  private final Autos auto = new Autos(swerveSubsys, visionSub);
+  private final AutoSimple AutoS = new AutoSimple(swerveSubsys,intakeSub,elevSub);
 
 
-  CommandXboxController driverController =
+
+
+  private final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.DriverControllerPort);
   // XboxController operatorController =
   //     new XboxController(OperatorConstants.OperatorControllerPort);
   
-  XboxController operatorController = new XboxController(OperatorConstants.OperatorControllerPort);
+ private final XboxController operatorController = new XboxController(OperatorConstants.OperatorControllerPort);
 
   //SwerveCommand swerveCom = new SwerveCommand(swerveSubsys, driverController);
 
@@ -88,6 +93,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(null);
-    return auto;
+    return AutoS;
   }
 }

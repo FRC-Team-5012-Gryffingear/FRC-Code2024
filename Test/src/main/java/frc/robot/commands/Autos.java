@@ -62,7 +62,7 @@ public class Autos extends Command {
      */
   @Override
   public void execute() {
-    vision.startVision();
+    //vision.startVision();
 
     //ALL OF THE GOALS AND THRESHOLDS NEEED TO BE CHANGED OR WILL NOT FUNCTION DUE TO THE NEW METHOD
     //BEING IMPLEMENTED
@@ -133,7 +133,7 @@ public class Autos extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    vision.stopVision();
+  //  vision.stopVision();
   }
 
   // Returns true when the command should end.
