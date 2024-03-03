@@ -87,7 +87,7 @@ public class ElevatorSubsys extends SubsystemBase {
 
 
   public void elevating2(double power){
-    elevMotor1.set(ControlMode.PercentOutput , -1);
+    elevMotor1.set(ControlMode.PercentOutput , power*.8);
   }
   
   @Override

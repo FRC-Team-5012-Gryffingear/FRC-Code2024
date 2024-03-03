@@ -72,9 +72,9 @@ public class RobotContainer {
     // () -> operatorController.getAButton()));
 
     
-    // elevSub.setDefaultCommand(new ElevatorComm(elevSub,
-    // () -> operatorController.getRightTriggerAxis(), 
-    // () -> operatorController.getLeftTriggerAxis()));
+     elevSub.setDefaultCommand(new ElevatorComm(elevSub,
+     () -> operatorController.getRightTriggerAxis(), 
+     () -> operatorController.getLeftTriggerAxis()));
 
   }
 
