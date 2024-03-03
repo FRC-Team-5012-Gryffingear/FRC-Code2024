@@ -64,12 +64,12 @@ public class RobotContainer {
      driverController,
      () -> driverController.a().getAsBoolean()));
      
-     //visionSub.setDefaultCommand(new Autos(swerveSubsys, visionSub));
+     visionSub.setDefaultCommand(new Autos(swerveSubsys, visionSub));
 
 
-    // intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
-    // () -> operatorController.getBButton(),
-    // () -> operatorController.getAButton()));
+    intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
+    () -> operatorController.getAButton(),
+    () -> operatorController.getBButton()));
 
     
      elevSub.setDefaultCommand(new ElevatorComm(elevSub,

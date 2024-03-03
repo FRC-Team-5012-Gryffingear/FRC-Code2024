@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class IntakeSubsys extends SubsystemBase {
     TalonSRX intake1 = new TalonSRX(Constants.Intake1);
-    DigitalInput intakeLimit = new DigitalInput(2);
+    DigitalInput intakeLimit = new DigitalInput(1);
    // private Timer timer1 = new Timer();
     //have left side motor (Right side when in front) be the intake1
   public IntakeSubsys() {
@@ -38,12 +38,12 @@ public class IntakeSubsys extends SubsystemBase {
     //Checks if the A button is being pressed 
     if(a){
       //once the A button is pressed also check if the intake limit is pressed to see if we hit our goal
-      if(intakeLimit.get()){
-        intake1.set(ControlMode.PercentOutput, 0);
+      if(intakeLimit.get()==true){
+        intake1.set(ControlMode.PercentOutput, 1);
       }
       //if not then just continue intaking until true
       else{
-        intake1.set(ControlMode.PercentOutput, 1);
+        intake1.set(ControlMode.PercentOutput, 0);
       }
       
     }

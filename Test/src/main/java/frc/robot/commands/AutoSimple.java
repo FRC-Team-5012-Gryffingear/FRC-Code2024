@@ -42,7 +42,13 @@ public class AutoSimple extends Command {
     //this math should autocorrect the yaw of the robot to match its forward taking account any broken modules(Should)
     double percentRot = swerve.getYaw()/10;
     //Ex: swerve.drive3(0,0,percent,true); 
-
+    time.start();
+    if(time.get() > 1){
+      swerve.drive3(1, 0, percentRot,true);
+      if(time.get() > 7){
+        swerve.drive3(0, 0, percentRot, true);
+      }
+    }
 
 
 
