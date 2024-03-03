@@ -28,16 +28,17 @@ public class ElevatorSubsys extends SubsystemBase {
   Timer time = new Timer();
 
   public ElevatorSubsys() {
-    elevMotor1.configFactoryDefault();
-    elevMotor2.configFactoryDefault();
+    // elevMotor1.configFactoryDefault();
+    // elevMotor2.configFactoryDefault();
 
     elevMotor1.setNeutralMode(NeutralMode.Brake);
     elevMotor2.setNeutralMode(NeutralMode.Brake);
 
+    elevMotor2.setInverted(InvertType.InvertMotorOutput);
     elevMotor2.follow(elevMotor1);
     //If motor right side then do invert if on left then do not invert
     //Ignore if gears make them inverted already and
-    elevMotor1.setInverted(InvertType.InvertMotorOutput);
+
 
     
   }
@@ -55,7 +56,7 @@ public class ElevatorSubsys extends SubsystemBase {
           elevMotor1.set(ControlMode.PercentOutput, 0);
         }
         else{
-          elevMotor1.set(ControlMode.PercentOutput, .25);
+          elevMotor1.set(ControlMode.PercentOutput, .2);
         }
       }
       //if the timer is above 0.3 seconds immediately end it
@@ -71,7 +72,7 @@ public class ElevatorSubsys extends SubsystemBase {
 // checks if bottom limit and if power is negative
 // if it is to prevent it from going down
     else if(Limit2Bottom.get() && power < 0){
-      elevMotor2.set(ControlMode.PercentOutput, 0);
+      elevMotor1.set(ControlMode.PercentOutput, 0);
     }
 // if the button is not pressed, top and lower limits not being pressed
 // to move normally since none of the requirements are being met
@@ -82,6 +83,11 @@ public class ElevatorSubsys extends SubsystemBase {
     time.reset();
     }
 
+  }
+
+
+  public void elevating2(double power){
+    elevMotor1.set(ControlMode.PercentOutput , -1);
   }
   
   @Override

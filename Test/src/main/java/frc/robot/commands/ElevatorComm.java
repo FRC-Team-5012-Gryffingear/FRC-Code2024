@@ -17,17 +17,17 @@ public class ElevatorComm extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ElevatorSubsys elevSubsys;
   private final DoubleSupplier up, down;
-  private final BooleanSupplier push;
+ // private final BooleanSupplier push;
   /**
    * Creates a new ElevatorComm.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorComm(ElevatorSubsys subsystem, DoubleSupplier up, DoubleSupplier down, BooleanSupplier button) {
+  public ElevatorComm(ElevatorSubsys subsystem, DoubleSupplier up, DoubleSupplier down) {
     elevSubsys = subsystem;
     this.up = up;
     this.down = down;
-    push = button;
+   // push = button;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -39,7 +39,8 @@ public class ElevatorComm extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(), push.getAsBoolean());
+   // elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(), push.getAsBoolean());
+   elevSubsys.elevating2(up.getAsDouble() - down.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

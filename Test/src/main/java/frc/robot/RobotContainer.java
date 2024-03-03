@@ -67,15 +67,14 @@ public class RobotContainer {
      //visionSub.setDefaultCommand(new Autos(swerveSubsys, visionSub));
 
 
-    intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
-    () -> operatorController.getBButton(),
-    () -> operatorController.getAButton()));
+    // intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
+    // () -> operatorController.getBButton(),
+    // () -> operatorController.getAButton()));
 
     
-    elevSub.setDefaultCommand(new ElevatorComm(elevSub,
-    () -> operatorController.getRightTriggerAxis(), 
-    () -> operatorController.getLeftTriggerAxis(),
-    () -> operatorController.getXButton()));
+    // elevSub.setDefaultCommand(new ElevatorComm(elevSub,
+    // () -> operatorController.getRightTriggerAxis(), 
+    // () -> operatorController.getLeftTriggerAxis()));
 
   }
 
