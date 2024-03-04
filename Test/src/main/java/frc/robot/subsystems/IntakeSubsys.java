@@ -28,7 +28,7 @@ public class IntakeSubsys extends SubsystemBase {
     intake1.configFactoryDefault();
 
     intake1.setNeutralMode(NeutralMode.Brake);
-    intake1.setInverted(InvertType.InvertMotorOutput);
+   // intake1.setInverted(InvertType.InvertMotorOutput);
   }
 
 

@@ -52,7 +52,7 @@ public class ElevatorSubsys extends SubsystemBase {
       if(time.get() < 0.3){
         //if timer is not above 0.3 seconds also check if the top limit switch is pressed
         //and if it is stop the motor to prevent from going more up
-        if(Limit1Top.get()){
+        if(!Limit1Top.get()){
           elevMotor1.set(ControlMode.PercentOutput, 0);
         }
         else{
@@ -66,12 +66,12 @@ public class ElevatorSubsys extends SubsystemBase {
     }
 //Checks top limit and if power is positive
 //if it is to turn it completely off 
-    else if(Limit1Top.get() && power > 0){
+    else if(!Limit1Top.get() && power > 0){
       elevMotor1.set(ControlMode.PercentOutput, 0);
     }
 // checks if bottom limit and if power is negative
 // if it is to prevent it from going down
-    else if(Limit2Bottom.get() && power < 0){
+    else if(!Limit2Bottom.get() && power < 0){
       elevMotor1.set(ControlMode.PercentOutput, 0);
       time.stop();
       time.reset();
