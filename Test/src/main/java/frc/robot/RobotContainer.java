@@ -63,9 +63,6 @@ public class RobotContainer {
     swerveSubsys.setDefaultCommand(new SwerveCommand(swerveSubsys,
      driverController,
      () -> driverController.a().getAsBoolean()));
-     
-     visionSub.setDefaultCommand(new Autos(swerveSubsys, visionSub));
-
 
     intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
     () -> operatorController.getAButton(),
