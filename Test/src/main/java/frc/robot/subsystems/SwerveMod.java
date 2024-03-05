@@ -30,8 +30,6 @@ public class SwerveMod {
 
     private final PIDController pidcontrl = new PIDController(ModConstants.KP, ModConstants.KI, ModConstants.KD);
 
-    private final SlewRateLimiter DriveLim = new SlewRateLimiter(1);
-
     private final PIDController drivecont = new PIDController(ModConstants.KP, 0, 0);
     private final String Modname;
 

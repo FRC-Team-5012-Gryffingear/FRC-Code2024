@@ -44,25 +44,11 @@ public class ElevatorSubsys extends SubsystemBase {
   }
 
 
+
   public void elevating(double power, boolean push){
-    //Checks if push button pressed and if so then start timer
     if(push){
-      time.start();
-      //check if the timer is not above 0.3 seconds
-      if(time.get() < 0.3){
-        //if timer is not above 0.3 seconds also check if the top limit switch is pressed
-        //and if it is stop the motor to prevent from going more up
-        if(!Limit1Top.get()){
-          elevMotor1.set(ControlMode.PercentOutput, 0);
-        }
-        else{
-          elevMotor1.set(ControlMode.PercentOutput, .2);
-        }
-      }
-      //if the timer is above 0.3 seconds immediately end it
-      else if(time.get() > 0.3){
-        elevMotor1.set(ControlMode.PercentOutput, 0);
-      }
+      elevMotor1.set(ControlMode.PercentOutput, power*2);
+      System.out.println("Inside movement basically");
     }
 //Checks top limit and if power is positive
 //if it is to turn it completely off 
@@ -83,14 +69,7 @@ public class ElevatorSubsys extends SubsystemBase {
 
   public void elevating2(double power,boolean push){
     if(push){
-      time.start();
-      //check if the timer is not above 0.3 seconds
-      if(time.get() > 0.3){
-        elevMotor1.set(ControlMode.PercentOutput, 0);
-      }
-      else{
-        elevMotor1.set(ControlMode.PercentOutput, 0.25);
-      }
+System.out.println("Nothing for now");
     }
     else{
       time.stop();
