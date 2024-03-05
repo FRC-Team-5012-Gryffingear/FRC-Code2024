@@ -59,9 +59,6 @@ public class ElevatorSubsys extends SubsystemBase {
 // to move normally since none of the requirements are being met
     else{
       elevMotor1.set(ControlMode.PercentOutput, power*0.8); 
-    //reset timer if nothing happening in the push
-    time.stop();
-    time.reset();
     }
 
   }
