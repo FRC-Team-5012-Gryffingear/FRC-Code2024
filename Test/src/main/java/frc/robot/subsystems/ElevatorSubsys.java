@@ -24,6 +24,7 @@ public class ElevatorSubsys extends SubsystemBase {
   TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
 
   DigitalInput Limit1Top = new DigitalInput(2);
+ // DigitalInput Limit2Bottom = new DigitalInput(3);
  
   Timer time = new Timer();
 
@@ -55,12 +56,17 @@ public class ElevatorSubsys extends SubsystemBase {
     else if(!Limit1Top.get() && power > 0){
       elevMotor1.set(ControlMode.PercentOutput, 0);
     }
+    //  else if(!Limit2Bottom.get() && power < 0){
+    //  elevMotor1.set(ControlMode.PercentOutput, 0);
+    //  }
 // if the button is not pressed, top and lower limits not being pressed
 // to move normally since none of the requirements are being met
-    else{
+    else if(Math.abs(power) > 0){
       elevMotor1.set(ControlMode.PercentOutput, power*0.8); 
     }
-
+    else{
+      elevMotor1.set(ControlMode.PercentOutput, 0.1);
+    }
   }
 
 
@@ -74,6 +80,9 @@ System.out.println("Nothing for now");
       elevMotor1.set(ControlMode.PercentOutput , power*0.8);
     }
   }
+  // public boolean bottomLimitBOOL(){
+  //   return Limit2Bottom.get();
+  // }
   
   @Override
   public void periodic() {

@@ -42,7 +42,7 @@ public class ElevatorComm extends Command {
   @Override
   public void execute() {
    // elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(), push.getAsBoolean());
-   elevSubsys.elevating2(up.getAsDouble() - down.getAsDouble(),push.getAsBoolean());
+   elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(),push.getAsBoolean());
   }
 
   // Called once the command ends or is interrupted.
