@@ -48,11 +48,8 @@ public class AutoSimple extends Command {
 
         if(time.get() > 3 && time.get() < 6){
           swerve.drive3(0, 0, 0, true);
-          ElevSubsys.elevating(-.5, false);
-          if(time.get() > 6){
-            ElevSubsys.elevating(0, false);
           }
-        }
+        
       }
 
     }
