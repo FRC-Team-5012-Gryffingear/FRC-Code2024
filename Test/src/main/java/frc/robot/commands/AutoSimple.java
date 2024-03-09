@@ -40,16 +40,15 @@ public class AutoSimple extends Command {
   @Override
   public void execute() {
     //this math should autocorrect the yaw of the robot to match its forward taking account any broken modules(Should)
-    double percentRot = swerve.getYaw()/10;
+   // double percentRot = swerve.getYaw()/10;
     //Ex: swerve.drive3(0,0,percent,true); 
     time.start();
-    if(time.get() > 0.3){
-        swerve.drive3(0.5, 0, percentRot, true);
+    if(time.get() > 0.3 && time.get() < 3){
+        swerve.drive3(-0.15, 0, 0, true);
 
-        if(time.get() > 3){
-          swerve.drive3(0, 0, percentRot, true);
+        if(time.get() > 3 && time.get() < 6){
+          swerve.drive3(0, 0, 0, true);
           ElevSubsys.elevating(-.5, false);
-
           if(time.get() > 6){
             ElevSubsys.elevating(0, false);
           }

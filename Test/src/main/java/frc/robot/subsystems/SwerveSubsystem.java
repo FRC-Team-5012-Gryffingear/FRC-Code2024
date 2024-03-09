@@ -89,7 +89,7 @@ private Field2d fieldMaker = new Field2d();
 //to autocorrect itself in the right orientation
   public double getYaw(){
     double currentYaw = pigeon.getYaw().getValueAsDouble();
-    double angle = currentYaw % 360;
+    double angle = currentYaw % 270;
     return angle;
   }
 

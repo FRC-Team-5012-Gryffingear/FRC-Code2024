@@ -120,7 +120,7 @@ public class SwerveMod {
          lastDesiredState = desiredState;
 
         //If there is no input in where we want it to go then don't move
-        if(Math.abs(lastDesiredState.speedMetersPerSecond) < 0.05){
+        if(Math.abs(lastDesiredState.speedMetersPerSecond) < 0.02){
             stop();
             return;
         }

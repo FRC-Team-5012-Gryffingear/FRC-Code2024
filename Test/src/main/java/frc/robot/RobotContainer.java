@@ -90,6 +90,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(null);
-    return AutoS;
+    return null;
   }
 }

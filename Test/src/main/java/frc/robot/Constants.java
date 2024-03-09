@@ -45,14 +45,14 @@ public final class Constants {
   public static final int BackRightEncoderID = 12;
 
 //One of these encoders needs to be changed due to new encoder
-  public static final double FrontLeftOffset = -0.771728515625;
-  public static final double FrontRightOffset = -0.003173828125;
+  public static final double FrontLeftOffset = -0.27221679875;
+  public static final double FrontRightOffset = -0.503173828125;
   public static final double BackLeftOffset = -0.408203125;
   public static final double BackRightOffset = -0.148193359375;
 
   // if true then inverse drive motors
-  public static final boolean FrontLeftInv = false;
-  public static final boolean FrontRightInv = false;
+  public static final boolean FrontLeftInv = true;
+  public static final boolean FrontRightInv = true;
   public static final boolean BackLeftInv = false;
   public static final boolean BackRightInv = true;
 
