@@ -25,7 +25,7 @@ public class IntakeSubsys extends SubsystemBase {
    // private Timer timer1 = new Timer();
     //have left side motor (Right side when in front) be the intake1
   public IntakeSubsys() {
-    intake1.configFactoryDefault();
+  //  intake1.configFactoryDefault();
 
     intake1.setNeutralMode(NeutralMode.Brake);
    // intake1.setInverted(InvertType.InvertMotorOutput);

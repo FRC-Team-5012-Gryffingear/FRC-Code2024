@@ -43,16 +43,13 @@ public class AutoSimple extends Command {
    // double percentRot = swerve.getYaw()/10;
     //Ex: swerve.drive3(0,0,percent,true); 
     time.start();
-    if(time.get() > 0.3 && time.get() < 3){
+    if(time.get() > 0.3 && time.get() < 2){
         swerve.drive3(-0.15, 0, 0, true);
-
-        if(time.get() > 3 && time.get() < 6){
-          swerve.drive3(0, 0, 0, true);
-          }
-        
       }
-
+    else if(time.get() > 2){
+      swerve.drive3(0, 0, 0, true);
     }
+  }
 
   // Called once the command ends or is interrupted.
   @Override

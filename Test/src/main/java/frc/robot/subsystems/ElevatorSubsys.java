@@ -71,14 +71,7 @@ public class ElevatorSubsys extends SubsystemBase {
 
 
   public void elevating2(double power,boolean push){
-    if(push){
-System.out.println("Nothing for now");
-    }
-    else{
-      time.stop();
-      time.reset();
       elevMotor1.set(ControlMode.PercentOutput , power*0.8);
-    }
   }
   // public boolean bottomLimitBOOL(){
   //   return Limit2Bottom.get();
