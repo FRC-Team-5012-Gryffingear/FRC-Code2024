@@ -57,10 +57,10 @@ public class SwerveCommand extends Command {
     // double numeratorY =Math.pow(ySpeed, t/1000);
     // double denomY = Math.pow(2, t/1000);
 
-    double alpha = 0.5;
+    double alpha = 0.015;
 
-    double finalPushX = 1 - Math.pow(Math.E, -alpha*(t/10000)*xSpeed);
-    double finalPushY = 1 - Math.pow(Math.E, -alpha*(t/10000)*ySpeed);
+    double finalPushX = 1 - Math.pow(Math.E, -alpha*t*xSpeed);
+    double finalPushY = 1 - Math.pow(Math.E, -alpha*t*ySpeed);
 
     if(finalPushX > 1){
       finalPushX = 1;
@@ -69,7 +69,7 @@ public class SwerveCommand extends Command {
       finalPushX = -1;
     }
 
-    
+
     if(finalPushY > 1){
       finalPushY = 1;
     }
@@ -94,7 +94,7 @@ public class SwerveCommand extends Command {
 
     // Delete 2 if slow
 //X should move pos direction, -Y  move pos direction, rotateSpeed move in pos direction
-    swervesubsys.drive3(xSpeed, -ySpeed, rotateSpeed, true);
+    swervesubsys.drive3(finalPushX, -finalPushY, rotateSpeed*1.5, true);
 
     
     if(yaw.getAsBoolean()){
