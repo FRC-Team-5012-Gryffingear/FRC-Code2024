@@ -27,11 +27,7 @@ public class VisionComm extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Thread visionThread = new Thread(() -> visionSubsystem.apriltagVisionThreadProc());
-    // // Change the priority if it does not work. Default is 5.
-    // visionThread.setPriority(5);
-    // visionThread.setDaemon(true);
-    // visionThread.start();
+    visionSubsystem.startVision();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +36,9 @@ public class VisionComm extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    visionSubsystem.stopVision();
+  }
 
   // Returns true when the command should end.
   @Override

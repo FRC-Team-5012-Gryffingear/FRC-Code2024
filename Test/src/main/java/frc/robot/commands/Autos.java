@@ -28,6 +28,7 @@ public class Autos extends Command {
   @Override
   public void initialize() {
     System.out.println("Runnnnnnninnnnng");
+    vision.startVision();
   }
 
       /* Error = GOAL - Current
@@ -78,7 +79,7 @@ public class Autos extends Command {
     double Error6Z = 85 - vision.getZID(6);
 
     //this Kp value will be permanent for all values
-    double kp = 0.2;
+    double kp = 0.4;
 
     double Zpower_ID_5 = kp * Error5Z; 
     double Zpower_ID_6 = kp * Error6Z;
@@ -134,6 +135,7 @@ public class Autos extends Command {
   @Override
   public void end(boolean interrupted) {
   //  vision.stopVision();
+  vision.stopVision();
   }
 
   // Returns true when the command should end.
