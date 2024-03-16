@@ -89,6 +89,7 @@ public class Autos extends Command {
     if(Math.abs(Xpower_ID_5) >= 0){
       if(m_subsystem.getZID(5) < 90 && m_subsystem.getZID(5) > 83){
         Zpower_ID_5 = 0;
+        
         System.out.println("Z IS 000000");
       }
       if (m_subsystem.getXID(5) > -9.25 && m_subsystem.getXID(5) < 15.25){
@@ -102,7 +103,7 @@ public class Autos extends Command {
   
       if(Zpower_ID_5 == 0 && Xpower_ID_5 == 0 && Rollpower_ID_5 == 0){
       System.out.println("ALLL VALUES ARE 0-------");
-      
+
       //Outake that Note for X amount (To be determined)
       /*
        * if(time.get() > X seconds){

@@ -24,9 +24,9 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import java.util.*;
 
 import java.lang.Math;
-import java.util.*;
 
 import javax.xml.crypto.dsig.Transform;
 
@@ -88,9 +88,8 @@ private Thread visionThread;
     ArrayList<Integer> IDValues = new ArrayList<>();
 
     var TagSize = 36;
-    //Camera Logitech C270 HD Webcam
-    var fx = 954.6564522093413;
-    var fy = 950.3993532691603;
+    
+    
   
 
     Scalar outlineColor = new Scalar(0,255,0);
@@ -115,12 +114,25 @@ private Thread visionThread;
 
      // xPose.clear();
       ArrayList<Transform3d> poses = new ArrayList<Transform3d>();
+      //CHECK THESE NEW VALUES
+      //FOV is information grabbed from logitech website in degrees.
+      //fx and fy is found using a formula found on github.
+      //cx and cy is found using the grayimage height/width because grayImage is used to grab apriltags.
+      var FOV = 55;
+      var fx = (grayimage.height() / 2) / Math.tan((Math.PI * FOV / 180) / 2);
+      var fy = fx;
+      
+      // Values we orginillay used for fx and fy:
+      // var fxx = 954.6564522093413;
+      // var fyy = 950.3993532691603;
 
       // double cxs = 334.86944443989194;
       // double cys = 221.42493856582405;
-
-      double cxs = 320;
-      double cys = 240;
+      double cxs = grayimage.width() / 2;
+      double cys = grayimage.height() / 2;
+      // Values we originally usedin cx and cy:
+      // double cxs = 320;
+      // double cys = 240;
 
 
       for (AprilTagDetection detection : detections){
@@ -176,7 +188,7 @@ private Thread visionThread;
           SmartDashboard.putNumber("ID 6 X Value", _pose.getX());
           SmartDashboard.putNumber("ID 6 Y Value", _pose.getY());
           SmartDashboard.putNumber( "ID 6 Z Value", _pose.getZ());
-          SmartDashboard.putNumber( "ID 6 Pitch Value", _pose.getRotation().getX());
+          SmartDashboard.putNumber( "ID 6 Pitch Value", Math.toDegrees(_pose.getRotation().getX()));
           SmartDashboard.putNumber("ID 6 Roll Value", _pose.getRotation().getY());
           SmartDashboard.putNumber("ID 6 Yaw Value", _pose.getRotation().getZ());
         }
