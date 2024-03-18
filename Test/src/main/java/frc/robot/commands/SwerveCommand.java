@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSub;
 
 import java.util.function.BooleanSupplier;
 
@@ -22,6 +23,7 @@ public class SwerveCommand extends Command {
  private final CommandXboxController controller2;
   private final BooleanSupplier yaw;
   public double t = 1;
+  private VisionSub vision = new VisionSub();
 
  
   
@@ -36,6 +38,7 @@ public class SwerveCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    vision.startThread();
     swervesubsys.resetHeading();
   }
 
@@ -51,18 +54,18 @@ public class SwerveCommand extends Command {
       t = 1; 
     }
 
-    // double numeratorX =Math.pow(xSpeed, t/1000);
-    // double denomX = Math.pow(2, t/1000);
+    double numeratorX =Math.pow(xSpeed, t/1000);
+    double denomX = Math.pow(2, t/1000);
 
-    // double numeratorY =Math.pow(ySpeed, t/1000);
-    // double denomY = Math.pow(2, t/1000);
+    double numeratorY =Math.pow(ySpeed, t/1000);
+    double denomY = Math.pow(2, t/1000);
 
-    double alpha = 0.015;
+    double alpha = 0.015; //changed from .015
 
     double finalPushX = 1 - Math.pow(Math.E, -alpha*t*xSpeed);
     double finalPushY = 1 - Math.pow(Math.E, -alpha*t*ySpeed);
 
-    if(finalPushX > 1){
+    if(finalPushX > 1){ //changed, used to be finalPushX > 1
       finalPushX = 1;
     }
     else if(finalPushX < -1){
@@ -115,6 +118,7 @@ public class SwerveCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     swervesubsys.stopMods();
+    vision.stopThread();
   }
 
   // Returns true when the command should end.

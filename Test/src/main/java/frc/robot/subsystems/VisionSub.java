@@ -24,9 +24,9 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import java.util.*;
 
 import java.lang.Math;
-import java.util.*;
 
 import javax.xml.crypto.dsig.Transform;
 
@@ -34,42 +34,32 @@ import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 import edu.wpi.first.apriltag.AprilTagDetection;
 
-
 public class VisionSub extends SubsystemBase {
-  
-
-  // ArrayList<Double> xPose = new ArrayList<>();
-  // //double xPose;
-  // ArrayList<Integer> ID = new ArrayList<>();
- // private Alert enableVisionUpdatesAlert =
-  //  new Alert("Vision updates are temporarily disabled.", AlertType.WARNING);
-  private Thread visionThread;
-  
+  /** Creates a new VisionSub. */
+private Thread visionThread;
   public VisionSub(){
     visionThread = new Thread(this::apriltagVisionThreadProc);
   }
-
-  //Checks if the vision is not running and if so to make the thread connection to the main function
-  //and then starts it using the start() command that the thread has
-  public void startVision(){
-    if(visionThread == null || !visionThread.isAlive()){
+  // ArrayList<Double> xPose = new ArrayList<>();
+  // //double xPose;
+  // ArrayList<Integer> ID = new ArrayList<>();
+  public void startThread(){
+    if(!visionThread.isAlive() || visionThread == null){
       visionThread = new Thread(this::apriltagVisionThreadProc);
       visionThread.start();
     }
   }
-//Stops the vision by checking it is running and if so use the 
-//Try - catch method to see if there is an exception to use that exception to run the interrupt command
-  public void stopVision(){
-    if(visionThread.isAlive() || visionThread != null){
+
+  public void stopThread(){
+    if(visionThread!= null || visionThread.isAlive()){
       visionThread.interrupt();
-      try{
+      try {
         visionThread.join();
-      } catch(InterruptedException e){
+      } catch (InterruptedException e){
         Thread.currentThread().interrupt();
       }
     }
   }
-
 
   public void apriltagVisionThreadProc(){
     AprilTagDetector detector = new AprilTagDetector();
@@ -78,7 +68,11 @@ public class VisionSub extends SubsystemBase {
     //get the UsbCamera from CameraServer
     UsbCamera camera = CameraServer.startAutomaticCapture();
     //set resolution
-    camera.setResolution(640, 480);
+    camera.setResolution(320, 240);
+    camera.setFPS(15);
+    camera.setExposureAuto();
+    camera.setWhiteBalanceAuto();
+    camera.setBrightness(25);
 
     //Get a CvSink This will capture Mats from the camera
     CvSink cvsink = CameraServer.getVideo();
@@ -97,11 +91,9 @@ public class VisionSub extends SubsystemBase {
     ArrayList<Integer> IDValues = new ArrayList<>();
 
     var TagSize = 36;
-    //Camera Logitech C270 HD Webcam
-    //tan something needs to be added here
-    double FOV = 55;
-    var fx = (grayimage.height() / 2) / Math.tan((Math.PI * FOV/180) / 2);
-    var fy = fx;
+    
+    
+  
 
     Scalar outlineColor = new Scalar(0,255,0);
     Scalar xColor = new Scalar(0,0,255);
@@ -125,15 +117,32 @@ public class VisionSub extends SubsystemBase {
 
      // xPose.clear();
       ArrayList<Transform3d> poses = new ArrayList<Transform3d>();
+      //CHECK THESE NEW VALUES
+      //FOV is information grabbed from logitech website in degrees.
+      //fx and fy is found using a formula found on github.
+      //cx and cy is found using the grayimage height/width because grayImage is used to grab apriltags.
+      var FOV = 55;
+      var fx = (grayimage.height() / 2) / Math.tan((Math.PI * FOV / 180) / 2);
+      var fy = fx;
+      
+      // Values we orginillay used for fx and fy:
+      // var fxx = 954.6564522093413;
+      // var fyy = 950.3993532691603;
 
-      double cxs = grayimage.width()/2;
-      double cys = grayimage.height()/2;
+      // double cxs = 334.86944443989194;
+      // double cys = 221.42493856582405;
+      double cxs = grayimage.width() / 2;
+      double cys = grayimage.height() / 2;
+      // Values we originally usedin cx and cy:
+      // double cxs = 320;
+      // double cys = 240;
+
 
       for (AprilTagDetection detection : detections){
         tagsIDs.add(detection.getId());
        // ID.add(detection.getId());
         for (var i = 0; i <= 3; i++){
-          var j = (i + 1) % 4;
+          var j = (i + 1) % 4; 
           var pt1 = new Point(detection.getCornerX(i), detection.getCornerY(i));
           var pt2 = new Point(detection.getCornerX(j), detection.getCornerY(j));
           Imgproc.line(image, pt1, pt2, outlineColor, 2);
@@ -150,11 +159,55 @@ public class VisionSub extends SubsystemBase {
         Transform3d pose = poseEst.estimate(detection);
         poses.add(pose);
       //  adapt(tags,pose);
-
-
       }
-      System.out.println(poses);
+      // System.out.println(poses);
       var i = 0;
+
+      if (poses.isEmpty())
+      {
+          SmartDashboard.putNumber("ID 4 X Value",0);
+          SmartDashboard.putNumber("ID 4 Y Value",0);
+          SmartDashboard.putNumber( "ID 4 Z Value",0);
+          SmartDashboard.putNumber( "ID 4 Pitch Value",0);
+          SmartDashboard.putNumber("ID 4 Roll Value",0);
+          SmartDashboard.putNumber("ID 4 Yaw Value",0);
+
+          SmartDashboard.putNumber("ID 3 X Value",0);
+          SmartDashboard.putNumber("ID 3 Y Value",0);
+          SmartDashboard.putNumber( "ID 3 Z Value",0);
+          SmartDashboard.putNumber( "ID 3 Pitch Value",0);
+          SmartDashboard.putNumber("ID 3 Roll Value",0);
+          SmartDashboard.putNumber("ID 3 Yaw Value",0);
+
+          SmartDashboard.putNumber("ID 5 X Value",0);
+          SmartDashboard.putNumber("ID 5 Y Value",0);
+          SmartDashboard.putNumber( "ID 5 Z Value",0);
+          SmartDashboard.putNumber( "ID 5 Pitch Value",0);
+          SmartDashboard.putNumber("ID 5 Roll Value",0);
+          SmartDashboard.putNumber("ID 5 Yaw Value",0);
+
+          SmartDashboard.putNumber("ID 6 X Value",0);
+          SmartDashboard.putNumber("ID 6 Y Value",0);
+          SmartDashboard.putNumber( "ID 6 Z Value",0);
+          SmartDashboard.putNumber( "ID 6 Pitch Value", 0);
+          SmartDashboard.putNumber("ID 6 Roll Value",0);
+          SmartDashboard.putNumber("ID 6 Yaw Value",0);
+
+          SmartDashboard.putNumber("ID 7 X Value",0);
+          SmartDashboard.putNumber("ID 7 Y Value",0);
+          SmartDashboard.putNumber( "ID 7 Z Value",0);
+          SmartDashboard.putNumber( "ID 7 Pitch Value",0);
+          SmartDashboard.putNumber("ID 7 Roll Value",0);
+          SmartDashboard.putNumber("ID 7 Yaw Value",0);
+
+          SmartDashboard.putNumber("ID 8 X Value",0);
+          SmartDashboard.putNumber("ID 8 Y Value",0);
+          SmartDashboard.putNumber( "ID 8 Z Value",0);
+          SmartDashboard.putNumber( "ID 8 Pitch Value",0);
+          SmartDashboard.putNumber("ID 8 Roll Value",0);
+          SmartDashboard.putNumber("ID 8 Yaw Value",0);
+      }
+
       for (Transform3d _pose : poses){
         if(detections[i].getId() == 4){
           SmartDashboard.putNumber("ID 4 X Value", _pose.getX());
@@ -184,7 +237,7 @@ public class VisionSub extends SubsystemBase {
           SmartDashboard.putNumber("ID 6 X Value", _pose.getX());
           SmartDashboard.putNumber("ID 6 Y Value", _pose.getY());
           SmartDashboard.putNumber( "ID 6 Z Value", _pose.getZ());
-          SmartDashboard.putNumber( "ID 6 Pitch Value", _pose.getRotation().getX());
+          SmartDashboard.putNumber( "ID 6 Pitch Value", Math.toDegrees(_pose.getRotation().getX()));
           SmartDashboard.putNumber("ID 6 Roll Value", _pose.getRotation().getY());
           SmartDashboard.putNumber("ID 6 Yaw Value", _pose.getRotation().getZ());
         }
@@ -231,20 +284,20 @@ public class VisionSub extends SubsystemBase {
       double value_id_4_value = SmartDashboard.getNumber("ID 4 X Value", 0);
       SmartDashboard.putNumber("ID 4 X Values", value_id_4_value);
 
-    //   double value_id_3_value = SmartDashboard.getNumber("ID 3 X Value", 0);
-    //   SmartDashboard.putNumber("ID 3 X Values", value_id_3_value);
+      double value_id_3_value = SmartDashboard.getNumber("ID 3 X Value", 0);
+      SmartDashboard.putNumber("ID 3 X Values", value_id_3_value);
 
-    //   double value_id_5_value = SmartDashboard.getNumber("ID 5 X Value", 0);
-    //   SmartDashboard.putNumber("ID 5 X Values", value_id_5_value);
+      double value_id_5_value = SmartDashboard.getNumber("ID 5 X Value", 0);
+      SmartDashboard.putNumber("ID 5 X Values", value_id_5_value);
 
-    //   double value_id_6_value = SmartDashboard.getNumber("ID 6 X Value", 0);
-    //   SmartDashboard.putNumber("ID 6 X Values", value_id_6_value);
+      double value_id_6_value = SmartDashboard.getNumber("ID 6 X Value", 0);
+      SmartDashboard.putNumber("ID 6 X Values", value_id_6_value);
 
-    //   double value_id_7_value = SmartDashboard.getNumber("ID 7 X Value", 0);
-    //   SmartDashboard.putNumber("ID 7 X Values", value_id_7_value);
+      double value_id_7_value = SmartDashboard.getNumber("ID 7 X Value", 0);
+      SmartDashboard.putNumber("ID 7 X Values", value_id_7_value);
 
-    //   double value_id_8_value = SmartDashboard.getNumber("ID 8 X Value", 0);
-    //   SmartDashboard.putNumber("ID 8 X Values", value_id_8_value);
+      double value_id_8_value = SmartDashboard.getNumber("ID 8 X  Value", 0);
+      SmartDashboard.putNumber("ID 8 X Values", value_id_8_value);
 
       SmartDashboard.putString("X values", Xvalues.toString());
       SmartDashboard.putString("Y values", Yvalues.toString());
@@ -263,99 +316,48 @@ public class VisionSub extends SubsystemBase {
 
       SmartDashboard.putString("tag", tagsIDs.toString());
       
+      
       outputStream.putFrame(image);
+      System.out.println("ENDDDNNDNDND");
     }
     detector.close();
   }
-
-
-public double get_ID_Xpose(int ID){
+  public double getXID(int ID){
     String ID_name;
-    double x = 0;
-
+    double x;
+  
     ID_name = "ID " + ID + " X Value";
     x = SmartDashboard.getNumber(ID_name, 0);
-    return x;
-}
-
-public double get_ID_Ypose(int ID){
+  
+    System.out.println("THE VALUE OF X: " + x);
+      return x;
+  }
+  
+  public double getIDroll(int ID){
     String ID_name;
-    double y = 0;
+    double roll;
+  
+    ID_name = "ID " + ID + " Roll Value";
+    roll = SmartDashboard.getNumber(ID_name, 0);
 
-    ID_name = "ID " + ID + " Y Value";
-    y = SmartDashboard.getNumber(ID_name, 0);
-    return y;
-}
-
-public double get_ID_Zpose(int ID){
+    System.out.println("THE VALUE OF ROLL: " + roll);
+      return roll;
+  }
+  
+  public double getZID(int ID){
     String ID_name;
-    double z = 0;
-
+    double z;
     ID_name = "ID " + ID + " Z Value";
     z = SmartDashboard.getNumber(ID_name, 0);
-    return z;
-}
-//  public double getX_ID_3(){
-//     double x = SmartDashboard.getNumber("ID 3 X Value", 0);
-//     return x;
-//  }
-
-//  public double getX_ID_4(){
-//   double x = SmartDashboard.getNumber("ID 4 X Value", 0);
-//   return x;
-//  }
-
-//  public double getX_ID_5(){
-//   double x = SmartDashboard.getNumber("ID 5 X Value", 0);
-//   return x;
-//  }
-
-//  public double getX_ID_6(){
-//   double x = SmartDashboard.getNumber("ID 6 X Value", 0);
-//   return x;
-//  }
-//   public double getX_ID_7(){
-//   double x = SmartDashboard.getNumber("ID 7 X Value", 0);
-//   return x;
-//  }
-//  public double getX_ID_8(){
-//   double x = SmartDashboard.getNumber("ID 8 X Value", 0);
-//   return x;
-//  }
+    System.out.println("THE VALUE OF Z: " + z);
+      return z;
+  }
   
-public double getXID(int ID){
-  String ID_name;
-  double x;
-
-  ID_name = "ID " + ID + " X Value";
-  x = SmartDashboard.getNumber(ID_name, 0);
-
-  System.out.println("THE VALUE OF X: " + x);
-    return x;
-}
-
-public double getIDroll(int ID){
-  String ID_name;
-  double roll;
-
-  ID_name = "ID " + ID + " Roll Value";
-  roll = SmartDashboard.getNumber(ID_name, 0);
-  System.out.println("THE VALUE OF ROLL: " + roll);
-    return roll;
-}
-
-public double getZID(int ID){
-  String ID_name;
-  double z;
-  ID_name = "ID " + ID + " Z Value";
-  z = SmartDashboard.getNumber(ID_name, 0);
-  System.out.println("THE VALUE OF Z: " + z);
-    return z;
-}
-
-
+ 
+ 
   @Override
-  public void periodic() {}
+  public void periodic() {
+  }
 
   @Override
   public void simulationPeriodic() {

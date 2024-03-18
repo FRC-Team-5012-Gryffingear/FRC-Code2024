@@ -27,7 +27,7 @@ public class VisionComm extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    visionSubsystem.startVision();
+    visionSubsystem.startThread();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +37,7 @@ public class VisionComm extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    visionSubsystem.stopVision();
+    visionSubsystem.stopThread();
   }
 
   // Returns true when the command should end.

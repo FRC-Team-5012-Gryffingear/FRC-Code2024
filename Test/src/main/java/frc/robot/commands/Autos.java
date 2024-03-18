@@ -4,31 +4,35 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.commands.SwerveCommand;
 /** An example command that uses an example subsystem. */
 public class Autos extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsystem swerve;
   private final VisionSub vision;
+  private double t = 1;
 
  
   public Autos(SwerveSubsystem subsystem, VisionSub vision) {
     swerve = subsystem;
     this.vision = vision;
-
-
     addRequirements(subsystem,vision);
   }
+
+
 
   @Override
   public void initialize() {
     System.out.println("Runnnnnnninnnnng");
-    vision.startVision();
+    vision.startThread();
   }
 
       /* Error = GOAL - Current
@@ -75,67 +79,125 @@ public class Autos extends Command {
     //FOR AMPS DO TAGS 5 AND 3
     //THIS SECTION IS FOR Z
     //THESE ARE FOR PID (MIGHT NEED TO CHANGE LATER)
-    double Error5Z = 85 - vision.getZID(5);
-    double Error6Z = 85 - vision.getZID(6);
+    //1ft = 85 units
+    double Error5Z = vision.getZID(5)/41;
+    double Error6Z = vision.getZID(6)/41;
 
     //this Kp value will be permanent for all values
     double kp = 0.4;
 
-    double Zpower_ID_5 = kp * Error5Z; 
-    double Zpower_ID_6 = kp * Error6Z;
+    // double Zpower_ID_5 = kp * Error5Z; 
+    // double Zpower_ID_6 = kp * Error6Z;
 
     //this section is for X
     //Change 15 to a number that takes in count the offset of the camera since it is on the side
-    double Error5X = 15 - vision.getXID(5);
-    double Error6X = 15 - vision.getXID(6);
+    //subtract 15 to correct the offset and divide by amount of units that equals one foot for X axis
+    double Error5X = vision.getXID(5)/61.7;
+    double Error6X = vision.getXID(6)/61.7;
 
-    double Xpower_ID_5 = kp * Error5X;
-    double Xpower_ID_6 = kp * Error6X;
+    // double Xpower_ID_5 = kp * Error5X;
+    // double Xpower_ID_6 = kp * Error6X;
 
     //This section is for Roll (rotating)
     //Might cause an error since the value read is 0 - 360 (Maybe)
     //Check to see if changing the Mod encoder config to -pi to pi works
-    double Error5Roll = 0.1 - vision.getIDroll(5);
-    double Error6Roll = 0.1 - vision.getIDroll(6);
+    double Error5Roll = vision.getIDroll(5);
 
-    double Rollpower_ID_5 = kp * Error5Roll;
-    double Rollpower_ID_6 = kp * Error6Roll;
+    
+    double Error6Roll = vision.getIDroll(6) - .1;
+
+    // double Rollpower_ID_5 = kp * Error5Roll;
+    // double Rollpower_ID_6 = kp * Error6Roll;
 
     //Add Threshold checkers  for ID 5 & 6 here:
 
+     double alpha = 0.001; //changed from .015
+
+    if(Math.abs(Error5Z) < 0.02 && Math.abs(Error5X) < 0.02 && Error5Roll < 0.02){
+      t = 1; 
+    }
+
+    double finalPushZ = 1 / (1 - Math.pow(Math.E, -alpha*t*Error5Z));
+    double finalPushX = 1 / (1 - Math.pow(Math.E, -alpha*t*Error5X));
+    double finalPushRoll = 1 / (1 - Math.pow(Math.E, -alpha*t*Error5Roll));
+
+    if(finalPushX > .1){ //changed, used to be finalPushX > 1
+      finalPushX = .1; 
+    }
+    else if(finalPushX < -.1){
+      finalPushX = -.1;
+    }
 
 
-    
+    if(finalPushZ > .1){
+      finalPushZ = .1;
+    }
+    else if(finalPushZ < -.1){
+      finalPushZ = -.1;
+    }
+
   
-  // if(Math.abs(Xpower_ID_5) >= 0){
-  //   if(vision.getZID(5) < 90 && vision.getZID(5) > 83) {
-  //     System.out.println("Z IS 00000000");
-  //     Zpower_ID_5 = 0;
-  //   }
-  //   if(vision.getXID(5) > -9.25 && vision.getXID(5) < 15.25) {
-  //     Xpower_ID_5 = 0;
-  //     System.out.println("X IS 000000000");
-  //   }   
-  //   if(vision.getIDroll(5) > -.1 && vision.getIDroll(5) < .1) {
-  //     Rollpower_ID_5 = 0;
-  //     System.out.println("ROLL IS PERFECT YIPPEEEEEEE");
-  //   }
-  //   swerve.drive3(Zpower_ID_5, -Xpower_ID_5, Rollpower_ID_5, true);
+    if(finalPushRoll > .1){ //changed, used to be finalPushRoll > 1
+      finalPushRoll = .1; 
+    }
+    else if(finalPushRoll < -.1){
+      finalPushRoll = -.1;
+    }
 
-  //   if(Zpower_ID_5 == 0 && Xpower_ID_5 == 0 && Rollpower_ID_5 ==0) {
-  //     System.out.println("ALL VALUES ARE 0000000000000000000000000000000");
-  //     swerve.drive3(0, 0, 0, true);
-  //   }
-  // }
-    //Changes: Created a VisionComm where we would initiate the thread plus
-    //initiate the function.
-  }
+    if(Math.abs(SmartDashboard.getNumber("ID 5 X Value", 0)) > 0){
+
+    //   swerve.drive3(0, -Error5X, Error5Roll, true);
+
+    //   // if( 39 < vision.getZID(5)  && vision.getZID(5) < 43){
+    //   //   Error5Z = 0;
+    //   //   swerve.drive3(Error5Z, Error5X, Error5Roll, true);
+    //   //   System.out.println("Z IS 000000");
+    //   // }
+
+    //   if(59.7 < vision.getXID(5) && vision.getXID(5) < 63.7){
+    //     Error5X = 0;
+    //     swerve.drive3(0, -Error5X/20, Error5Roll/20, true);
+    //     System.out.println("THE X IS NOW 0");
+    //   }
+
+      if( 0.45 < vision.getIDroll(5) && vision.getIDroll(5) < 0.75){
+        Error5Roll = 0;
+        swerve.drive3(0, 0, 0, true);
+         System.out.println("THE ROLL IS PERFECTOR");
+     }
+     else if(vision.getIDroll(5) < 0.45){
+     swerve.drive3(0, 0, -finalPushRoll/1.75 , true); 
+     }
+    //  else if(vision.getIDroll(5) > 0.10){
+    //   swerve.drive3(0, 0, finalPushRoll, true);
+    //  }
+     else{
+      System.out.println("THIS IS FINAL PUSH: " + finalPushRoll);
+      swerve.drive3(0, 0, finalPushRoll/1.75 , true);
+     }
+
+     t = t + 1;
+
+     
+    //  swerve.drive3(0, 0, -Error5Roll, true);
+   
+    }
+    else{
+      swerve.drive3(0, 0, 0, true);
+      Error5Roll = 0;
+      t = 1;
+    }
+
+    // if(Error5X == 0 && Error5Roll ==0){
+    //   swerve.drive3(0, 0, 0, true);
+    // }
+    }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
   //  vision.stopVision();
-  vision.stopVision();
+  vision.stopThread();
   }
 
   // Returns true when the command should end.
