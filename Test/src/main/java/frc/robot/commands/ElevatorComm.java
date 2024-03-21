@@ -17,18 +17,20 @@ public class ElevatorComm extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ElevatorSubsys elevSubsys;
   private final DoubleSupplier up, down;
-  private final BooleanSupplier push;
+  private final BooleanSupplier push, stall, stall_off;
  // private final BooleanSupplier push;
   /**
    * Creates a new ElevatorComm.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorComm(ElevatorSubsys subsystem, DoubleSupplier up, DoubleSupplier down, BooleanSupplier push) {
+  public ElevatorComm(ElevatorSubsys subsystem, DoubleSupplier up, DoubleSupplier down, BooleanSupplier push, BooleanSupplier stall, BooleanSupplier stall_off) {
     elevSubsys = subsystem;
     this.up = up;
     this.down = down;
     this.push = push;
+    this.stall = stall;
+    this.stall_off = stall_off;
    // push = button;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -36,13 +38,15 @@ public class ElevatorComm extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+   elevSubsys.elevating(0, false, false, true);  
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
    // elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(), push.getAsBoolean());
-   elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(),push.getAsBoolean());
+   elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(),push.getAsBoolean(), stall.getAsBoolean(), stall_off.getAsBoolean());
   }
 
   // Called once the command ends or is interrupted.

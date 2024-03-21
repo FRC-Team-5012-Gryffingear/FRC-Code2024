@@ -68,7 +68,7 @@ private Thread visionThread;
     //get the UsbCamera from CameraServer
     UsbCamera camera = CameraServer.startAutomaticCapture();
     //set resolution
-    camera.setResolution(320, 240);
+    camera.setResolution(320, 240); 
     camera.setFPS(15);
     camera.setExposureAuto();
     camera.setWhiteBalanceAuto();

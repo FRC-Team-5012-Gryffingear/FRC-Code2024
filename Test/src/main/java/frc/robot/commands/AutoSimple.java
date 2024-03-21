@@ -31,6 +31,7 @@ public class AutoSimple extends Command {
   @Override
   public void initialize() {
     //Makes its forward new forward and resets timer
+    ElevSubsys.Checkoff();
     swerve.resetHeading();
     time.stop();
     time.reset();
@@ -42,19 +43,42 @@ public class AutoSimple extends Command {
     //this math should autocorrect the yaw of the robot to match its forward taking account any broken modules(Should)
    // double percentRot = swerve.getYaw()/10;
     //Ex: swerve.drive3(0,0,percent,true); 
-    time.start();
-    if(time.get() > 0.3 && time.get() < 2){
-        swerve.drive3(-0.15, 0, 0, true);
+
+     time.start();
+    // if(time.get() > 0.3 && time.get() < 2){
+    //     swerve.drive3(-0.15, 0, 0, true);
+    //   }
+    // else if(time.get() > 2){
+    //   swerve.drive3(0, 0, 0, true);
+    // }
+      
+    
+    System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
+    ElevSubsys.elevating(-0.8, false, false, true);
+    if(time.get() > 1){
+      ElevSubsys.elevating(0.8, false, true, false);
+      if(!ElevSubsys.elevLimit()){
+        ElevSubsys.elevating(0, false, true, false);
       }
-    else if(time.get() > 2){
-      swerve.drive3(0, 0, 0, true);
+      System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
     }
+
+    
+    // if(time.get() > 3){
+    //   if(ElevSubsys.elevLimit() == false){
+    //     ElevSubsys.elevating2(0, false);
+    //   }
+    //   ElevSubsys.elevating2(2, false);
+
+    // }
+
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerve.drive3(0, 0, 0,true);
+   /// swerve.drive3(0, 0, 0,true);
   }
 
   // Returns true when the command should end.

@@ -5,11 +5,14 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.Time;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.SwerveCommand;
@@ -18,12 +21,18 @@ public class Autos extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsystem swerve;
   private final VisionSub vision;
+  private final ElevatorSubsys elev;
+  //t is different from Time :)
   private double t = 1;
+  private double time;
+  private Timer Timer = new Timer();
+  private Timer elevTime = new Timer();
 
  
-  public Autos(SwerveSubsystem subsystem, VisionSub vision) {
+  public Autos(SwerveSubsystem subsystem, VisionSub vision, ElevatorSubsys elev) {
     swerve = subsystem;
     this.vision = vision;
+    this.elev = elev;
     addRequirements(subsystem,vision);
   }
 
@@ -31,7 +40,15 @@ public class Autos extends Command {
 
   @Override
   public void initialize() {
-    System.out.println("Runnnnnnninnnnng");
+    Timer.reset();
+    Timer.stop();
+
+    elevTime.reset();
+    elevTime.stop();
+
+    elev.Checkoff();
+    //System.out.println("Runnnnnnninnnnng");
+    swerve.resetHeading();
     vision.startThread();
   }
 
@@ -65,6 +82,36 @@ public class Autos extends Command {
      * power3 = kp * error
      * 
      */
+  public boolean AutoMovement(double Error5X, double finalPushX){
+    boolean checker = false;
+//Change these values to ID 6 since it is on the left side
+        if(-15 < vision.getXID(5) && vision.getXID(5) < 75){
+          if(-0.1 < vision.getIDroll(5) && vision.getIDroll(5) < 0.1){
+            System.out.println("CHECKER ONNNNNNNNNNNNNNNNNNNNNNNnn");
+            checker = true;
+            return checker;
+          }
+          else{
+            Error5X = 0;
+            if(vision.getIDroll(5) < 0){
+              Timer.stop();
+              swerve.drive3(.02, 0, 0, false);  
+            }
+            if(0 < vision.getIDroll(5)){
+              Timer.stop();
+              swerve.drive3(-.02, 0, 0, false);
+            }
+          }
+        }
+        else{
+          Timer.stop();
+          swerve.drive3(0,0,finalPushX/1.75,false);
+        }
+        return checker;
+  }
+
+  
+
   @Override
   public void execute() {
     //vision.startVision();
@@ -101,9 +148,7 @@ public class Autos extends Command {
     //This section is for Roll (rotating)
     //Might cause an error since the value read is 0 - 360 (Maybe)
     //Check to see if changing the Mod encoder config to -pi to pi works
-    double Error5Roll = vision.getIDroll(5);
-
-    
+    double Error5Roll = vision.getIDroll(5);    
     double Error6Roll = vision.getIDroll(6) - .1;
 
     // double Rollpower_ID_5 = kp * Error5Roll;
@@ -144,47 +189,129 @@ public class Autos extends Command {
       finalPushRoll = -.1;
     }
 
+    boolean rollCheck = false;
+    boolean xCheck = false;
+
+
+    
+/*
+ * v^2 = v_0^2 + 2a(x - x_0)
+ * v0 is initial velocity, v is final velocity, a is acceleration, X is final position, and x0 is initial position
+ */
+    double v = Math.sqrt(2*0.02*Error5Z/3.2808);
+    
+
+    System.out.println("---------THIS IS V VALUE: " + v);
+    time = ((Error5Z/3.2808)/v);
+
+    System.out.println("-------------This is TIme: " + time/3);
+
+
     if(Math.abs(SmartDashboard.getNumber("ID 5 X Value", 0)) > 0){
 
-    //   swerve.drive3(0, -Error5X, Error5Roll, true);
+      // Timer.start();
+      // System.out.println("--------------This is Timer: " + Timer.get()*1.5);
+      // if(Timer.get()*1.25 < (time)){
+      //   swerve.drive3(v/4, 0, 0, true);
+      //   System.out.println("WITHIN THE THRESH");
+      // }
+      // else{
+      //   swerve.drive3(0, 0, 0, true);
+      // }
 
-    //   // if( 39 < vision.getZID(5)  && vision.getZID(5) < 43){
-    //   //   Error5Z = 0;
-    //   //   swerve.drive3(Error5Z, Error5X, Error5Roll, true);
-    //   //   System.out.println("Z IS 000000");
-    //   // }
 
-    //   if(59.7 < vision.getXID(5) && vision.getXID(5) < 63.7){
-    //     Error5X = 0;
-    //     swerve.drive3(0, -Error5X/20, Error5Roll/20, true);
-    //     System.out.println("THE X IS NOW 0");
-    //   }
+          
 
-      if( 0.45 < vision.getIDroll(5) && vision.getIDroll(5) < 0.75){
-        Error5Roll = 0;
-        swerve.drive3(0, 0, 0, true);
-         System.out.println("THE ROLL IS PERFECTOR");
-     }
-     else if(vision.getIDroll(5) < 0.45){
-     swerve.drive3(0, 0, -finalPushRoll/1.75 , true); 
-     }
-    //  else if(vision.getIDroll(5) > 0.10){
-    //   swerve.drive3(0, 0, finalPushRoll, true);
+//Vision with roll and elevator
+  elevTime.start();
+
+  System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
+  elev.elevating(-0.8, false, false, true);
+  if(elevTime.get() > 1){
+    elev.elevating(0.8, false, true, false);
+  if(!elev.elevLimit()){
+    elev.elevating(0.1, false, true, false);
+  }
+  System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
+}
+
+
+    AutoMovement(Error5X, finalPushX);
+    if(AutoMovement(Error5X, finalPushX)){
+      System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            Timer.start();
+            System.out.println("--------------This is Timer: " + Timer.get()*1.25);
+            if(Timer.get()*1.25 < (time)){
+              swerve.drive3(0, -v/3.25, 0, false);
+              System.out.println("WITHIN THE THRESH");
+            }
+            else{
+              swerve.drive3(0, 0, 0, false);
+              //add outake code here
+            }
+    }
+
+      
+
+
+
+
+      // if(xCheck && rollCheck){
+      //   swerve.drive3(0, 0, 0, true);
+      // }
+      // swerve.drive3(0, -Error5X, Error5Roll, true);
+      // if( 39 < vision.getZID(5)  && vision.getZID(5) < 43){
+      //   Error5Z = 0;
+      //   swerve.drive3(Error5Z, Error5X, Error5Roll, true);
+      //   System.out.println("Z IS 000000");
+      // }
+
+
+
+
+      // if(-15 < vision.getXID(5) && vision.getXID(5) < 75){
+      //   Error5X = 0;
+      //   swerve.drive3(0, 0, 0, true);
+      //   System.out.println("THE X IS NOW 0");
+      //   xCheck = true;
+      // }
+      // // else if(vision.getXID(5) < 25){
+      // //   swerve.drive3(0, -Math.abs(finalPushX/2), 0, true);
+      // // }
+      // else{
+      //   swerve.drive3(0, finalPushX/2, 0, true);
+      //   xCheck =false;
+      // }
+
+
+      
+// ROLL NEEDS TO BE FIXED AGAIN
+
+
+    //   if( 0.45 < vision.getIDroll(5) && vision.getIDroll(5) < 0.75){
+    //     rollCheck = true;
+    //     Error5Roll = 0;
+    //     swerve.drive3(0, 0, 0, true);
+    //      System.out.println("THE ROLL IS PERFECTOR");
     //  }
-     else{
-      System.out.println("THIS IS FINAL PUSH: " + finalPushRoll);
-      swerve.drive3(0, 0, finalPushRoll/1.75 , true);
-     }
+    //  else if(vision.getIDroll(5) < 0.45){
+    //  swerve.drive3(0, 0, -Math.abs(finalPushRoll/1.75) , true); 
+    //  rollCheck = false;
+    //  }
+
+    //  else{
+    //   rollCheck = false;
+    //   System.out.println("THIS IS FINAL PUSH: " + finalPushRoll);
+    //   swerve.drive3(0, 0, finalPushRoll/1.75 , true);
+    //  }
 
      t = t + 1;
 
      
-    //  swerve.drive3(0, 0, -Error5Roll, true);
    
     }
     else{
       swerve.drive3(0, 0, 0, true);
-      Error5Roll = 0;
       t = 1;
     }
 

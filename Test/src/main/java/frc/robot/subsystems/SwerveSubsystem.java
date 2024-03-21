@@ -153,16 +153,16 @@ private Field2d fieldMaker = new Field2d();
 
   //This drive uses field orientation and needs to be changed since it is false there is no movement
   public void drive3(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative){
-    ChassisSpeeds speeds;
+    ChassisSpeeds speeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
     if(fieldRelative){
         //add negative on getHeading if need to invert
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, Rotation2d.fromRadians(getHeading().getRadians()));
-    
+    }
 
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
 
     setModStates(states);
-    }
+    
   }
 
   

@@ -20,6 +20,9 @@ import frc.robot.Constants;
 
 public class ElevatorSubsys extends SubsystemBase {
   /** Creates a new ElevatorSubsys. */
+ // boolean check = true;
+  boolean presser;
+  boolean check;
   TalonSRX elevMotor1 = new TalonSRX(Constants.Elev1);
   TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
 
@@ -31,6 +34,8 @@ public class ElevatorSubsys extends SubsystemBase {
   public ElevatorSubsys() {
     // elevMotor1.configFactoryDefault();
     // elevMotor2.configFactoryDefault();
+    presser = false;
+    check = true;
 
     elevMotor1.setNeutralMode(NeutralMode.Brake);
     elevMotor2.setNeutralMode(NeutralMode.Brake);
@@ -43,10 +48,27 @@ public class ElevatorSubsys extends SubsystemBase {
 
     
   }
+  public void Checkoff(){
+    check = true;
+  }
+
+  public boolean elevLimit(){
+    if(Limit1Top.get() == false){
+      check = false;
+      return check;
+    }
+    else{
+      if(!check){
+        return false;
+      }
+      check = true;
+      return true;
+    }
+  }
 
 
 
-  public void elevating(double power, boolean push){
+  public void elevating(double power, boolean push, boolean stall, boolean stall_off){
     if(push){
       elevMotor1.set(ControlMode.PercentOutput, power*2);
       System.out.println("Inside movement basically");
@@ -65,13 +87,27 @@ public class ElevatorSubsys extends SubsystemBase {
       elevMotor1.set(ControlMode.PercentOutput, power*0.8); 
     }
     else{
-      elevMotor1.set(ControlMode.PercentOutput, 0.1);
+
+      if(stall){
+        presser = true;
+        elevMotor1.set(ControlMode.PercentOutput, 0.1);
+      }
+      else if(stall_off){
+        presser = false;
+        elevMotor1.set(ControlMode.PercentOutput, 0);
+      }
+      else if(presser){
+        elevMotor1.set(ControlMode.PercentOutput, 0.1);
+      }
+      //elevMotor1.set(ControlMode.PercentOutput, 0.1);
+
     }
   }
 
 
   public void elevating2(double power,boolean push){
-      elevMotor1.set(ControlMode.PercentOutput , power*0.8);
+      elevMotor1.set(ControlMode.PercentOutput , power);
+      System.out.println(power + " Power -da-d-da--d-d-d-d--d-d");
   }
   // public boolean bottomLimitBOOL(){
   //   return Limit2Bottom.get();

@@ -39,7 +39,7 @@ public class RobotContainer {
   private final ElevatorSubsys elevSub = new ElevatorSubsys();
   private final VisionSub visionSub = new VisionSub();
 
-  private final Autos auto = new Autos(swerveSubsys, visionSub);
+  private final Autos auto = new Autos(swerveSubsys, visionSub, elevSub);
   private final AutoSimple AutoS = new AutoSimple(swerveSubsys,intakeSub,elevSub);
 
 
@@ -72,7 +72,9 @@ public class RobotContainer {
      elevSub.setDefaultCommand(new ElevatorComm(elevSub,
      () -> operatorController.getRightTriggerAxis(), 
      () -> operatorController.getLeftTriggerAxis(),
-     () -> operatorController.getXButton()));
+     () -> operatorController.getXButton(),
+     () -> operatorController.getLeftBumper(),
+     () -> operatorController.getRightBumper()));
 
   }
 
