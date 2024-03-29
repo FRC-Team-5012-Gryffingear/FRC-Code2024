@@ -9,11 +9,13 @@ import frc.robot.commands.AutoSimple;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ElevatorComm;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.HookCommand;
 import frc.robot.commands.IntakeComm;
 import frc.robot.commands.SwerveCommand;
 import frc.robot.otherInfo.controllerConstant;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakeSubsys;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
@@ -38,6 +40,7 @@ public class RobotContainer {
   private final IntakeSubsys intakeSub = new IntakeSubsys();
   private final ElevatorSubsys elevSub = new ElevatorSubsys();
   private final VisionSub visionSub = new VisionSub();
+  private final HookSubsystem hookSubsys = new HookSubsystem();
 
   private final Autos auto = new Autos(swerveSubsys, visionSub, elevSub);
   private final AutoSimple AutoS = new AutoSimple(swerveSubsys,intakeSub,elevSub);
@@ -72,10 +75,13 @@ public class RobotContainer {
      elevSub.setDefaultCommand(new ElevatorComm(elevSub,
      () -> operatorController.getRightTriggerAxis(), 
      () -> operatorController.getLeftTriggerAxis(),
-     () -> operatorController.getXButton(),
      () -> operatorController.getLeftBumper(),
      () -> operatorController.getRightBumper()));
 
+     //this is for the bag motor too hook on to the elevator
+     hookSubsys.setDefaultCommand(new HookCommand(hookSubsys,
+      () -> operatorController.getYButton(),
+      () -> operatorController.getXButton()));
   }
 
 
@@ -92,6 +98,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(null);
-    return auto;
+    return null;
   }
 }

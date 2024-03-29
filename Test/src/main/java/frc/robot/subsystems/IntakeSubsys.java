@@ -21,14 +21,14 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class IntakeSubsys extends SubsystemBase {
     TalonSRX intake1 = new TalonSRX(Constants.Intake1);
-    DigitalInput intakeLimit = new DigitalInput(1);
+    DigitalInput intakeLimit = new DigitalInput(2);
    // private Timer timer1 = new Timer();
     //have left side motor (Right side when in front) be the intake1
   public IntakeSubsys() {
   //  intake1.configFactoryDefault();
 
     intake1.setNeutralMode(NeutralMode.Brake);
-   // intake1.setInverted(InvertType.InvertMotorOutput);
+    intake1.setInverted(InvertType.InvertMotorOutput);
   }
 
 
@@ -36,6 +36,7 @@ public class IntakeSubsys extends SubsystemBase {
 
   public void intaking(boolean a, boolean b){
     //Checks if the A button is being pressed 
+    System.out.println("------LIMIT SWITCH DEBUG: " + intakeLimit.get());
     if(a){
       //once the A button is pressed also check if the intake limit is pressed to see if we hit our goal
       if(intakeLimit.get()==true){

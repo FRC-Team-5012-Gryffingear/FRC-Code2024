@@ -26,7 +26,7 @@ public class ElevatorSubsys extends SubsystemBase {
   TalonSRX elevMotor1 = new TalonSRX(Constants.Elev1);
   TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
 
-  DigitalInput Limit1Top = new DigitalInput(2);
+  DigitalInput Limit1Top = new DigitalInput(3);
  // DigitalInput Limit2Bottom = new DigitalInput(3);
  
   Timer time = new Timer();
@@ -68,14 +68,10 @@ public class ElevatorSubsys extends SubsystemBase {
 
 
 
-  public void elevating(double power, boolean push, boolean stall, boolean stall_off){
-    if(push){
-      elevMotor1.set(ControlMode.PercentOutput, power*2);
-      System.out.println("Inside movement basically");
-    }
+  public void elevating(double power, boolean stall, boolean stall_off){
 //Checks top limit and if power is positive
 //if it is to turn it completely off 
-    else if(!Limit1Top.get() && power > 0){
+    if(!Limit1Top.get() && power > 0){
       elevMotor1.set(ControlMode.PercentOutput, 0);
     }
     //  else if(!Limit2Bottom.get() && power < 0){

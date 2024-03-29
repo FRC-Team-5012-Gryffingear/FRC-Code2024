@@ -27,6 +27,8 @@ public class Autos extends Command {
   private double time;
   private Timer Timer = new Timer();
   private Timer elevTime = new Timer();
+  private boolean too_close = false;
+      private boolean checker;
 
  
   public Autos(SwerveSubsystem subsystem, VisionSub vision, ElevatorSubsys elev) {
@@ -43,6 +45,8 @@ public class Autos extends Command {
     Timer.reset();
     Timer.stop();
 
+    checker = false;
+
     elevTime.reset();
     elevTime.stop();
 
@@ -52,40 +56,13 @@ public class Autos extends Command {
     vision.startThread();
   }
 
-      /* Error = GOAL - Current
-     * kp = something constant
-     * 
-     * power = kp * error
-     * 
-     * --Actual stuff Distance z:
-     * 
-     * error = 85 - current firatees
-     * 
-     * kp = 0.2 needs to be changed
-     * 
-     * power1 = kp * error
-     * 
-     * --Actual for Distance x;
-     * 
-     * error = 15 - current firatees
-     * 
-     * kp = 0.2 needs to be changed
-     * 
-     * power2 = kp * error
-     * 
-     * --Actual roll:
-     * 
-     * error = 0.1 - abs current firatmeters
-     * 
-     * kp = 0.2 needs to be changed
-     * 
-     * power3 = kp * error
-     * 
-     */
-  public boolean AutoMovement(double Error5X, double finalPushX){
-    boolean checker = false;
+     // double thres = X/Z
+  public boolean AutoMovement(double Error5X, double finalPushX, double Error5Z){
+
 //Change these values to ID 6 since it is on the left side
-        if(-15 < vision.getXID(5) && vision.getXID(5) < 75){
+        //next comment may or may not be correct:
+        double relationship = 2.48456 * Error5Z + 25.9588;
+        if(-relationship < vision.getXID(5) && vision.getXID(5) < relationship){
           if(-0.1 < vision.getIDroll(5) && vision.getIDroll(5) < 0.1){
             System.out.println("CHECKER ONNNNNNNNNNNNNNNNNNNNNNNnn");
             checker = true;
@@ -95,17 +72,27 @@ public class Autos extends Command {
             Error5X = 0;
             if(vision.getIDroll(5) < 0){
               Timer.stop();
-              swerve.drive3(.02, 0, 0, false);  
+              /*
+              * Divide finalPushX by 1.75 if too fast
+              */
+              swerve.drive3(finalPushX, 0, 0, false);  
             }
             if(0 < vision.getIDroll(5)){
               Timer.stop();
-              swerve.drive3(-.02, 0, 0, false);
+              /*
+              * Divide finalPushX by 1.75 if too fast
+              */
+              swerve.drive3(-finalPushX, 0, 0, false);
             }
           }
         }
         else{
           Timer.stop();
-          swerve.drive3(0,0,finalPushX/1.75,false);
+          /*
+           * Divide finalPushX by 1.75 if too fast
+           */
+          swerve.drive3(0,0,(Math.atan((Error5X/Error5Z))),false);
+
         }
         return checker;
   }
@@ -130,20 +117,11 @@ public class Autos extends Command {
     double Error5Z = vision.getZID(5)/41;
     double Error6Z = vision.getZID(6)/41;
 
-    //this Kp value will be permanent for all values
-    double kp = 0.4;
-
-    // double Zpower_ID_5 = kp * Error5Z; 
-    // double Zpower_ID_6 = kp * Error6Z;
-
     //this section is for X
     //Change 15 to a number that takes in count the offset of the camera since it is on the side
     //subtract 15 to correct the offset and divide by amount of units that equals one foot for X axis
     double Error5X = vision.getXID(5)/61.7;
     double Error6X = vision.getXID(6)/61.7;
-
-    // double Xpower_ID_5 = kp * Error5X;
-    // double Xpower_ID_6 = kp * Error6X;
 
     //This section is for Roll (rotating)
     //Might cause an error since the value read is 0 - 360 (Maybe)
@@ -151,43 +129,62 @@ public class Autos extends Command {
     double Error5Roll = vision.getIDroll(5);    
     double Error6Roll = vision.getIDroll(6) - .1;
 
-    // double Rollpower_ID_5 = kp * Error5Roll;
-    // double Rollpower_ID_6 = kp * Error6Roll;
+    // Checks to see if last known robot to April Tag position is too close to April Tag
+    if(Math.abs(Error5Z) < 100 && Math.abs(Error5X) < 25 && Math.abs(Error5Roll) < 0.1){
+      too_close = true;
+    }
+
+    else
+    {
+      too_close = false;
+    }
 
     //Add Threshold checkers  for ID 5 & 6 here:
 
-     double alpha = 0.001; //changed from .015
+     double alpha = 0.001; //changed from .015 // Alpha goes up causes finalPush values to get smaller and vice versa
 
-    if(Math.abs(Error5Z) < 0.02 && Math.abs(Error5X) < 0.02 && Error5Roll < 0.02){
-      t = 1; 
+    
+    // Change this to abs.() < 0.02 later if when camera is close to April Tag the robot moves weird (like too fast or too small)
+     if(Math.abs(Error5Z) == 0 && Math.abs(Error5X) == 0 && Math.abs(Error5Roll) == 0){
+      // Checks to see if last recorded position is too close to the April Tag
+      if (too_close) {
+        t = t/2;
+      }
+      
+      else {
+        t = 1;
+      } 
     }
 
-    double finalPushZ = 1 / (1 - Math.pow(Math.E, -alpha*t*Error5Z));
-    double finalPushX = 1 / (1 - Math.pow(Math.E, -alpha*t*Error5X));
-    double finalPushRoll = 1 / (1 - Math.pow(Math.E, -alpha*t*Error5Roll));
+    double finalPushZ = Math.pow(Math.E, -alpha*t*Error5Z);
+    double finalPushX = Math.pow(Math.E, -alpha*t*Error5X);
+    double finalPushRoll = Math.pow(Math.E, -alpha*t*Error5Roll);
 
-    if(finalPushX > .1){ //changed, used to be finalPushX > 1
-      finalPushX = .1; 
-    }
-    else if(finalPushX < -.1){
-      finalPushX = -.1;
-    }
+    /*
+     * Bring back this code if the speeds for Z, X, and Roll get super fast
+     */
+    // if(finalPushX > .1){ //changed, used to be finalPushX > 1
+    //   finalPushX = .1; 
+    // }
+    // else if(finalPushX < -.1){
+    //   finalPushX = -.1;
+    // }
 
 
-    if(finalPushZ > .1){
-      finalPushZ = .1;
-    }
-    else if(finalPushZ < -.1){
-      finalPushZ = -.1;
-    }
+    // if(finalPushZ > .1){
+    //   finalPushZ = .1;
+    // }
+    // else if(finalPushZ < -.1){
+    //   finalPushZ = -.1;
+    // }
 
   
-    if(finalPushRoll > .1){ //changed, used to be finalPushRoll > 1
-      finalPushRoll = .1; 
-    }
-    else if(finalPushRoll < -.1){
-      finalPushRoll = -.1;
-    }
+    // if(finalPushRoll > .1){ //changed, used to be finalPushRoll > 1
+    //   finalPushRoll = .1; 
+    // }
+    // else if(finalPushRoll < -.1){
+    //   finalPushRoll = -.1;
+    // }
 
     boolean rollCheck = false;
     boolean xCheck = false;
@@ -198,6 +195,9 @@ public class Autos extends Command {
  * v^2 = v_0^2 + 2a(x - x_0)
  * v0 is initial velocity, v is final velocity, a is acceleration, X is final position, and x0 is initial position
  */
+    /*
+     * Change finalPushZ to Error5Z/3.2808 if too fast
+     */
     double v = Math.sqrt(2*0.02*Error5Z/3.2808);
     
 
@@ -207,48 +207,50 @@ public class Autos extends Command {
     System.out.println("-------------This is TIme: " + time/3);
 
 
+
+//   elevTime.start();
+
+//   System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
+//   elev.elevating(-0.8,  false, true);
+//   if(elevTime.get() > 1){
+//     elev.elevating(0.8,  true, false);
+//   if(!elev.elevLimit()){
+//     elev.elevating(0.1, true, false);
+//   }
+//   System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
+// }
+
+
+
     if(Math.abs(SmartDashboard.getNumber("ID 5 X Value", 0)) > 0){
-
-      // Timer.start();
-      // System.out.println("--------------This is Timer: " + Timer.get()*1.5);
-      // if(Timer.get()*1.25 < (time)){
-      //   swerve.drive3(v/4, 0, 0, true);
-      //   System.out.println("WITHIN THE THRESH");
-      // }
-      // else{
-      //   swerve.drive3(0, 0, 0, true);
-      // }
-
-
           
-
 //Vision with roll and elevator
-  elevTime.start();
+// 
 
-  System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
-  elev.elevating(-0.8, false, false, true);
-  if(elevTime.get() > 1){
-    elev.elevating(0.8, false, true, false);
-  if(!elev.elevLimit()){
-    elev.elevating(0.1, false, true, false);
-  }
-  System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
-}
+    AutoMovement(Error5X, finalPushX,Error5Z);
 
+    while(AutoMovement(Error5X, finalPushX, Error5Z)){
 
-    AutoMovement(Error5X, finalPushX);
-    if(AutoMovement(Error5X, finalPushX)){
       System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            Timer.start();
-            System.out.println("--------------This is Timer: " + Timer.get()*1.25);
-            if(Timer.get()*1.25 < (time)){
-              swerve.drive3(0, -v/3.25, 0, false);
-              System.out.println("WITHIN THE THRESH");
-            }
-            else{
-              swerve.drive3(0, 0, 0, false);
-              //add outake code here
-            }
+      if(vision.getZID(5) > 80){
+        swerve.drive3(0, finalPushZ, 0, false);
+      }else{
+        swerve.drive3(0, 0, 0, false);
+      }
+
+            // Timer.start();
+            // System.out.println("--------------This is Timer: " + Timer.get()*1);
+            // if(Timer.get()*1 < (time)){
+            //   /*
+            //    * divide v by 3.25 if too fast
+            //    */
+            //   swerve.drive3(0, -v/3.25, 0, false);
+            //   System.out.println("WITHIN THE THRESH");
+            // }
+            // else{
+            //   swerve.drive3(0, 0, 0, false);
+            //   //add outake code here
+            // }
     }
 
       
@@ -310,7 +312,7 @@ public class Autos extends Command {
      
    
     }
-    else{
+    else {
       swerve.drive3(0, 0, 0, true);
       t = 1;
     }
@@ -318,7 +320,7 @@ public class Autos extends Command {
     // if(Error5X == 0 && Error5Roll ==0){
     //   swerve.drive3(0, 0, 0, true);
     // }
-    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override

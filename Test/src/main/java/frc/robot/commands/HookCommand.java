@@ -4,48 +4,40 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.HookSubsystem;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorComm extends Command {
+public class HookCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ElevatorSubsys elevSubsys;
-  private final DoubleSupplier up, down;
-  private final BooleanSupplier stall, stall_off;
- // private final BooleanSupplier push;
+  //private final ExampleSubsystem m_subsystem;
+  private final HookSubsystem hooksubsys;
+  private final BooleanSupplier Y, X;
   /**
-   * Creates a new ElevatorComm.
+   * Creates a new HookCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorComm(ElevatorSubsys subsystem, DoubleSupplier up, DoubleSupplier down, BooleanSupplier stall, BooleanSupplier stall_off) {
-    elevSubsys = subsystem;
-    this.up = up;
-    this.down = down;
-    this.stall = stall;
-    this.stall_off = stall_off;
-   // push = button;
+  public HookCommand(HookSubsystem subsystem, BooleanSupplier Y, BooleanSupplier X) {
+    hooksubsys = subsystem;
+    this.Y = Y;
+    this.X = X;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-   elevSubsys.elevating(0, false, true);  
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   // elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(), push.getAsBoolean());
-   elevSubsys.elevating(up.getAsDouble() - down.getAsDouble(), stall.getAsBoolean(), stall_off.getAsBoolean());
+    hooksubsys.Hooking(Y.getAsBoolean(), X.getAsBoolean());
   }
 
   // Called once the command ends or is interrupted.
