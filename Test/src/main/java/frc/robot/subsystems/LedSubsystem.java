@@ -4,61 +4,53 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LedSubsystem extends SubsystemBase {
   /** Creates a new LedSubsystem. */
+// subject to change ports
+  // private DigitalOutput LED0 = new DigitalOutput(0);
+  // private DigitalOutput LED1 = new DigitalOutput(1);
+  // private DigitalOutput LED2 = new DigitalOutput(2);
+  // private DigitalOutput LED3 = new DigitalOutput(3);
+  // private DigitalOutput LED4 = new DigitalOutput(4);
 
-  DigitalInput LED1;
-  DigitalInput LED2;
-  DigitalInput LED3;
-  DigitalInput LED4;
-  DigitalInput LED5;
+  private Timer time = new Timer();
   public LedSubsystem() {
 
   }
-  public void LED_on(int port) {
-    if(port == 1){
-        LED1 = new DigitalInput(1);
-    }
-    else if(port == 2){
-        LED2 = new DigitalInput(2);
-    }
-    else if(port == 3){
-        LED3 = new DigitalInput(3);
-    }    
-    else if(port == 4){
-        LED4 = new DigitalInput(4);
-    }
-    else if(port == 5){
-        LED5 = new DigitalInput(5);
-    }
-  }
+   public void LED_on(int port) {
+    // LED4.set(true);
+ }
   public void LED_off(int port) {
-    if(port == 1){
-        LED1.close();
-    }
-    else if(port == 2){
-        LED2.close();
-    }
-    else if(port == 3){
-        LED3.close();
-    }    
-    else if(port == 4){
-        LED4.close();
-        }
-    else if(port == 5){
-        LED5.close();
-    }
+    // LED4.set(false);
   }
-  public void LED_blink(int port, double duration){
-    LED_on(port); //turn on LED
-    Timer.delay(duration); //wait for specified duration
-    LED_off(port); //turns off LED
-    Timer.delay(duration); //wait for specified duration
+
+
+  public void LED_blink(int port){
+    time.start();
+    if(time.get() > 0 && time.get() < 0.0625){
+      LED_on(port);
+      // if(time.get() > 1.5){
+      //   LED_off(port);
+      //   if(time.get() > 2){
+      //     time.reset();
+      //   }
+      // }
+    }
+    if(time.get() > 0.25){
+      LED_off(port);
+      if(time.get() > 0.625){
+        time.reset();
+      }
+    }
+    // LED_on(port); //turn on LED
+    // Timer.delay(duration); //wait for specified duration
+    // LED_off(port); //turns off LED
+    // Timer.delay(duration); //wait for specified duration
   }
 
   

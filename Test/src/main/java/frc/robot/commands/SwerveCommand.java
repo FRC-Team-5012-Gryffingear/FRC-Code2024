@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
+//import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
 
@@ -22,6 +23,7 @@ public class SwerveCommand extends Command {
  private final SwerveSubsystem swervesubsys;
  private final CommandXboxController controller2;
   private final BooleanSupplier yaw;
+  //private final LedSubsystem Ledsubsys; 
   public double t = 1;
   private VisionSub vision = new VisionSub();
 
@@ -31,6 +33,7 @@ public class SwerveCommand extends Command {
     swervesubsys = subsystem;
     controller2 = controller;
     this.yaw = yaw;
+  
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -40,6 +43,7 @@ public class SwerveCommand extends Command {
   public void initialize() {
     vision.startThread();
     swervesubsys.resetHeading();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -11,12 +11,14 @@ import frc.robot.commands.ElevatorComm;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HookCommand;
 import frc.robot.commands.IntakeComm;
+import frc.robot.commands.LedCommand;
 import frc.robot.commands.SwerveCommand;
 import frc.robot.otherInfo.controllerConstant;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakeSubsys;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
 import edu.wpi.first.wpilibj.Joystick;
@@ -41,6 +43,7 @@ public class RobotContainer {
   private final ElevatorSubsys elevSub = new ElevatorSubsys();
   private final VisionSub visionSub = new VisionSub();
   private final HookSubsystem hookSubsys = new HookSubsystem();
+ private final LedSubsystem Ledsubsys = new LedSubsystem();
 
   private final Autos auto = new Autos(swerveSubsys, visionSub, elevSub);
   private final AutoSimple AutoS = new AutoSimple(swerveSubsys,intakeSub,elevSub);
@@ -62,6 +65,7 @@ public class RobotContainer {
     configureBindings();
     
     //Check if A and B register since we switched to Xboxcontroller from CommandXboxcontroller
+  //  Ledsubsys.setDefaultCommand(new LedCommand(Ledsubsys));
     
     swerveSubsys.setDefaultCommand(new SwerveCommand(swerveSubsys,
      driverController,
@@ -98,6 +102,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(null);
-    return null;
+    return auto;
   }
 }

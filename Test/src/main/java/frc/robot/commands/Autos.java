@@ -75,20 +75,21 @@ public class Autos extends Command {
               /*
               * Divide finalPushX by 1.75 if too fast
               */
-              swerve.drive3(finalPushX, 0, 0, false);  
+              swerve.drive3(0.02, 0, 0, false);  
             }
             if(0 < vision.getIDroll(5)){
               Timer.stop();
               /*
               * Divide finalPushX by 1.75 if too fast
               */
-              swerve.drive3(-finalPushX, 0, 0, false);
+              swerve.drive3(-0.02, 0, 0, false);
             }
           }
         }
         else{
           Timer.stop();
           /*
+           * Replace with finalPushX
            * Divide finalPushX by 1.75 if too fast
            */
           swerve.drive3(0,0,(Math.atan((Error5X/Error5Z))),false);
@@ -232,8 +233,8 @@ public class Autos extends Command {
     while(AutoMovement(Error5X, finalPushX, Error5Z)){
 
       System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      if(vision.getZID(5) > 80){
-        swerve.drive3(0, finalPushZ, 0, false);
+      if(vision.getZID(5) > 85){
+        swerve.drive3(0, -0.1, 0, false);
       }else{
         swerve.drive3(0, 0, 0, false);
       }

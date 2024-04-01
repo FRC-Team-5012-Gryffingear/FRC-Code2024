@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,9 +39,19 @@ import edu.wpi.first.apriltag.AprilTagDetection;
 public class VisionSub extends SubsystemBase {
   /** Creates a new VisionSub. */
 private Thread visionThread;
+public boolean Visioncheck = false;
+public boolean AprilTagCheck = false;
+
   public VisionSub(){
     visionThread = new Thread(this::apriltagVisionThreadProc);
   }
+
+
+
+
+
+
+
   // ArrayList<Double> xPose = new ArrayList<>();
   // //double xPose;
   // ArrayList<Integer> ID = new ArrayList<>();
@@ -47,6 +59,8 @@ private Thread visionThread;
     if(!visionThread.isAlive() || visionThread == null){
       visionThread = new Thread(this::apriltagVisionThreadProc);
       visionThread.start();
+      Visioncheck = true;
+      // LED_off();
     }
   }
 
@@ -57,6 +71,8 @@ private Thread visionThread;
         visionThread.join();
       } catch (InterruptedException e){
         Thread.currentThread().interrupt();
+        Visioncheck = false;
+        AprilTagCheck = false;
       }
     }
   }
@@ -73,6 +89,7 @@ private Thread visionThread;
     camera.setExposureAuto();
     camera.setWhiteBalanceAuto();
     camera.setBrightness(25);
+    // LED_on();
 
     //Get a CvSink This will capture Mats from the camera
     CvSink cvsink = CameraServer.getVideo();
@@ -165,6 +182,7 @@ private Thread visionThread;
 
       if (poses.isEmpty())
       {
+        AprilTagCheck = false;
           SmartDashboard.putNumber("ID 4 X Value",0);
           SmartDashboard.putNumber("ID 4 Y Value",0);
           SmartDashboard.putNumber( "ID 4 Z Value",0);
@@ -232,6 +250,8 @@ private Thread visionThread;
           SmartDashboard.putNumber( "ID 5 Pitch Value", _pose.getRotation().getX());
           SmartDashboard.putNumber("ID 5 Roll Value", _pose.getRotation().getY());
           SmartDashboard.putNumber("ID 5 Yaw Value", _pose.getRotation().getZ());
+          // LED_blink();
+          AprilTagCheck = true;
         }
         else if (detections[i].getId() == 6){
           SmartDashboard.putNumber("ID 6 X Value", _pose.getX());
@@ -240,6 +260,8 @@ private Thread visionThread;
           SmartDashboard.putNumber( "ID 6 Pitch Value", Math.toDegrees(_pose.getRotation().getX()));
           SmartDashboard.putNumber("ID 6 Roll Value", _pose.getRotation().getY());
           SmartDashboard.putNumber("ID 6 Yaw Value", _pose.getRotation().getZ());
+          // LED_blink();
+          AprilTagCheck = true;
         }
         else if (detections[i].getId() == 7){
           SmartDashboard.putNumber("ID 7 X Value", _pose.getX());

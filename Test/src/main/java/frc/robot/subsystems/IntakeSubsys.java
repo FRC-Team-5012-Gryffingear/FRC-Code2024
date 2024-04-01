@@ -16,12 +16,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
 
 
 public class IntakeSubsys extends SubsystemBase {
     TalonSRX intake1 = new TalonSRX(Constants.Intake1);
-    DigitalInput intakeLimit = new DigitalInput(2);
+    DigitalInput intakeLimit = new DigitalInput(5);
+   private DigitalOutput LED3 = new DigitalOutput(3);
+   private Timer time = new Timer();
+  
+//blue = 3
+
    // private Timer timer1 = new Timer();
     //have left side motor (Right side when in front) be the intake1
   public IntakeSubsys() {
@@ -31,19 +37,40 @@ public class IntakeSubsys extends SubsystemBase {
     intake1.setInverted(InvertType.InvertMotorOutput);
   }
 
+  private void LED_on() {
+    LED3.set(true);
+    }
+  private void LED_off(){
+    LED3.set(false);
+  }
+  private void LED_blink(){
+    time.start();
+    if(time.get() > 0 && time.get() < 0.0625){
+      LED3.set(true);
+    }
+    if(time.get() > 0.25){
+      LED3.set(false);
+      if(time.get() > 0.625){
+        time.reset();
+      }
+  }
+}
 
 
 
   public void intaking(boolean a, boolean b){
     //Checks if the A button is being pressed 
-    System.out.println("------LIMIT SWITCH DEBUG: " + intakeLimit.get());
+   System.out.println("------LIMIT SWITCH DEBUG INTAKE: " + intakeLimit.getChannel());
     if(a){
       //once the A button is pressed also check if the intake limit is pressed to see if we hit our goal
       if(intakeLimit.get()==true){
         intake1.set(ControlMode.PercentOutput, 1);
+        LED_blink();
+        
       }
       //if not then just continue intaking until true
       else{
+        LED_on();
         intake1.set(ControlMode.PercentOutput, 0);
       }
       
@@ -52,9 +79,14 @@ public class IntakeSubsys extends SubsystemBase {
     else if(b){
       //if it is then outtake that note out
       intake1.set(ControlMode.PercentOutput, -1);
+      LED_blink();
     }
     //Nothing pressed? Don't move!
     else{
+      if(intakeLimit.get() == true){
+        
+        LED_off();
+      }
         intake1.set(ControlMode.PercentOutput, 0);
     }
   }
