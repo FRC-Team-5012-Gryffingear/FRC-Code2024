@@ -53,24 +53,16 @@ public class AutoSimple extends Command {
     // }
       
     
-    System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
-    ElevSubsys.elevating(-0.8, false, true);
-    if(time.get() > 1){
-      ElevSubsys.elevating(0.8, true, false);
-      if(!ElevSubsys.elevLimit()){
-        ElevSubsys.elevating(0,  true, false);
-      }
-      System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
-    }
-
-    
-    // if(time.get() > 3){
-    //   if(ElevSubsys.elevLimit() == false){
-    //     ElevSubsys.elevating2(0, false);
+    // System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
+    // ElevSubsys.elevating(-0.8, false, true);
+    // if(time.get() > 1){
+    //   ElevSubsys.elevating(0.8, true, false);
+    //   if(!ElevSubsys.elevLimit()){
+    //     ElevSubsys.elevating(0,  true, false);
     //   }
-    //   ElevSubsys.elevating2(2, false);
-
+    //   System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
     // }
+
 
 
   }

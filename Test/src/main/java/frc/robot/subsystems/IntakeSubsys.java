@@ -60,7 +60,7 @@ public class IntakeSubsys extends SubsystemBase {
 
   public void intaking(boolean a, boolean b){
     //Checks if the A button is being pressed 
-   System.out.println("------LIMIT SWITCH DEBUG INTAKE: " + intakeLimit.getChannel());
+  //  System.out.println("------LIMIT SWITCH DEBUG INTAKE: " + intakeLimit.getChannel());
     if(a){
       //once the A button is pressed also check if the intake limit is pressed to see if we hit our goal
       if(intakeLimit.get()==true){

@@ -61,8 +61,12 @@ public class Autos extends Command {
 
 //Change these values to ID 6 since it is on the left side
         //next comment may or may not be correct:
-        double relationship = 2.48456 * Error5Z + 25.9588;
-        if(-relationship < vision.getXID(5) && vision.getXID(5) < relationship){
+        double relationship = (2.48456 * (Error5Z * 12)) + 25.9588;
+        System.out.println("THIS IS RELATIONSHIP ------: " + relationship);
+        if((relationship/2) < 40){
+          relationship = 40;
+        }
+        if(-relationship/2 < vision.getXID(5) && vision.getXID(5) < relationship/2){
           if(-0.1 < vision.getIDroll(5) && vision.getIDroll(5) < 0.1){
             System.out.println("CHECKER ONNNNNNNNNNNNNNNNNNNNNNNnn");
             checker = true;
@@ -77,7 +81,7 @@ public class Autos extends Command {
               */
               swerve.drive3(0.02, 0, 0, false);  
             }
-            if(0 < vision.getIDroll(5)){
+            else if(0 < vision.getIDroll(5)){
               Timer.stop();
               /*
               * Divide finalPushX by 1.75 if too fast
@@ -92,7 +96,7 @@ public class Autos extends Command {
            * Replace with finalPushX
            * Divide finalPushX by 1.75 if too fast
            */
-          swerve.drive3(0,0,(Math.atan((Error5X/Error5Z))),false);
+          swerve.drive3(0,0,finalPushX/10,false);
 
         }
         return checker;
@@ -209,50 +213,55 @@ public class Autos extends Command {
 
 
 
-//   elevTime.start();
 
-//   System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
-//   elev.elevating(-0.8,  false, true);
-//   if(elevTime.get() > 1){
-//     elev.elevating(0.8,  true, false);
-//   if(!elev.elevLimit()){
-//     elev.elevating(0.1, true, false);
-//   }
-//   System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
-// }
+//Vision with roll and elevator
 
+  elevTime.start();
+  // System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
+  if(elevTime.get() < 1){
+  // elev.elevating(-num,  false, false);
+  elev.elevatingAuto(-0.8, false);
+  }
+  if(elevTime.get() > 1){
+    elev.elevatingAuto(0.8, false);
+  if(!elev.elevLimit()){
+    // elev.elevating(0.1, true, false);
+    elev.elevatingAuto(0.1, false);
+  }
+  // System.out.println(elevTime.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
+}
 
 
     if(Math.abs(SmartDashboard.getNumber("ID 5 X Value", 0)) > 0){
           
-//Vision with roll and elevator
-// 
 
-    AutoMovement(Error5X, finalPushX,Error5Z);
 
-    while(AutoMovement(Error5X, finalPushX, Error5Z)){
 
-      System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      if(vision.getZID(5) > 85){
-        swerve.drive3(0, -0.1, 0, false);
-      }else{
-        swerve.drive3(0, 0, 0, false);
-      }
+    // AutoMovement(Error5X, finalPushX,Error5Z);
 
-            // Timer.start();
-            // System.out.println("--------------This is Timer: " + Timer.get()*1);
-            // if(Timer.get()*1 < (time)){
-            //   /*
-            //    * divide v by 3.25 if too fast
-            //    */
-            //   swerve.drive3(0, -v/3.25, 0, false);
-            //   System.out.println("WITHIN THE THRESH");
-            // }
-            // else{
-            //   swerve.drive3(0, 0, 0, false);
-            //   //add outake code here
-            // }
+    while(checker){
+
+      // System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      // if(vision.getZID(5) > 85){
+      //   swerve.drive3(0, -0.05, 0, false);
+      // }else{
+      //   swerve.drive3(0, 0, 0, false);
+      // }
     }
+    //         // Timer.start();
+    //         // System.out.println("--------------This is Timer: " + Timer.get()*1);
+    //         // if(Timer.get()*1 < (time)){
+    //         //   /*
+    //         //    * divide v by 3.25 if too fast
+    //         //    */
+    //         //   swerve.drive3(0, -v/3.25, 0, false);
+    //         //   System.out.println("WITHIN THE THRESH");
+    //         // }
+    //         // else{
+    //         //   swerve.drive3(0, 0, 0, false);
+    //         //   //add outake code here
+    //         // }
+    // }
 
       
 

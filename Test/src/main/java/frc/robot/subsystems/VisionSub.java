@@ -39,8 +39,8 @@ import edu.wpi.first.apriltag.AprilTagDetection;
 public class VisionSub extends SubsystemBase {
   /** Creates a new VisionSub. */
 private Thread visionThread;
-public boolean Visioncheck = false;
-public boolean AprilTagCheck = false;
+// public boolean Visioncheck = false;
+// public boolean AprilTagCheck = false;
 
   public VisionSub(){
     visionThread = new Thread(this::apriltagVisionThreadProc);
@@ -59,7 +59,7 @@ public boolean AprilTagCheck = false;
     if(!visionThread.isAlive() || visionThread == null){
       visionThread = new Thread(this::apriltagVisionThreadProc);
       visionThread.start();
-      Visioncheck = true;
+      // Visioncheck = true;
       // LED_off();
     }
   }
@@ -71,8 +71,8 @@ public boolean AprilTagCheck = false;
         visionThread.join();
       } catch (InterruptedException e){
         Thread.currentThread().interrupt();
-        Visioncheck = false;
-        AprilTagCheck = false;
+        // Visioncheck = false;
+        // AprilTagCheck = false;
       }
     }
   }
@@ -182,7 +182,7 @@ public boolean AprilTagCheck = false;
 
       if (poses.isEmpty())
       {
-        AprilTagCheck = false;
+        // AprilTagCheck = false;
           SmartDashboard.putNumber("ID 4 X Value",0);
           SmartDashboard.putNumber("ID 4 Y Value",0);
           SmartDashboard.putNumber( "ID 4 Z Value",0);
@@ -251,7 +251,7 @@ public boolean AprilTagCheck = false;
           SmartDashboard.putNumber("ID 5 Roll Value", _pose.getRotation().getY());
           SmartDashboard.putNumber("ID 5 Yaw Value", _pose.getRotation().getZ());
           // LED_blink();
-          AprilTagCheck = true;
+          // AprilTagCheck = true;
         }
         else if (detections[i].getId() == 6){
           SmartDashboard.putNumber("ID 6 X Value", _pose.getX());
@@ -261,7 +261,7 @@ public boolean AprilTagCheck = false;
           SmartDashboard.putNumber("ID 6 Roll Value", _pose.getRotation().getY());
           SmartDashboard.putNumber("ID 6 Yaw Value", _pose.getRotation().getZ());
           // LED_blink();
-          AprilTagCheck = true;
+          // AprilTagCheck = true;
         }
         else if (detections[i].getId() == 7){
           SmartDashboard.putNumber("ID 7 X Value", _pose.getX());

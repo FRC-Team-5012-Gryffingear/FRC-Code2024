@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class VisionComm extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final VisionSub visionSubsystem;
-  private DigitalOutput LED4 = new DigitalOutput(4);
-  private Timer time = new Timer();
+  // private DigitalOutput LED4 = new DigitalOutput(4);
+  // private Timer time = new Timer();
 
   /**
    * Creates a new VisionComm.
@@ -23,25 +23,25 @@ public class VisionComm extends Command {
    * @param subsystem The subsystem used by this command.
    */
 
-  private void LED_on(){
-    LED4.set(true);
-  }
-  private void LED_off(){
-    LED4.set(false);
-  }
+  // private void LED_on(){
+  //   LED4.set(true);
+  // }
+  // private void LED_off(){
+  //   LED4.set(false);
+  // }
 
-  private void LED_blink(){
-    time.start();
-    if(time.get() > 0 && time.get() < 0.0625){
-      LED_on();
-    }
-    if(time.get() > 0.25){
-      LED_off();
-      if(time.get() > 0.625){
-        time.reset();
-      }
-    }
-  }
+  // private void LED_blink(){
+  //   time.start();
+  //   if(time.get() > 0 && time.get() < 0.0625){
+  //     LED_on();
+  //   }
+  //   if(time.get() > 0.25){
+  //     LED_off();
+  //     if(time.get() > 0.625){
+  //       time.reset();
+  //     }
+  //   }
+  // }
 
   public VisionComm(VisionSub VisSubsystem) {
     visionSubsystem = VisSubsystem;
@@ -53,21 +53,21 @@ public class VisionComm extends Command {
   @Override
   public void initialize() {
     visionSubsystem.startThread();
-    LED_off();
+    // LED_off();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(visionSubsystem.AprilTagCheck){
-      LED_blink();
-    }
-    else if(visionSubsystem.Visioncheck){
-      LED_on();
-    }
-    else {
-      LED_off();
-    }
+    // if(visionSubsystem.AprilTagCheck){
+    //   LED_blink();
+    // }
+    // else if(visionSubsystem.Visioncheck){
+    //   LED_on();
+    // }
+    // else {
+    //   LED_off();
+    // }
   }
 
   // Called once the command ends or is interrupted.

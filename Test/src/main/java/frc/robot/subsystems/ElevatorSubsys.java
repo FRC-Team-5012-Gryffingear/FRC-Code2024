@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class ElevatorSubsys extends SubsystemBase {
   /** Creates a new ElevatorSubsys. */
@@ -30,6 +31,8 @@ public class ElevatorSubsys extends SubsystemBase {
   private DigitalOutput LED2 = new DigitalOutput(2);
   private Timer time2 = new Timer();
 
+  private DigitalOutput LED4 = new DigitalOutput(4);
+
   // private LedSubsystem ledSubsystem = new LedSubsystem();
 
   DigitalInput Limit1Top = new DigitalInput(6);
@@ -41,6 +44,7 @@ public class ElevatorSubsys extends SubsystemBase {
     // elevMotor1.configFactoryDefault();
     // elevMotor2.configFactoryDefault();
     presser = false;
+    // presser2 = false;
     check = true;
 
     elevMotor1.setNeutralMode(NeutralMode.Brake);
@@ -74,6 +78,13 @@ public class ElevatorSubsys extends SubsystemBase {
     }
   }
 
+  private void LED_on4(){
+    LED4.set(true);
+  }
+  private void LED_off4(){
+    LED4.set(false);
+  }
+
 
   private void LED_on(){
     LED2.set(true);
@@ -98,10 +109,14 @@ public class ElevatorSubsys extends SubsystemBase {
   public void elevating(double power, boolean stall, boolean stall_off){
 //Checks top limit and if power is positive
 //if it is to turn it completely off 
-    System.out.println("-------Limit Switch2 ELEVATOR: " + Limit1Top.getChannel() + "    VALUE: " + Limit1Top.get());
+System.out.println("This is POWERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR: " + power);
+    // System.out.println("-------Limit Switch2 ELEVATOR: " + Limit1Top.getChannel() + "    VALUE: " + Limit1Top.get());
     if(!Limit1Top.get() && power > 0){
       elevMotor1.set(ControlMode.PercentOutput, 0);
       LED_on();
+      if(presser){
+        elevMotor1.set(ControlMode.PercentOutput, 0.1);
+      }
     }
     //  else if(!Limit2Bottom.get() && power < 0){
     //  elevMotor1.set(ControlMode.PercentOutput, 0);
@@ -113,21 +128,24 @@ public class ElevatorSubsys extends SubsystemBase {
       LED_blink();
     }
     else{
-
       if(stall){
         presser = true;
+        // presser2 = false;
         elevMotor1.set(ControlMode.PercentOutput, 0.1);
       }
       else if(stall_off){
         presser = false;
+        // presser2 = true;
         elevMotor1.set(ControlMode.PercentOutput, 0);
       }
 
       if(presser){
         elevMotor1.set(ControlMode.PercentOutput, 0.1);
+        LED_on4();
       }
       else{
-        elevMotor1.set(ControlMode.PercentOutput, 0);
+         elevMotor1.set(ControlMode.PercentOutput, 0);
+        LED_off4();        
       }
 
       LED_off();
@@ -136,8 +154,11 @@ public class ElevatorSubsys extends SubsystemBase {
   }
 
 
-  public void elevating2(double power,boolean push){
-      elevMotor1.set(ControlMode.PercentOutput , power);
+  public void elevatingAuto(double power,boolean push){
+      elevMotor1.set(ControlMode.PercentOutput , power*0.8);
+      if(!Limit1Top.get() && power > 0){
+        elevMotor1.set(ControlMode.PercentOutput, 0.1);
+      }
       System.out.println(power + " Power -da-d-da--d-d-d-d--d-d");
   }
   // public boolean bottomLimitBOOL(){
