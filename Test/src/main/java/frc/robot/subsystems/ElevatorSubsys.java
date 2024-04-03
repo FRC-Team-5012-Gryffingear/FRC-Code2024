@@ -23,13 +23,16 @@ import frc.robot.Robot;
 public class ElevatorSubsys extends SubsystemBase {
   /** Creates a new ElevatorSubsys. */
  // boolean check = true;
-  boolean presser;
+  boolean presser; 
+  boolean Autocheck = false;
   boolean check;
   TalonSRX elevMotor1 = new TalonSRX(Constants.Elev1);
   TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
 
   private DigitalOutput LED2 = new DigitalOutput(2);
   private Timer time2 = new Timer();
+
+  private Timer Autotimer = new Timer();
 
   private DigitalOutput LED4 = new DigitalOutput(4);
 
@@ -144,22 +147,39 @@ System.out.println("This is POWERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR: " + power);
         LED_on4();
       }
       else{
-         elevMotor1.set(ControlMode.PercentOutput, 0);
-        LED_off4();        
+        if(!Autocheck){
+          elevMotor1.set(ControlMode.PercentOutput, 0);
+        }
+          LED_off4();        
       }
 
+      if(!Limit1Top.get()){
+        LED_on();
+      }
+      else{
       LED_off();
-
+      }
     }
   }
 
 
-  public void elevatingAuto(double power,boolean push){
-      elevMotor1.set(ControlMode.PercentOutput , power*0.8);
-      if(!Limit1Top.get() && power > 0){
+  public void elevatingAuto(Timer Autotimer2){
+    Autocheck = true;
+
+    if(Autotimer2.get()  < 1){
+      elevMotor1.set(ControlMode.PercentOutput, -0.5);
+    }
+
+    else if(Autotimer2.get() > 1){
+
+      if(!Limit1Top.get()){
         elevMotor1.set(ControlMode.PercentOutput, 0.1);
+        Autocheck = false;
+        Autotimer2.stop();
+      }else{
+        elevMotor1.set(ControlMode.PercentOutput, 0.4);
       }
-      System.out.println(power + " Power -da-d-da--d-d-d-d--d-d");
+    }
   }
   // public boolean bottomLimitBOOL(){
   //   return Limit2Bottom.get();

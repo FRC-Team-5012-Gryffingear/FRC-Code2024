@@ -17,6 +17,7 @@ public class AutoSimple extends Command {
   private final SwerveSubsystem swerve;
   private final IntakeSubsys intakeSubsys;
   private final ElevatorSubsys ElevSubsys;
+  private Timer elevTimer = new Timer();
 
   private Timer time = new Timer(); 
   public AutoSimple(SwerveSubsystem subsystem, IntakeSubsys intakeSubsystem, ElevatorSubsys elevSubsys) {
@@ -31,6 +32,8 @@ public class AutoSimple extends Command {
   @Override
   public void initialize() {
     //Makes its forward new forward and resets timer
+    elevTimer.stop();
+    elevTimer.reset();
     ElevSubsys.Checkoff();
     swerve.resetHeading();
     time.stop();
@@ -44,7 +47,7 @@ public class AutoSimple extends Command {
    // double percentRot = swerve.getYaw()/10;
     //Ex: swerve.drive3(0,0,percent,true); 
 
-     time.start();
+    //  time.start();
     // if(time.get() > 0.3 && time.get() < 2){
     //     swerve.drive3(-0.15, 0, 0, true);
     //   }
@@ -52,7 +55,11 @@ public class AutoSimple extends Command {
     //   swerve.drive3(0, 0, 0, true);
     // }
       
+
+    elevTimer.start();
+    ElevSubsys.elevatingAuto(elevTimer);
     
+
     // System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
     // ElevSubsys.elevating(-0.8, false, true);
     // if(time.get() > 1){

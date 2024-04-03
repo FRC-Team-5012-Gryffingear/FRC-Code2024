@@ -45,7 +45,7 @@ public class RobotContainer {
   private final HookSubsystem hookSubsys = new HookSubsystem();
  private final LedSubsystem Ledsubsys = new LedSubsystem();
 
-  private final Autos auto = new Autos(swerveSubsys, visionSub, elevSub);
+  private final Autos auto = new Autos(swerveSubsys, visionSub);
   private final AutoSimple AutoS = new AutoSimple(swerveSubsys,intakeSub,elevSub);
 
 
@@ -102,6 +102,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(null);
-    return auto;
+    return AutoS;
   }
 }

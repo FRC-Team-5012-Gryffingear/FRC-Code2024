@@ -84,11 +84,11 @@ private Thread visionThread;
     //get the UsbCamera from CameraServer
     UsbCamera camera = CameraServer.startAutomaticCapture();
     //set resolution
-    camera.setResolution(400, 300); 
+    camera.setResolution(320, 240); //4:3 ratio
     camera.setFPS(15);
     camera.setExposureAuto();
     camera.setWhiteBalanceAuto();
-    camera.setBrightness(25);
+    camera.setBrightness(3);
     // LED_on();
 
     //Get a CvSink This will capture Mats from the camera
@@ -107,6 +107,7 @@ private Thread visionThread;
     ArrayList<Double> Yawvalues = new ArrayList<>();
     ArrayList<Integer> IDValues = new ArrayList<>();
 
+    
     var TagSize = 36;
     
     
