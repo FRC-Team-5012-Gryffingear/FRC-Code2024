@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj.Timer;
 public class IntakeSubsys extends SubsystemBase {
     TalonSRX intake1 = new TalonSRX(Constants.Intake1);
     DigitalInput intakeLimit = new DigitalInput(5);
-   private DigitalOutput LED3 = new DigitalOutput(3);
-   private Timer time = new Timer();
+    private DigitalOutput LED3 = new DigitalOutput(2);
+    private Timer time = new Timer();
   
 //blue = 3
 
@@ -45,10 +45,10 @@ public class IntakeSubsys extends SubsystemBase {
   }
   private void LED_blink(){
     time.start();
-    if(time.get() > 0 && time.get() < 0.0625){
+    if(time.get() > 0 && time.get() < 0.07){
       LED3.set(true);
     }
-    if(time.get() > 0.25){
+    if(time.get() > 0.07){
       LED3.set(false);
       if(time.get() > 0.625){
         time.reset();
@@ -64,7 +64,7 @@ public class IntakeSubsys extends SubsystemBase {
     if(a){
       //once the A button is pressed also check if the intake limit is pressed to see if we hit our goal
       if(intakeLimit.get()==true){
-        intake1.set(ControlMode.PercentOutput, 1);
+        intake1.set(ControlMode.PercentOutput, 0.5);
         LED_blink();
         
       }

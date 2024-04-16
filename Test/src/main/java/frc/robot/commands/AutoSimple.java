@@ -47,30 +47,17 @@ public class AutoSimple extends Command {
    // double percentRot = swerve.getYaw()/10;
     //Ex: swerve.drive3(0,0,percent,true); 
 
-    //  time.start();
-    // if(time.get() > 0.3 && time.get() < 2){
-    //     swerve.drive3(-0.15, 0, 0, true);
-    //   }
-    // else if(time.get() > 2){
-    //   swerve.drive3(0, 0, 0, true);
-    // }
-      
+    //  elevTimer.start();
+    // ElevSubsys.elevatingAuto(elevTimer);
 
-    elevTimer.start();
-    ElevSubsys.elevatingAuto(elevTimer);
-    
-
-    // System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
-    // ElevSubsys.elevating(-0.8, false, true);
-    // if(time.get() > 1){
-    //   ElevSubsys.elevating(0.8, true, false);
-    //   if(!ElevSubsys.elevLimit()){
-    //     ElevSubsys.elevating(0,  true, false);
-    //   }
-    //   System.out.println(time.get() + "Timer testing -a-a-a-a-a-a-a-a-a-");
-    // }
-
-
+     time.start();
+     // 0 to 2 sec
+    if(time.get() > 0 && time.get() < 2){
+        swerve.drive3(-0.15, 0, 0, true);
+      }
+    else if(time.get() > 2){
+      swerve.drive3(0, 0, 0, true);
+    }
 
   }
 

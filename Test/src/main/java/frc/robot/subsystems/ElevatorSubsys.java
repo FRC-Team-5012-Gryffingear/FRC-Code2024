@@ -29,12 +29,14 @@ public class ElevatorSubsys extends SubsystemBase {
   TalonSRX elevMotor1 = new TalonSRX(Constants.Elev1);
   TalonSRX elevMotor2 = new TalonSRX(Constants.Elev2);
 
-  private DigitalOutput LED2 = new DigitalOutput(2);
+  private DigitalOutput LED2 = new DigitalOutput(3);
+  // LED 2 = green
   private Timer time2 = new Timer();
 
   private Timer Autotimer = new Timer();
 
   private DigitalOutput LED4 = new DigitalOutput(4);
+  // LED 4 = white
 
   // private LedSubsystem ledSubsystem = new LedSubsystem();
 
@@ -177,7 +179,7 @@ System.out.println("This is POWERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR: " + power);
         Autocheck = false;
         Autotimer2.stop();
       }else{
-        elevMotor1.set(ControlMode.PercentOutput, 0.4);
+        elevMotor1.set(ControlMode.PercentOutput, 0.3);
       }
     }
   }

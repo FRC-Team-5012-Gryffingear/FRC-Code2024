@@ -57,7 +57,7 @@ public class HookSubsystem extends SubsystemBase {
   public void Hooking(boolean Y, boolean X){
     if(Y){
         hookTimer.start();
-        if(hookTimer.get() > 1.5){
+        if(hookTimer.get() > 0.5){
             hookMotor.set(ControlMode.PercentOutput, 0.5);
             LED_on();
             hookAttached = true;
