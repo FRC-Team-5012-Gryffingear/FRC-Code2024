@@ -58,7 +58,7 @@ public class RobotContainer {
      () -> xboxControllerxbox.getLeftTriggerAxis(),
      () -> xboxControllerxbox.getLeftX()));
     
-    shootsubsys.setDefaultCommand(new shooterComm(shootsubsys,
+  shootsubsys.setDefaultCommand(new shooterComm(shootsubsys,
      () -> xboxControllerxbox.getAButton(),
      () -> xboxControllerxbox.getBButton()));
    

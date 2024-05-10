@@ -33,13 +33,16 @@ public class arcadeComm extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_subsystem.yawReset();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_subsystem.motionTurning(forwardTrigger.getAsDouble() - backTrigger.getAsDouble(), turning.getAsDouble());
-  }
+    m_subsystem.angle();
+   }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -24,18 +24,17 @@ public class shooterSubsys extends SubsystemBase {
 
   //Uses boolean shootA and shootB as button placeholders and checks if they are pressed. 
   //If they are, then there respectivemotor will move.
-  public void shoot(boolean shootA, boolean shootB){
+  public void shoot(boolean shootA, boolean intakeB){
     if(shootA){
+        shooterTalon1.set(ControlMode.PercentOutput, -1);
+        shooterTalon2.set(ControlMode.PercentOutput, -1);
+    }
+    else if(intakeB){
         shooterTalon1.set(ControlMode.PercentOutput, 1);
-    }
-    else{
-        shooterTalon1.set(ControlMode.PercentOutput, 0);
-
-    }
-    if(shootB){
         shooterTalon2.set(ControlMode.PercentOutput, 1);
     }
     else{
+        shooterTalon1.set(ControlMode.PercentOutput, 0);
         shooterTalon2.set(ControlMode.PercentOutput, 0);
     }
 

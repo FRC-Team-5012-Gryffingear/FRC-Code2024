@@ -14,16 +14,20 @@ package frc.robot;
  */
 public final class Constants {
 
-  public final static int talon1 = 18; //FL
-  public final static int talon2 = 12; //FR
-  public final static int talon3 = 19; //BL
-  public final static int talon4 = 13; // BR
+  public final static int talon1 = 13; //FL
+  public final static int talon2 = 7; //FR
+  public final static int talon3 = 12; //BL
+  public final static int talon4 = 0; // BR
+
+
   public final static int drivercontroller = 0;
 
-  //shooter SS for prototype
+  public final static int pigeonport = 1;
 
-  public final static int talonS1 = 1;
-  public final static int talonS2 = 1;
+
+  //shooter SS for prototype
+   public final static int talonS1 = 2;
+   public final static int talonS2 = 4;
 
 
   public static class OperatorConstants {
