@@ -101,7 +101,8 @@ public class SwerveCommand extends Command {
 
     // Delete 2 if slow
 //X should move pos direction, -Y  move pos direction, rotateSpeed move in pos direction
-    swervesubsys.drive3(finalPushX, -finalPushY, rotateSpeed*1.5, true);
+    // swervesubsys.drive3(finalPushX, -finalPushY, rotateSpeed*1.5, true);
+    swervesubsys.drive3(xSpeed, -ySpeed, rotateSpeed*1.5, true);
 
     
     if(yaw.getAsBoolean()){
