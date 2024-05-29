@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -28,6 +30,12 @@ public class ExampleSubsystem extends SubsystemBase {
         });
   }
 
+  public void LED_blink(int x, int y){
+    DigitalOutput LED = new DigitalOutput(x);
+    Timer.delay(y);
+    LED.set(false);
+    Timer.delay(y);
+  }
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *
