@@ -8,8 +8,12 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.pneumaticsComm;
+import frc.robot.commands.practiceCommand;
+import frc.robot.commands.vacuumComm;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.pneumaticVacuum;
 import frc.robot.subsystems.pneumaticsSubsys;
+import frc.robot.subsystems.practiceArcade;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -26,6 +30,8 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final pneumaticsSubsys pneumaticSub = new pneumaticsSubsys();
+  private final pneumaticVacuum vacuumSub = new pneumaticVacuum();
+  private final practiceArcade practiceSub = new practiceArcade();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -52,10 +58,19 @@ public class RobotContainer {
     pneumaticSub.setDefaultCommand(new pneumaticsComm(pneumaticSub,
     () -> xboxControllerxx.getAButton(),
     () -> xboxControllerxx.getBButton()));
-    
+
+    vacuumSub.setDefaultCommand(new vacuumComm(vacuumSub,
+    () -> xboxControllerxx.getRightBumper(),
+    () -> xboxControllerxx.getLeftBumper()));
+
+ 
+    practiceSub.setDefaultCommand(new practiceCommand(practiceSub, 
+    () -> xboxControllerxx.getRightTriggerAxis(), 
+    () -> xboxControllerxx.getLeftTriggerAxis(), 
+    () -> xboxControllerxx.getLeftX()));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    // new Trigger(m_exampleSubsystem::exampleCondition)
+    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
@@ -69,6 +84,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return null;//Autos.exampleAuto(m_exampleSubsystem);
   }
 }

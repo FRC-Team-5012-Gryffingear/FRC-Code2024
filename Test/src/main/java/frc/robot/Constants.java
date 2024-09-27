@@ -19,6 +19,13 @@ public final class Constants {
   public final static int solenoid1 = 0;
   public final static int solenoid2 = 1;
 
+  public final static int talon1 = 3;
+
+
+  public final static int mtalon1 = 0;
+  public final static int mtalon2 = 0;
+  public final static int mtalon3 = 0;
+  public final static int mtalon4 = 0;
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
