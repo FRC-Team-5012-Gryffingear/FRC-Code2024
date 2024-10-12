@@ -53,7 +53,7 @@ public class arcadeSubsys extends SubsystemBase {
   public void motionTurning(double power, double turn){
     talonFR.set(ControlMode.PercentOutput, power - turn);
     talonFL.set(ControlMode.PercentOutput, power + turn);
-  }
+    }
   //Gets the angle of the pigeon in degrees
   public Rotation2d angle(){
     return Rotation2d.fromDegrees(pigeon.getAngle());

@@ -14,9 +14,9 @@ package frc.robot;
  */
 public final class Constants {
 
-  public final static int talon1 = 13; //FL
+  public final static int talon1 = 5; //FL
   public final static int talon2 = 7; //FR
-  public final static int talon3 = 12; //BL
+  public final static int talon3 = 2; //BL
   public final static int talon4 = 0; // BR
 
 
@@ -26,7 +26,7 @@ public final class Constants {
 
 
   //shooter SS for prototype
-   public final static int talonS1 = 2;
+   public final static int talonS1 = 3;
    public final static int talonS2 = 4;
 
 

@@ -7,10 +7,10 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.arcadeComm;
-import frc.robot.commands.shooterComm;
+// import frc.robot.commands.shooterComm;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.arcadeSubsys;
-import frc.robot.subsystems.shooterSubsys;
+// import frc.robot.subsystems.shooterSubsys;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,7 +29,7 @@ public class RobotContainer {
 
   private final arcadeSubsys arcadesubsys = new arcadeSubsys();
 
-  private final shooterSubsys shootsubsys = new shooterSubsys();
+  // private final shooterSubsys shootsubsys = new shooterSubsys();
 
   //private final Joystick driverController = new Joystick(Constants.drivercontroller);
 
@@ -58,9 +58,9 @@ public class RobotContainer {
      () -> xboxControllerxbox.getLeftTriggerAxis(),
      () -> xboxControllerxbox.getLeftX()));
     
-  shootsubsys.setDefaultCommand(new shooterComm(shootsubsys,
-     () -> xboxControllerxbox.getAButton(),
-     () -> xboxControllerxbox.getBButton()));
+  // shootsubsys.setDefaultCommand(new shooterComm(shootsubsys,
+  //    () -> xboxControllerxbox.getAButton(),
+  //    () -> xboxControllerxbox.getBButton()));
    
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
   
