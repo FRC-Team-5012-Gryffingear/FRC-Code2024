@@ -4,29 +4,32 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ArcadeDriv;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.arcade;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import javax.swing.text.AbstractDocument.LeafElement;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ArcadeCommand extends Command {
+public class arcadeComm extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ArcadeDriv arcadesubsys;
-  private final DoubleSupplier forwardtrigger, backtrigger, turning;
-  
+  private final arcade arcade2;
+  private final DoubleSupplier RT, LT, Turn;
+
   /**
-   * Creates a new ArcadeCommand.
+   * Creates a new arcadeComm.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArcadeCommand(ArcadeDriv subsystem, DoubleSupplier fTrigger, DoubleSupplier bTrigger, DoubleSupplier t) {
-    arcadesubsys = subsystem;
-    forwardtrigger = fTrigger;
-    backtrigger = bTrigger;
-    turning = t;
+  public arcadeComm(arcade subsystem, DoubleSupplier Le, DoubleSupplier Ri, DoubleSupplier Tu) {
+    arcade2 = subsystem;
+    LT = Le;
+    RT = Ri;
+    Turn = Tu;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -39,7 +42,7 @@ public class ArcadeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arcadesubsys.moveandturn(forwardtrigger.getAsDouble() - backtrigger.getAsDouble(), turning.getAsDouble());
+    arcade2.moveandturn(RT.getAsDouble() - LT.getAsDouble(), Turn.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

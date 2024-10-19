@@ -5,11 +5,12 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArcadeCommand;
+
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ArcadeDriv;
+import frc.robot.commands.arcadeComm;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.arcade;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ArcadeDriv arcadedsub = new ArcadeDriv();
+  private final arcade arc = new arcade();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController =
@@ -48,15 +49,10 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-      
-    arcadedsub.setDefaultCommand(new ArcadeCommand(arcadedsub,
-      () -> xboxC.getRightTriggerAxis(),
-      () -> xboxC.getLeftTriggerAxis(),
-       () -> xboxC.getLeftX()));
-
+    arc.setDefaultCommand(new arcadeComm(arc,
+    () -> xboxC.getLeftTriggerAxis(),
+    ()-> xboxC.getRightTriggerAxis(),
+    ()-> xboxC.getLeftX()));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
   }
