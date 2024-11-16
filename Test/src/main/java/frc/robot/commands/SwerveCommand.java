@@ -27,19 +27,20 @@ public class SwerveCommand extends Command {
  private final CommandXboxController controller2;
   private final BooleanSupplier yaw;
 
-  private final limey l = new limey();
-  private final BooleanSupplier limelock;
+  private final BooleanSupplier limeLock;
+
   //private final LedSubsystem Ledsubsys; 
   public double t = 1;
   private VisionSub vision = new VisionSub();
+  private limey lime = new limey();
 
  
   
-  public SwerveCommand(SwerveSubsystem subsystem, CommandXboxController controller,BooleanSupplier yaw, BooleanSupplier limeL) {
+  public SwerveCommand(SwerveSubsystem subsystem, CommandXboxController controller,BooleanSupplier yaw, BooleanSupplier limeLock) {
     swervesubsys = subsystem;
     controller2 = controller;
-    limelock = limeL;
-
+    this.limeLock = limeLock;
+  
     this.yaw = yaw;
   
     // Use addRequirements() here to declare subsystem dependencies.
@@ -49,7 +50,7 @@ public class SwerveCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    vision.startThread();
+    //vision.startThread();
     swervesubsys.resetHeading();
 
   }
@@ -123,12 +124,9 @@ public class SwerveCommand extends Command {
 
 
     //Function that moves left/right in order to look at target
-    if(limelock.getAsBoolean()){
-      PIDController movement = new PIDController(.1, 0, 0);
-      double w = movement.calculate(l.getx(),0);
-
-      swervesubsys.drive3(xSpeed,-ySpeed,w,true);
-    }    
+     if(limeLock.getAsBoolean()){
+      lime.rotationLock(lime.getx());
+     }
     
 
   }
@@ -137,7 +135,8 @@ public class SwerveCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     swervesubsys.stopMods();
-    vision.stopThread();
+   // vision.stopThread();
+    
   }
 
   // Returns true when the command should end.

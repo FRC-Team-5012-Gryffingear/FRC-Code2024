@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,13 +13,27 @@ import frc.robot.LimelightHelpers;
 
 public class limey extends SubsystemBase {
   /** Creates a new limey. */
-  public limey() {} 
+    PIDController Movement = new PIDController(.1, 0, 0);
+
+  public limey() {
+    Movement.reset();
+  } 
 
   public double getx() {
     double tx = LimelightHelpers.getTX("");
     SmartDashboard.putNumber("Distance Y ", tx);
     return tx;
   }
+
+  public double estimate3DZ(){
+    Pose3d poses = LimelightHelpers.getTargetPose3d_CameraSpace("");
+    double distance = poses.getZ();
+    double zinOneInch = 39.6153846154;
+    double distanceInches = distance * zinOneInch;
+    return distanceInches;
+  }
+
+
   public double gety(){
     double ty = LimelightHelpers.getTY("");
     SmartDashboard.putNumber("Distance Y", ty);
@@ -42,6 +58,25 @@ public class limey extends SubsystemBase {
     SmartDashboard.putNumber("Distance Z Estimated", distanceFromLimelightToGoalInches);
 
     return distanceFromLimelightToGoalInches;
+  }
+
+  // Asks for the getX() value in order to calculate the necessary value to move
+  // 
+  public double rotationLock(double x_value){ 
+    double rot = Movement.calculate(x_value, 0); // setpoint should be changed after testing 
+    
+    // This is to check if the rotational movement is worth moving
+    // Also to prevent microadjustment which would cause clicking 
+    // in the motors
+    if(Math.abs(rot) < 0.15){
+      rot = 0; // setting the rotation value to 0 to prevent unecessary rotation
+    }
+    return rot;
+  }
+
+  public double fwrdLock(double z_value){
+    double z_movement = Movement.calculate(z_value,5);
+    return z_movement;
   }
 
 
