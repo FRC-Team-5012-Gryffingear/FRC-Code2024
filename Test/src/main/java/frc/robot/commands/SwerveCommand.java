@@ -12,10 +12,13 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.limey;
 
 /** An example command that uses an example subsystem. */
 public class SwerveCommand extends Command {
@@ -23,15 +26,20 @@ public class SwerveCommand extends Command {
  private final SwerveSubsystem swervesubsys;
  private final CommandXboxController controller2;
   private final BooleanSupplier yaw;
+
+  private final limey l = new limey();
+  private final BooleanSupplier limelock;
   //private final LedSubsystem Ledsubsys; 
   public double t = 1;
   private VisionSub vision = new VisionSub();
 
  
   
-  public SwerveCommand(SwerveSubsystem subsystem, CommandXboxController controller,BooleanSupplier yaw) {
+  public SwerveCommand(SwerveSubsystem subsystem, CommandXboxController controller,BooleanSupplier yaw, BooleanSupplier limeL) {
     swervesubsys = subsystem;
     controller2 = controller;
+    limelock = limeL;
+
     this.yaw = yaw;
   
     // Use addRequirements() here to declare subsystem dependencies.
@@ -108,14 +116,20 @@ public class SwerveCommand extends Command {
     if(yaw.getAsBoolean()){
       swervesubsys.resetHeading();
     }
-    // else if(pose.getAsBoolean()){
-    //   swervesubsys.resetPose();
-    // }
-    // if(controller2.rightBumper().getAsBoolean()){
-    //     swervesubsys.drive(xSpeed, ySpeed, rotateSpeed,true);
-    // } else{
-    //     swervesubsys.drive(xSpeed, ySpeed, rotateSpeed);
-    // }
+    
+
+     // Function that moves towards the target certain amount
+
+
+
+    //Function that moves left/right in order to look at target
+    if(limelock.getAsBoolean()){
+      PIDController movement = new PIDController(.1, 0, 0);
+      double w = movement.calculate(l.getx(),0);
+
+      swervesubsys.drive3(xSpeed,-ySpeed,w,true);
+    }    
+    
 
   }
 

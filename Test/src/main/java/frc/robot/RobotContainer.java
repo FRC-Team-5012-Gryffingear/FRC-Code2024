@@ -13,6 +13,7 @@ import frc.robot.commands.HookCommand;
 import frc.robot.commands.IntakeComm;
 import frc.robot.commands.LedCommand;
 import frc.robot.commands.SwerveCommand;
+import frc.robot.commands.limeCom;
 import frc.robot.otherInfo.controllerConstant;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -21,6 +22,7 @@ import frc.robot.subsystems.IntakeSubsys;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSub;
+import frc.robot.subsystems.limey;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,6 +47,7 @@ public class RobotContainer {
   private final HookSubsystem hookSubsys = new HookSubsystem();
  private final LedSubsystem Ledsubsys = new LedSubsystem();
 
+ private final limey lime = new limey();
   private final Autos auto = new Autos(swerveSubsys, visionSub);
   private final AutoSimple AutoS = new AutoSimple(swerveSubsys,intakeSub,elevSub);
 
@@ -66,10 +69,13 @@ public class RobotContainer {
     
     //Check if A and B register since we switched to Xboxcontroller from CommandXboxcontroller
   //  Ledsubsys.setDefaultCommand(new LedCommand(Ledsubsys));
+
+    lime.setDefaultCommand(new limeCom(lime));
     
     swerveSubsys.setDefaultCommand(new SwerveCommand(swerveSubsys,
      driverController,
-     () -> driverController.a().getAsBoolean()));
+     () -> driverController.a().getAsBoolean(),
+     () -> driverController.b().getAsBoolean()));
 
     intakeSub.setDefaultCommand(new IntakeComm(intakeSub,
     () -> operatorController.getAButton(),
