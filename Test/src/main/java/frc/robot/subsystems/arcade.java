@@ -16,20 +16,23 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class arcade extends SubsystemBase {
   /** Creates a new arcade. */
-  TalonSRX drive1 = new TalonSRX(0); //LeftFront
-  TalonSRX drive2 = new TalonSRX(1); //RightFront
-  TalonSRX drive3 = new TalonSRX(2); //LeftBack
-  TalonSRX drive4 = new TalonSRX(3); //RightBack
+  TalonSRX drive1 = new TalonSRX(Constants.FL); //LeftFront
+  TalonSRX drive2 = new TalonSRX(Constants.FR); //RightFront
+  TalonSRX drive3 = new TalonSRX(Constants.BL); //LeftBack
+  TalonSRX drive4 = new TalonSRX(Constants.BR); //RightBack
   
   public arcade() {
+    // do the same configurations for drive 3 and 4
     drive1.configFactoryDefault();
     drive2.configFactoryDefault();
     drive3.configFactoryDefault();
     drive4.configFactoryDefault();
 
+    // do the same configurations for drive 3 and 4
     drive1.setNeutralMode(NeutralMode.Brake);
     drive2.setNeutralMode(NeutralMode.Brake);
     drive3.setNeutralMode(NeutralMode.Brake);
