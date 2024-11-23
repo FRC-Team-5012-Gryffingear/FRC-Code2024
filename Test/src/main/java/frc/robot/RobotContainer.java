@@ -5,11 +5,14 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ArcadeComm;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.limet;
+import frc.robot.subsystems.ArcadeSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.limey;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,9 +30,10 @@ public class RobotContainer {
 
   private final limey lime = new limey();
 
+  private final ArcadeSubsys arc = new ArcadeSubsys();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final XboxController xbox = new XboxController(Constants.OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -49,6 +53,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+    arc.setDefaultCommand(new ArcadeComm(arc,
+     () -> xbox.getRightTriggerAxis(),
+     () -> xbox.getLeftTriggerAxis(),
+     () -> xbox.getLeftX(),
+     () -> xbox.getAButton(),
+     () -> xbox.getBButton()));
   }
 
   /**

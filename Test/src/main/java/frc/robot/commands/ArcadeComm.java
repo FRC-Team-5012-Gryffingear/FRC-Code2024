@@ -4,23 +4,37 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ArcadeSubsys;
 import frc.robot.subsystems.limey;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class limet extends Command {
+public class ArcadeComm extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final limey limeSub;
+  private final ArcadeSubsys arcade;
+
+  private final DoubleSupplier RT, LT, Tu;
+
+  private final BooleanSupplier Zlock, RotLock;
+
+  private final limey lim = new limey();
 
   /**
-   * Creates a new limet.
+   * Creates a new ArcadeComm.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public limet(limey subsystem) {
-    limeSub = subsystem;
+  public ArcadeComm(ArcadeSubsys subsystem, DoubleSupplier Ri, DoubleSupplier Le, DoubleSupplier T, BooleanSupplier Zlock, BooleanSupplier RotLock) {
+    arcade = subsystem;
+    RT = Ri;
+    LT = Le;
+    Tu = T;
+    this.Zlock = Zlock;
+    this.RotLock = RotLock;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -32,11 +46,13 @@ public class limet extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // SmartDashboard.putNumber("AprilXValue", limeSub.getX());
-    // limeSub.estimate3DZInches();
-    SmartDashboard.putNumber("TZ Value", limeSub.getTZ());
-    SmartDashboard.putNumber("Distance of ID " + limeSub.getId(), limeSub.estimate3DZInches());
-    // SmartDashboard.putNumber("Error of ID " + limeSub.getId(), limeSub.getErrorValue());
+    arcade.move_turn(RT.getAsDouble() - LT.getAsDouble(), Tu.getAsDouble());
+    if(Zlock.getAsBoolean()){
+        arcade.move_turn(lim.fwrdLock(lim.estimate3DZInches()), 0);
+    }
+    else if(RotLock.getAsBoolean()){
+        arcade.move_turn(0, lim.rotationLock(lim.getX()));
+    }
   }
 
   // Called once the command ends or is interrupted.

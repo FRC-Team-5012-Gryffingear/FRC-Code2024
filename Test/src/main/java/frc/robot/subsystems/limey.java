@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -20,6 +21,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class limey extends SubsystemBase {
   /** Creates a new limey. */
+  PIDController movement = new PIDController(.1, 0, 0);
 
   public limey() {
 
@@ -29,12 +31,13 @@ public class limey extends SubsystemBase {
     return LimelightHelpers.getTX("");
   }
 
-  public double estimate3DZ(){
+  public double estimate3DZInches(){
     Pose3d poses = LimelightHelpers.getTargetPose3d_CameraSpace("");
     double distance = poses.getZ();
     double zinOneInch = 39.6153846154;
     double distanceInches = distance * zinOneInch;
     return distanceInches;
+    //Max Distance is 199 inches for higher quality camera
   }
   
   public double getTZ(){
@@ -42,38 +45,19 @@ public class limey extends SubsystemBase {
     return poses.getZ();
   }
 
-  public double getEstZ(){
-    double ty = LimelightHelpers.getTY("");
-
-    double limelightMountAngleDeg = 0;
-    double limelightMountHeight = 44;
-
-    double goalHeightInches = 50.5;
-
-    double anleToGoalDegrees = limelightMountAngleDeg + ty;
-    double angletoGoalRad = anleToGoalDegrees * (Math.PI / 180);
-
-    double distanceFromTag = (goalHeightInches - limelightMountHeight) / Math.tan(angletoGoalRad);
-    
-    return distanceFromTag;
+  public double rotationLock(double x_value){
+    double rot = movement.calculate(x_value,0);
+    if(Math.abs(rot) < .15){
+      rot = 0;
+    }
+    SmartDashboard.putNumber("Rotational power", rot);
+    return rot;
   }
 
-  public double getErrorValue(){
-    double April1TrueDistance = 91;
-    double April2TrueDistance = 97;
-    double April3TrueDistance = 101;
-
-    double id = getId();
-    if(id == 1){
-      return Math.abs(April1TrueDistance - getEstZ());
-    } else if(id == 2){
-      return Math.abs(April2TrueDistance - getEstZ());
-    } else if(id == 3){
-      return Math.abs(April3TrueDistance - getEstZ());
-    } else{
-      return 0;
-    }
-
+  public double fwrdLock(double z_value){
+    double zPower = movement.calculate(z_value,15);
+    SmartDashboard.putNumber("Z power input", zPower);
+    return zPower;
   }
 
   public double getId(){
