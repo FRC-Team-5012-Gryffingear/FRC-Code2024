@@ -29,10 +29,10 @@ public class ArcadeSubsys extends SubsystemBase {
     talonBL.configFactoryDefault();
     talonBR.configFactoryDefault();
 
-    talonFL.setNeutralMode(NeutralMode.Brake);
-    talonFR.setNeutralMode(NeutralMode.Brake);
-    talonBL.setNeutralMode(NeutralMode.Brake);
-    talonBR.setNeutralMode(NeutralMode.Brake);
+    talonFL.setNeutralMode(NeutralMode.Coast);
+    talonFR.setNeutralMode(NeutralMode.Coast);
+    talonBL.setNeutralMode(NeutralMode.Coast);
+    talonBR.setNeutralMode(NeutralMode.Coast);
 
     talonBL.follow(talonFL);
     talonBR.follow(talonFR);
@@ -46,35 +46,7 @@ public class ArcadeSubsys extends SubsystemBase {
     talonFL.set(ControlMode.PercentOutput, power + turn);
     talonFR.set(ControlMode.PercentOutput, power - turn);
   }
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
-  }
-
-  public void LED_blink(int x, int y){
-    DigitalOutput LED = new DigitalOutput(x);
-    Timer.delay(y);
-    LED.set(false);
-    Timer.delay(y);
-  }
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
+ 
 
   @Override
   public void periodic() {

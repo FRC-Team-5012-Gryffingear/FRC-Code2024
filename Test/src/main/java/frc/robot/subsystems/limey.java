@@ -21,7 +21,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class limey extends SubsystemBase {
   /** Creates a new limey. */
-  PIDController movement = new PIDController(.1, 0, 0);
+  public double kp = .05;
+  PIDController movement = new PIDController(kp, 0, 0);
 
   public limey() {
 
@@ -57,12 +58,27 @@ public class limey extends SubsystemBase {
   public double fwrdLock(double z_value){
     double zPower = movement.calculate(z_value,15);
     SmartDashboard.putNumber("Z power input", zPower);
-    return zPower;
+    
+    return zPower*kp;
+  }
+
+  public double rotAround(double x_value){
+    double xPower = movement.calculate(x_value, 15);
+    SmartDashboard.putNumber("X power input", xPower);
+    return xPower;
+  }
+
+
+
+  public double getID2(){
+    return LimelightHelpers.getFiducialID("");
   }
 
   public double getId(){
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(0.0);
   }
+
+
 
   @Override
   public void periodic() { 
