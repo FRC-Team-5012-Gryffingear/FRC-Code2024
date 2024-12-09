@@ -21,7 +21,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class limey extends SubsystemBase {
   /** Creates a new limey. */
-  public double kp = .05;
+  public double kp = .01;
   PIDController movement = new PIDController(kp, 0, 0);
 
   public limey() {
@@ -46,6 +46,11 @@ public class limey extends SubsystemBase {
     return poses.getZ();
   }
 
+
+
+
+
+
   public double rotationLock(double x_value){
     double rot = movement.calculate(x_value,0);
     if(Math.abs(rot) < .15){
@@ -55,23 +60,41 @@ public class limey extends SubsystemBase {
     return rot;
   }
 
+
+
+
   public double fwrdLock(double z_value){
-    double zPower = movement.calculate(z_value,15);
-    SmartDashboard.putNumber("Z power input", zPower);
+
+    // Calculates the speed needed to reach goal
+    double zPower = movement.calculate(z_value,15); 
     
-    return zPower*kp;
+
+    // caps the motor powers on an interval of [-1,1]
+    zPower = Math.max(-1, Math.min(1,zPower));
+
+    SmartDashboard.putNumber("Z power input", zPower);
+    return zPower;
   }
 
+
   public double rotAround(double x_value){
+    // Calculates the speed needed to reach goal
     double xPower = movement.calculate(x_value, 15);
+    
+    // caps the motor powers on an interval of [-1,1]
+    xPower = Math.max(-1, Math.min(1,xPower));
+    
     SmartDashboard.putNumber("X power input", xPower);
+
     return xPower;
   }
 
 
-
+// Check which of the 2 getID's work
   public double getID2(){
-    return LimelightHelpers.getFiducialID("");
+    double ID_detected =  LimelightHelpers.getFiducialID("");
+    SmartDashboard.putNumber("ID DETECTED IN getID2", ID_detected);
+    return ID_detected;
   }
 
   public double getId(){
