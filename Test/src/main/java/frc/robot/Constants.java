@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
 
@@ -78,6 +79,12 @@ public final class Constants {
     public static final double KP = 0.4;
     public static final double KI = 0;
     public static final double KD = 0;
+
+    public static final TrapezoidProfile.Constraints thetaConstraints = 
+            new TrapezoidProfile.Constraints(
+                    Constants.Max_Angular,
+                    10
+            );
   }
 
   public static class OperatorConstants {
