@@ -47,12 +47,16 @@ public class ArcadeComm extends Command {
   @Override
   public void execute() {
     arcade.move_turn(RT.getAsDouble() - LT.getAsDouble(), Tu.getAsDouble());
-    if(Zlock.getAsBoolean()){
+
+
+
         arcade.move_turn(lim.fwrdLock(lim.estimate3DZInches()), 0);
-    }
-    else if(RotLock.getAsBoolean()){
+    
         arcade.move_turn(0, lim.rotationLock(lim.getX()));
-    }
+        lim.rotAround(lim.getX());
+
+    arcade.button(Zlock.getAsBoolean());
+    
   }
 
   // Called once the command ends or is interrupted.

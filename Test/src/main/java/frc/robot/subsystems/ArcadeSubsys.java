@@ -8,6 +8,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -23,11 +26,17 @@ public class ArcadeSubsys extends SubsystemBase {
   TalonSRX talonBL = new TalonSRX(Constants.BR);
   TalonSRX talonBR = new TalonSRX(Constants.BL);
 
+  TalonFX motor = new TalonFX(Constants.ran);
+
   public ArcadeSubsys() {
     talonFL.configFactoryDefault();
     talonFR.configFactoryDefault();
     talonBL.configFactoryDefault();
     talonBR.configFactoryDefault();
+
+    motor.getConfigurator().apply(new TalonFXConfiguration());
+    motor.setNeutralMode(NeutralModeValue.Brake);
+    
 
     talonFL.setNeutralMode(NeutralMode.Coast);
     talonFR.setNeutralMode(NeutralMode.Coast);
@@ -45,6 +54,14 @@ public class ArcadeSubsys extends SubsystemBase {
   public void move_turn(double power, double turn){
     talonFL.set(ControlMode.PercentOutput, power + turn);
     talonFR.set(ControlMode.PercentOutput, power - turn);
+  }
+  public void button(boolean a){
+    if(a){
+      motor.set(1);
+    }
+    else{
+      motor.set(0);
+    }
   }
  
 

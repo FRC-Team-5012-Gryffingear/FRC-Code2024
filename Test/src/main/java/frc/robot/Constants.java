@@ -18,8 +18,9 @@ public final class Constants {
   public static final int FL = 2;
   public static final int FR = 7;
   public static final int BL = 15;
-  public static final int BR = 0;
+  public static final int BR = 8;
 
+  public static final int ran = 0;
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
