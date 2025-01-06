@@ -20,7 +20,7 @@ import edu.wpi.first.units.Unit;
  */
 public final class Constants {
 //Trackwidth is the distance between front 2 modules
-//wheebase is the distance between the front to the back Modules
+// wheebase is the distance between the front to the back Modules
   public static final double trackWidth = Units.inchesToMeters(16.366);
   public static final double wheelBase = Units.inchesToMeters(22.580);
 
